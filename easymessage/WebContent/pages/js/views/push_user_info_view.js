@@ -26,7 +26,6 @@ ADF.PushUserInfoView = Backbone.View.extend({
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
-		
 
 	},
 	afterRender : function() {
@@ -92,8 +91,9 @@ ADF.PushUserInfoView = Backbone.View.extend({
 		} else {
 			if (sessionSendNum != sendNumInput) {
 				if (confirm('입력하신 발송번호로 수정하시겠습니까?') == true) {
-					var user_Info_sendnum_input = $('#user-info-sendnum-input').val();
-					
+					var user_Info_sendnum_input = $('#user-info-sendnum-input')
+							.val();
+
 					var userNameUpdate = new Object();
 					userNameUpdate.userName = user_Info_sendnum_input;
 					var userNameUpdateReq = JSON.stringify(userNameUpdate);
@@ -114,14 +114,29 @@ ADF.PushUserInfoView = Backbone.View.extend({
 								alert('발송번호를 수정 하였습니다.');
 								sessionStorage.setItem("userName",
 										user_Info_sendnum_input);
-								$('#user-info-sendnum-input').prop('disabled', true);
+								$('#user-info-sendnum-input').prop('disabled',
+										true);
 							} else {
 								alert('발송번호 수정에 실패 하였습니다.');
 								// console.log('이름 업데이트 실패');
 							}
 
 						},
-						error : function(data, textStatus, request) {
+						error : function(data) {
+							if (data.status == 401) {
+								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+								sessionStorage.removeItem("token");
+								sessionStorage.removeItem("userId");
+								sessionStorage.removeItem("role");
+								sessionStorage.removeItem("monitoringStatus");
+								sessionStorage.removeItem("groupTopic");
+								sessionStorage.removeItem("ufmi");
+								sessionStorage.removeItem("userName");
+								pushRouter.navigate('login', {
+									trigger : true
+								});
+								return false;
+							}
 							alert('발송번호 수정에 실패 하였습니다.');
 							// console.log('이름 업데이트 실패');
 						}

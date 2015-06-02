@@ -90,7 +90,8 @@ ADF.PushMsgListView = Backbone.View
 
 					messageContent = pushUtil.utf8_to_b64(messageContent);
 					messageTarget = messageTarget.split(",");
-
+//					console.log('메지시 수신자 변경');
+//					messageTarget[0] = 'mms/P1/82/50/g130';
 					var messageData = new Object();
 					messageData.receivers = messageTarget;
 					messageData.content = messageContent;
@@ -344,24 +345,101 @@ ADF.PushMsgListView = Backbone.View
 						});
 				$('#msg-list-detail-div').focus();
 
-				console.log(aData.appAckType);
+				console.log(aData.msgId);
+				var reqMsgId = aData.msgId;
+				var reqMonth = $('#msg-list-month-date-input').val();
+				var splitMonth = reqMonth.split('/');
+				reqMonth = splitMonth[0] + splitMonth[1];
+				console.log(reqMonth);
 
+				var token = sessionStorage.getItem('token');
 				var detailTableData = new Array();
-				detailTableData.push({
-					pmaAckTime : aData.pmaAckTime,
-					pmaAckType : aData.pmaAckType,
-					appAckTime : aData.appAckTime,
-					appAckType : aData.appAckType,
-					resendCount : aData.resendCount,
-					resendInterval : aData.resendInterval,
-					content : aData.content
+
+				$.ajax({
+					url : '/v1/pms/adm/svc/messages/' + reqMsgId + '?keyMon='
+							+ reqMonth,
+					type : 'GET',
+					contentType : "application/json",
+					headers : {
+						'X-Application-Token' : token
+					},
+					dataType : 'json',
+
+					async : false,
+					success : function(data) {
+						if (!data.result.errors) {
+							console.log('ajax 호출');
+							console.log(data.result.data.data);
+							var resultData = data.result.data.data;
+							if (resultData.length == 0) {
+								$('#msg-list-detail-div').hide();
+								alert('상세 내용이 없습니다.');
+								return false;
+							}
+							for ( var i in resultData) {
+								console.log(resultData[i].pmaAckType);
+
+								if (resultData[i].pmaAckType == null) {
+
+									resultData[i].pmaAckType = '응답없음';
+								} else {
+									resultData[i].pmaAckType = '수신확인';
+									var dateTime = resultData[i].pmaAckTime;
+									resultData[i].pmaAckTime = new Date(
+											dateTime).toLocaleString();
+								}
+
+								if (resultData[i].appAckType == null) {
+
+									resultData[i].appAckType = '응답없음';
+								} else {
+									resultData[i].appAckType = '메시지확인';
+									var dateTime = resultData[i].appAckTime;
+									resultData[i].appAckTime = new Date(
+											dateTime).toLocaleString();
+								}
+
+								detailTableData.push({
+									receiver : resultData[i].receiver,
+									pmaAckType : resultData[i].pmaAckType,
+									pmaAckTime : resultData[i].pmaAckTime,
+									appAckType : resultData[i].appAckType,
+									appAckTime : resultData[i].appAckTime
+
+								});
+
+							}
+						} else {
+							alert('상세조회에 실패 하였습니다.');
+							console.log(data);
+						}
+
+					},
+					error : function(data) {
+						if (data.status == 401) {
+							alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+							sessionStorage.removeItem("token");
+							sessionStorage.removeItem("userId");
+							sessionStorage.removeItem("role");
+							sessionStorage.removeItem("monitoringStatus");
+							sessionStorage.removeItem("groupTopic");
+							sessionStorage.removeItem("ufmi");
+							sessionStorage.removeItem("userName");
+							pushRouter.navigate('login', {
+								trigger : true
+							});
+							return false;
+						}
+						alert('상세조회에 실패 하였습니다.');
+
+					}
 				});
 
 				var detailTable = $('#msg-list-detail-table').dataTable({
 					aaData : detailTableData,
 					'bSort' : false,
-					// bJQueryUI : true,
-					// bDestroy : true,
+					bJQueryUI : true,
+					bDestroy : true,
 					"bPaginate" : false,
 					"pageLength" : 25,
 					"bInfo" : false,
@@ -370,32 +448,22 @@ ADF.PushMsgListView = Backbone.View
 					scrollX : true,
 					"bLengthChange" : false,
 					"dom" : 'T<"clear">lrtip',
-					/*
-					 * "tableTools" : { "sSwfPath" : "swf/csvxlspdf.swf",
-					 * "aButtons" : [ { "sExtends" : "xls", "sButtonText" :
-					 * "csv", "sFileName" : "*.csv" }, "copy" ] },
-					 */
+
 					aoColumns : [ {
-						mData : 'pmaAckType',
+						mData : 'receiver',
 						"sWidth" : "10%"
+					}, {
+						mData : 'pmaAckType',
+						"sWidth" : "20%"
 					}, {
 						mData : 'pmaAckTime',
-						"sWidth" : "20%"
+						"sWidth" : "25%"
 					}, {
 						mData : 'appAckType',
-						"sWidth" : "10%"
+						"sWidth" : "20%"
 					}, {
 						mData : 'appAckTime',
-						"sWidth" : "20%"
-					}, {
-						mData : 'resendCount',
-						"sWidth" : "10%"
-					}, {
-						mData : 'resendInterval',
-						"sWidth" : "10%"
-					}, {
-						mData : 'content',
-						"sWidth" : "20%"
+						"sWidth" : "25%"
 					} ]
 				});
 
@@ -837,69 +905,80 @@ ADF.PushMsgListView = Backbone.View
 															}
 														},//		
 														"pageLength" : 25,
+														/*
+														 * <th>발송시간</th> <th>수신번호</th>
+														 * <th>발송상태</th> <th>반복시간</th>
+														 * <th>반복횟수</th> <th>내용</th>
+														 * 
+														 * <th></th>
+														 */
 														'columns' : [
 																{
 																	"data" : "updateTime",
 																	'sClass' : 'one-line'
 																},
-																{
-																	"data" : "issueName"
-																},
+
 																{
 																	"data" : "receiver"
 																},
 																{
 																	"data" : "status"
 																},
+
+																{
+																	"data" : "resendInterval"
+
+																},
+																{
+																	"data" : "resendCount"
+
+																},
+																{
+																	"data" : "content"
+
+																},
 																{
 																	"data" : null,
 																	"defaultContent" : '<button type="button" id="msg-list-detail-btn" class="btn btn-xs btn-white">상세보기</button>&nbsp;<button id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal">재전송 </button>'
 																},
-																{
-																	"data" : "resendCount",
-																	"visible" : false
-																},
-																{
-																	"data" : "resendInterval",
-																	"visible" : false
-																},
 
-																// //
-																// defaultContent":
-																// "<button>Click!</button>"
+														// //
+														// defaultContent":
+														// "<button>Click!</button>"
 
-																{
-																	"data" : "content",
-																	// "sWidth"
-																	// : "10%",
-																	"visible" : false
-																},
-																{
-																	"data" : "msgId",
-																	"visible" : false
-																},
-																{
-																	"data" : "contentType",
-																	"visible" : false
-																},
-																{
-																	"data" : "pmaAckType",
-																	"visible" : false
-																},
-																{
-																	"data" : "pmaAckTime",
-																	"visible" : false
-																},
-																{
-																	"data" : "appAckType",
-																	"visible" : false
-																},
-																{
-																	"data" : "appAckTime",
-																	"visible" : false
-																} ],
+														// {
+														// "data" : "msgId",
+														// "visible" : false
+														// },
+														// {
+														// "data" :
+														// "contentType",
+														// "visible" : false
+														// },
+														// {
+														// "data" :
+														// "pmaAckType",
+														// "visible" : false
+														// },
+														// {
+														// "data" :
+														// "pmaAckTime",
+														// "visible" : false
+														// },
+														// {
+														// "data" :
+														// "appAckType",
+														// "visible" : false
+														// },
+														// {
+														// "data" :
+														// "appAckTime",
+														// "visible" : false
+														// }
+
+														],
 														'sPaginationType' : 'full_numbers',
-														'sAjaxSource' : '/v1/pms/adm/svc/messages',
+														'sAjaxSource' : '/v1/pms/adm/svc/messages2',
 
 														'fnServerData' : function(
 																sSource,
@@ -942,33 +1021,6 @@ ADF.PushMsgListView = Backbone.View
 																										0,
 																										15)
 																								+ "..";
-																					}
-																					if (dataResult[i].issueName == null) {
-																						console
-																								.log('이슈 네임이 널임');
-																						dataResult[i].issueName = dataResult[i].updateId;
-																					}
-
-																					if (dataResult[i].pmaAckType == null) {
-
-																						dataResult[i].pmaAckType = '응답없음';
-																					} else {
-																						dataResult[i].pmaAckType = '수신확인';
-																						var dateTime = dataResult[i].pmaAckTime;
-																						dataResult[i].pmaAckTime = new Date(
-																								dateTime)
-																								.toLocaleString();
-																					}
-
-																					if (dataResult[i].appAckType == null) {
-
-																						dataResult[i].appAckType = '응답없음';
-																					} else {
-																						dataResult[i].appAckType = '메시지확인';
-																						var dateTime = dataResult[i].appAckTime;
-																						dataResult[i].appAckTime = new Date(
-																								dateTime)
-																								.toLocaleString();
 																					}
 
 																					switch (dataResult[i].status) {
@@ -1096,7 +1148,8 @@ ADF.PushMsgListView = Backbone.View
 																	'#msg-list-month-date-input')
 																	.val();
 															console.log('월선택');
-															console.log(messageMonth);
+															console
+																	.log(messageMonth);
 															searchSelectValue = searchSelectValue * 1;
 
 															switch (searchSelectValue) {
@@ -1193,7 +1246,8 @@ ADF.PushMsgListView = Backbone.View
 															}
 
 															console.log('월월월');
-															console.log(messageMonth);
+															console
+																	.log(messageMonth);
 															messageMonth = messageMonth
 																	.replace(
 																			"/",

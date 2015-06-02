@@ -32,7 +32,7 @@ ADF.PushLoginView = Backbone.View.extend({
 		$('#sidebar-shortcuts').hide();
 		$('#sidebar-ul-list').hide();
 		$('#login-user-info-div').hide();
-		
+
 	},
 	render : function() {
 		console.log("login view render..");
@@ -117,7 +117,9 @@ ADF.PushLoginView = Backbone.View.extend({
 					sessionStorage.setItem("token", token);
 					sessionStorage.setItem("userId", userId);
 					sessionStorage.setItem("userName", userName);
-
+					if (userId != null && userId != "") {
+						$('#user-id-span').text(userId);
+					}
 					if (userName == null || userName == "") {
 
 						pushRouter.navigate('user_info', {

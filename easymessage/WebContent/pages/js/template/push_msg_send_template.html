@@ -33,87 +33,151 @@
 	<div class="row">
 		<div class="col-lg-4">
 			<div class="tabbable">
-				<ul class="nav nav-tabs" id="myTab">
-					<li class="active"><a data-toggle="tab" href="#home"> 직접입력
-							발송 </a></li>
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab"
+						href="#msg-send-private"> 개인 발송 </a></li>
 
 					<li><a data-toggle="tab" href="#messages"> 그룹 발송 </a></li>
 					<li><a data-toggle="tab" href="#groupmsg"> 주소록 발송 </a></li>
-					<li><a data-toggle="tab" href="#excelmsg"> 엑셀 발송 </a></li>
+
 
 				</ul>
 
 				<div class="tab-content">
-					<div id="home" class="tab-pane fade in active">
+					<div id="msg-send-private" class="tab-pane fade in active">
 						<div class="widget-box">
 							<div class="widget-header">
 								<i class="ace-icon fa fa-envelope bigger-180"></i>
-								<h4 class="widget-title">&nbsp;직접입력 발송</h4>
+								<h4 class="widget-title">&nbsp;개인 발송</h4>
 							</div>
 							<div class="widget-body ">
 								<div class="widget-main">
 									<div class="form-group">
-										<i class="ace-icon fa fa-caret-right blue"></i> <label>Ptalk 유형 선택 : </label> <label>Ptalk1.0</label> <input
-											type="radio" name="resend-pnum-radio"
-											id="resend-pnum-p1-radio" value="82" checked="checked">
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>Ptalk
+											유형 선택 : </label> <label>Ptalk1.0</label> <input type="radio"
+											name="send-private-pnum-radio"
+											id="send-private-pnum-p1-radio" value="82" checked="checked">
 										&nbsp;<label>Ptalk2.0</label> <input type="radio"
-											name="resend-pnum-radio" id="resend-pnum-p2-radio" value="01">
+											name="send-private-pnum-radio"
+											id="send-private-pnum-p2-radio" value="01">
 									</div>
 
 									<div class="form-group">
-										<i class="ace-icon fa fa-caret-right blue"></i> <label>fleet/확장 번호</label><br><span
-											style="font-size: x-small;  font-weight: bold;">(Ptalk1.0은
-												fleet번호, Ptalk2.0은 확장번호를 입력해 주세요.)</span> <input type="text"
-											class="form-control" id="resend-fleep-bunch-input"
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>fleet/확장
+											번호</label><br> <span
+											style="font-size: x-small; font-weight: bold;">(Ptalk1.0은
+											fleet번호, Ptalk2.0은 확장번호를 입력해 주세요.)</span> <input type="text"
+											class="form-control" id="send-private-fleep-bunch-input"
 											maxlength="6">
 									</div>
 
 									<div class="form-group">
-										<i class="ace-icon fa fa-caret-right blue"></i> <label>개별 번호
-										</label><br><span
-											style="font-size: x-small;  font-weight: bold;">(개별
-												번호를 입력한 후 플러스(+)버튼을 누르세요!)</span>
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>개별
+											번호 </label><br> <span
+											style="font-size: x-small; font-weight: bold;">(개별 번호를
+											입력한 후 플러스(+)버튼을 누르세요!)</span>
 										<div class="input-group">
 											<input maxlength="6" type="text" class="form-control"
-												id="resend-private-input" placeholder=""> <span
-												style="cursor: pointer;" id="msg-resend-plus-span"
+												id="send-private-input" placeholder=""> <span
+												style="cursor: pointer;" id="msg-send-private-plus-span"
 												class="input-group-addon"><span
 												class="glyphicon glyphicon-plus"></span> </span>
 										</div>
 									</div>
-									<div class="form-group" id="msg-resend-user-target-show-div"
+									<div class="form-group"
+										id="msg-send-private-user-target-show-div"
 										style="display: none;">
-										<i class="ace-icon fa fa-caret-right blue"></i> <label>수신 무전번호 목록 </label><br>
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>수신
+											무전번호 목록 </label><br>
 										<textarea class="form-control"
-											id="msg-resend-user-target-show-input" disabled="disabled"></textarea>
+											id="msg-send-private-user-target-show-input"
+											disabled="disabled"></textarea>
 
 									</div>
-									<i class="ace-icon fa fa-caret-right blue"></i> <label
-										class="text-primary">내용</label>
+									<i class="ace-icon fa fa-caret-right blue"></i> <label>내용</label>
 									<div class="form-group">
 										<textarea rows="9" class="form-control"
-											id="msg-resend-content-textarea" placeholder="내용 입력"></textarea>
-										<p id="msg-resend-length-p">
-											<strong id="msg-resend-length-strong">0</strong>/<span
-												id="msg-resend-length-max">140</span><span
-												id="msg-resend-length-byte">byte</span>
+											id="msg-send-private-content-textarea" placeholder="내용 입력"></textarea>
+										<p id="msg-send-private-length-p">
+											<strong id="msg-send-private-length-strong">0</strong>/<span
+												id="msg-send-private-length-max">140</span><span
+												id="msg-send-private-length-byte">byte</span>
 
 										</p>
 									</div>
+									<div class="form-group">
+										<button type="button" id="msg-send-private-save-btn"
+											class="btn btn-sm btn-white btn-info ">
+											<i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>&nbsp;내용저장
+										</button>
+									</div>
+									<div class="form-group">
+										<i class="ace-icon fa fa-caret-right blue"></i> <label
+											class="text-primary">메시지 불러오기</label> <select
+											class="form-control"
+											id="msg-send-private-content-load-select">
+											<option value="0">선택</option>
+										</select>
+									</div>
+									<div class="form-group">
+									<i class="ace-icon fa fa-caret-right blue"></i>
+										<label> 반복 메시지 </label>&nbsp; 
+										<input id="msg-send-private-user-repeat-check" type="checkbox"/>
+									</div>
+									<div id="msg-send-private-repeat-div" style="display: none;">
+										<div class="form-group">
+											<label>횟수 <span
+												style="font-size: x-small; font-weight: bold;">(반복 휫수
+													+1 건의 메시지가 발송 됩니다.)</span></label> <select class="form-control"
+												id="msg-send-private-repeat-cnt-select">
+												<option value="0">선택</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+												<option value="9">9</option>
+												<option value="10">10</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label>반복 시간</label><span
+												style="font-size: x-small; font-weight: bold;">(반복
+												시간은 최대 24시간(1440분) 입력 가능합니다!)</span> <input class="form-control"
+												maxlength="4" id="msg-send-private-repeat-time-input"
+												placeholder="옵션       반복 시간(분 단위)" disabled="disabled">
+										</div>
+									</div>
+									<div>
+										<i class="ace-icon fa fa-caret-right blue"></i><label> 예약
+											메시지 설정</label><br>
+										<span style="font-size: x-small; font-weight: lighter;">(예약메시지
+											발송이 필요한 경우 오른쪽 캘린더 설정을 해주세요.)</span>
+									</div>
+									<div class="input-group" id="msg-send-private-reservation-div">
 
-									
+										<input id="msg-send-private-reservation-date-input" type="text"
+											class="form-control" disabled="disabled"> <span
+											class="input-group-addon"> <i
+											class="fa fa-clock-o bigger-110"></i>
+										</span>
+
+									</div>
 
 								</div>
 								<div class="modal-footer">
-										<button class="btn btn-sm " id="modal-footer-cancel">
-											<i class="ace-icon fa fa-times"></i> 취소
-										</button>
+									<button class="btn btn-sm " id="msg-send-private-cancel-btn">
+										<i class="ace-icon fa fa-times"></i> 취소
+									</button>
 
-										<button id="msg-resend-btn"
-											class="btn btn-sm btn-primary ">
-											<i class="ace-icon fa fa-check"></i> 메시지 전송
-										</button>
-									</div>
+									<button id="msg-send-private-btn"
+										class="btn btn-sm btn-primary ">
+										<i class="ace-icon fa fa-check"></i> 메시지 전송
+									</button>
+								</div>
 							</div>
 
 
@@ -251,16 +315,11 @@
 				<div class="btn-group">
 					<a href="#my-modal" data-toggle="modal">
 						<button class="btn btn-white btn-info ">
-							<i class="ace-icon fa fa-plus bigger-120 blue"></i> 직접 주소록 등록
+							<i class="ace-icon fa fa-plus bigger-120 blue"></i> 주소록 등록
 						</button>
 
 					</a>
 
-
-					<button class="btn btn-white btn-warning">
-						<i class="ace-icon fa fa-file-excel-o bigger-110 orange"></i> 엑셀
-						파일로 등록
-					</button>
 				</div>
 
 
@@ -1136,168 +1195,3 @@
 </div>
 <!--page Content-->
 
-<script src="assets/js/jquery.dataTables.min.js"></script>
-<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
-<script src="assets/js/dataTables.tableTools.min.js"></script>
-<script src="assets/js/dataTables.colVis.min.js"></script>
-<script type="text/javascript">
-	jQuery(function($) {
-		//initiate dataTables plugin
-		var oTable1 = $('#dynamic-table')
-		//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-		.dataTable({
-			bAutoWidth : false,
-			"aaSorting" : []
-
-		//,
-		//"sScrollY": "200px",
-		//"bPaginate": false,
-
-		//"sScrollX": "100%",
-		//"sScrollXInner": "120%",
-		//"bScrollCollapse": true,
-		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
-
-		//"iDisplayLength": 50
-		});
-		//oTable1.fnAdjustColumnSizing();
-
-		//TableTools settings
-		TableTools.classes.container = "btn-group btn-overlap";
-		TableTools.classes.print = {
-			"body" : "DTTT_Print",
-			"info" : "tableTools-alert gritter-item-wrapper gritter-info gritter-center white",
-			"message" : "tableTools-print-navbar"
-		}
-
-		//initiate TableTools extension
-
-		//we put a container before our table and append TableTools element to it
-
-		//also add tooltips to table tools buttons
-		//addding tooltips directly to "A" buttons results in buttons disappearing (weired! don't know why!)
-		//so we add tooltips to the "DIV" child after it becomes inserted
-		//flash objects inside table tools buttons are inserted with some delay (100ms) (for some reason)
-
-		//ColVis extension
-		var colvis = new $.fn.dataTable.ColVis(oTable1, {
-			"buttonText" : "<i class='fa fa-search'></i>",
-			"aiExclude" : [ 0, 6 ],
-			"bShowAll" : true,
-			//"bRestore": true,
-			"sAlign" : "right",
-			"fnLabel" : function(i, title, th) {
-				return $(th).text();//remove icons, etc
-			}
-
-		});
-
-		//style it
-		$(colvis.button()).addClass('btn-group').find('button').addClass(
-				'btn btn-white btn-info btn-bold')
-
-		//and append it to our table tools btn-group, also add tooltip
-		$(colvis.button()).prependTo('.tableTools-container .btn-group').attr(
-				'title', 'Show/hide columns').tooltip({
-			container : 'body'
-		});
-
-		//and make the list, buttons and checkboxed Ace-like
-		$(colvis.dom.collection)
-				.addClass(
-						'dropdown-menu dropdown-light dropdown-caret dropdown-caret-right')
-				.find('li').wrapInner('<a href="javascript:void(0)" />') //'A' tag is required for better styling
-				.find('input[type=checkbox]').addClass('ace').next().addClass(
-						'lbl padding-8');
-
-		/////////////////////////////////
-		//table checkboxes
-		$('th input[type=checkbox], td input[type=checkbox]').prop('checked',
-				false);
-
-		//select/deselect all rows according to table header checkbox
-		$('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on(
-				'click',
-				function() {
-					var th_checked = this.checked;//checkbox inside "TH" table header
-
-					$(this).closest('table').find('tbody > tr').each(
-							function() {
-								var row = this;
-								if (th_checked)
-									tableTools_obj.fnSelect(row);
-								else
-									tableTools_obj.fnDeselect(row);
-							});
-				});
-
-		//select/deselect a row when the checkbox is checked/unchecked
-		$('#dynamic-table').on('click', 'td input[type=checkbox]', function() {
-			var row = $(this).closest('tr').get(0);
-			if (!this.checked)
-				tableTools_obj.fnSelect(row);
-			else
-				tableTools_obj.fnDeselect($(this).closest('tr').get(0));
-		});
-
-		$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-			e.stopImmediatePropagation();
-			e.stopPropagation();
-			e.preventDefault();
-		});
-
-		//And for the first simple table, which doesn't have TableTools or dataTables
-		//select/deselect all rows according to table header checkbox
-		var active_class = 'active';
-		$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on(
-				'click',
-				function() {
-					var th_checked = this.checked;//checkbox inside "TH" table header
-
-					$(this).closest('table').find('tbody > tr').each(
-							function() {
-								var row = this;
-								if (th_checked)
-									$(row).addClass(active_class).find(
-											'input[type=checkbox]').eq(0).prop(
-											'checked', true);
-								else
-									$(row).removeClass(active_class).find(
-											'input[type=checkbox]').eq(0).prop(
-											'checked', false);
-							});
-				});
-
-		//select/deselect a row when the checkbox is checked/unchecked
-		$('#simple-table').on('click', 'td input[type=checkbox]', function() {
-			var $row = $(this).closest('tr');
-			if (this.checked)
-				$row.addClass(active_class);
-			else
-				$row.removeClass(active_class);
-		});
-
-		/********************************/
-		//add tooltip for small views action buttons in dropdown menu
-		$('[data-rel="tooltip"]').tooltip({
-			placement : tooltip_placement
-		});
-
-		//tooltip placement on right or left
-		function tooltip_placement(context, source) {
-			var $source = $(source);
-			var $parent = $source.closest('table')
-			var off1 = $parent.offset();
-			var w1 = $parent.width();
-
-			var off2 = $source.offset();
-			//var w2 = $source.width();
-
-			if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
-				return 'right';
-			return 'left';
-		}
-
-	})
-</script>
