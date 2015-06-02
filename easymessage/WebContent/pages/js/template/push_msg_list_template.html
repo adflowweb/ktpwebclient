@@ -1,0 +1,319 @@
+<div class="breadcrumbs">
+	<ul class="breadcrumb">
+		<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+		</li>
+		<li class="active">메시지 발송 현황</li>
+	</ul>
+
+</div>
+<!--breadcrumbs -->
+<div class="page-content">
+	<div class="page-header">
+		<h1>
+			메시지 발송 현황 <small> <i
+				class="ace-icon fa fa-angle-double-right"></i> 메시지 발송 결과 확인 및 재전송
+			</small>
+		</h1>
+	</div>
+	<!-- /.page-header -->
+
+	<div class="row">
+		<!-- 		<div class="col-xs-12"> -->
+		<!-- 			<div class="alert alert-info"> -->
+		<!-- 				<button class="close" data-dismiss="alert"> -->
+		<!-- 					<i class="ace-icon fa fa-times"></i> -->
+		<!-- 				</button> -->
+
+		<!-- 				<i class="ace-icon fa fa-hand-o-right"></i> 월 별로 메시지 발송 현황을 조회 할 수 -->
+		<!-- 				있습니다. -->
+		<!-- 			</div> -->
+		<!-- 		</div> -->
+		<div class="col-lg-12">
+			<div class="widget-box">
+				<div class="widget-header widget-header-flat">
+					<h4 class="widget-title">메시지 발송 현황</h4>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="form-group">
+							<label>검색 월 선택</label>
+							<div id="msg-list-date-time-picker-div"
+								class="input-group col-lg-12">
+								<input id="msg-list-month-date-input" type="text"
+									class="form-control" disabled="disabled"> <span
+									class="input-group-addon"> <i
+									class="fa fa-clock-o bigger-110"></i>
+								</span>
+							</div>
+							<br>
+							<div class="clearfix"></div>
+							<br> <label>검색 시작 일 선택</label>
+							<div id="msg-list-start-date-time-picker-div"
+								class="input-group col-lg-12">
+								<input id="msg-list-start-date-input" type="text"
+									class="form-control" disabled="disabled"> <span
+									class="input-group-addon"> <i
+									class="fa fa-clock-o bigger-110"></i>
+								</span>
+							</div>
+							<div class="clearfix"></div>
+							<br> <label>검색 종료 일 선택</label>
+							<div id="msg-list-end-date-time-picker-div"
+								class="input-group col-lg-12">
+								<input id="msg-list-end-date-input" type="text"
+									class="form-control" disabled="disabled"> <span
+									class="input-group-addon"> <i
+									class="fa fa-clock-o bigger-110"></i>
+								</span>
+							</div>
+
+							<div class="clearfix"></div>
+							<br> <label>검색 항목</label> <select class="form-control"
+								id="msg-list-search-select">
+								<option value="0">선택</option>
+								<option value="1">발송상태</option>
+								<option value="2">수신번호</option>
+								<option value="3">응답상태</option>
+
+							</select>
+							<div class="clearfix"></div>
+							<br>
+							<div id="msg-list-search-content-div" style="display: none;">
+								<label>수신 번호</label> <input id="msg-list-search-input"
+									type="text" class="form-control" disabled="disabled">
+								<div class="clearfix"></div>
+							</div>
+
+							<div id="msg-list-send-status-div" style="display: none;">
+								<label>발송상태 선택</label><select class="form-control"
+									id="msg-list-search-status-select">
+									<option value="-99">발송오류</option>
+									<option value="-2">수신자없음</option>
+									<option value="0">발송중</option>
+									<option value="1">발송됨</option>
+									<option value="2">예약취소됨</option>
+								</select>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div id="msg-list-ack-status-div" style="display: none;">
+								<label>응답상태 선택</label> <select class="form-control"
+									id="msg-list-search-ack-select">
+									<option value="0">응답없음</option>
+									<option value="1">수신확인</option>
+									<option value="2">메시지확인</option>
+
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="clearfix"></div>
+
+							<button class="btn btn-info" id="msg-list-search-btn"
+								type="button">
+
+								<i class="ace-icon fa fa-search bigger-110"></i> 검색
+							</button>
+
+							<!-- 							&nbsp; &nbsp; -->
+							<!-- 							<button class="btn" id="msg-list-reset-btn" type="button"> -->
+							<!-- 								<i class="ace-icon fa fa-refresh bigger-110"></i> 재설정 -->
+							<!-- 							</button> -->
+						</div>
+
+
+						<div class="row">
+							<div class="col-lg-12">
+
+
+								<div class="clearfix">
+									<div class="pull-right tableTools-container"></div>
+								</div>
+								<div class="table-header">발송 메시지 목록</div>
+
+								<!-- div.table-responsive -->
+
+								<!-- div.dataTables_borderWrap -->
+
+								<table id="msg-list-table"
+									class="table table-striped  table-hover" width="100%">
+									<thead>
+										<tr>
+											<th>발송시간</th>
+											<th>발송번호</th>
+											<th>수신번호</th>
+											<th>발송상태</th>
+											<th></th>
+											<!-- 											<th>반복횟수</th> -->
+											<!-- 											<th>반복시간</th> -->
+											<!-- 											<th>메시지내용</th> -->
+										</tr>
+									</thead>
+
+									<tbody>
+
+									</tbody>
+								</table>
+								<div class="form-group" id="msg-list-csv-div">
+									<input type="hidden" id="msg-list-excel-cnt">
+									<div class="clearfix"></div>
+									<br>
+									<button class="btn btn-info" id="msg-list-csv-btn"
+										type="button">
+
+										<i class="ace-icon fa fa-file-excel-o bigger-110"></i> csv 파일로
+										다운로드
+									</button>
+
+								</div>
+							</div>
+						</div>
+
+
+						<div id="msg-list-detail-div" class="row" width="100%"
+							style="display: none;">
+							<div class="col-lg-12">
+
+
+								<div class="clearfix">
+									<div class="pull-right tableTools-container"></div>
+								</div>
+								<div class="table-header">상세 내용</div>
+
+
+								<!-- div.table-responsive -->
+
+								<!-- div.dataTables_borderWrap -->
+
+								<table id="msg-list-detail-table"
+									class="table table-striped  table-hover" width="100%;">
+									<thead>
+										<tr>
+											<th>수신확인</th>
+											<th>수신확인시간</th>
+											<th>메시지확인</th>
+											<th>메시지확인시간</th>
+											<th>반복횟수</th>
+											<th>반복시간</th>
+											<th>메시지내용</th>
+										</tr>
+									</thead>
+
+									<tbody width="100%">
+
+									</tbody>
+								</table>
+								<button class="btn btn-info" id="msg-list-detail-confirm-btn"
+									type="button">
+
+									<i class="ace-icon fa fa-check bigger-110"></i>확인
+
+								</button>
+
+							</div>
+						</div>
+
+						<div id="msg-resend-modal" class="modal fade" tabindex="-1">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" id="modal-header-close" class="close"
+											data-dismiss="modal">&times;</button>
+										<h4 class="blue bigger">메시지 재전송</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="widget-box ui-sortable-handle">
+													<div class="widget-header">
+														<h5 class="widget-title">무전번호 입력</h5>
+													</div>
+													<div class="widget-body">
+														<div class="widget-main">
+															<div class="form-group">
+																	<i class="ace-icon fa fa-caret-right blue"></i><label>Ptalk 유형 선택 : </label> <label>Ptalk1.0</label> <input
+																	type="radio" name="resend-pnum-radio"
+																	id="resend-pnum-p1-radio" value="82" checked="checked">
+																&nbsp;<label>Ptalk2.0</label> <input type="radio"
+																	name="resend-pnum-radio" id="resend-pnum-p2-radio"
+																	value="01">
+															</div>
+
+															<div class="form-group">
+																<i class="ace-icon fa fa-caret-right blue"></i> <label>fleet/확장
+																	번호</label><br> <span
+																	style="font-size: x-small; font-weight: bold;">(Ptalk1.0은
+																	fleet번호, Ptalk2.0은 확장번호를 입력해 주세요.)</span> <input type="text"
+																	class="form-control" id="resend-fleep-bunch-input"
+																	maxlength="6">
+															</div>
+
+															<div class="form-group">
+																<i class="ace-icon fa fa-caret-right blue"></i> <label>개별
+																	번호 </label><br>
+																<span style="font-size: x-small; font-weight: bold;">(개별
+																	번호를 입력한 후 플러스(+)버튼을 누르세요!)</span>
+																<div class="input-group">
+																	<input maxlength="6" type="text" class="form-control"
+																		id="resend-private-input" placeholder=""> <span
+																		style="cursor: pointer;" id="msg-resend-plus-span"
+																		class="input-group-addon"><span
+																		class="glyphicon glyphicon-plus"></span> </span>
+																</div>
+															</div>
+															<div class="form-group"
+																id="msg-resend-user-target-show-div"
+																style="display: none;">
+																<i class="ace-icon fa fa-caret-right blue"></i>	<label>수신 무전번호 목록 </label><br>
+																<textarea class="form-control"
+																	id="msg-resend-user-target-show-input"
+																	disabled="disabled"></textarea>
+
+															</div>
+															<i class="ace-icon fa fa-caret-right blue"></i> <label
+																class="text-primary">내용</label>
+															<div class="form-group">
+																<textarea rows="9" class="form-control"
+																	id="msg-resend-content-textarea" placeholder="내용 입력"></textarea>
+																<p id="msg-resend-length-p">
+																	<strong id="msg-resend-length-strong">0</strong>/<span
+																		id="msg-resend-length-max">140</span><span
+																		id="msg-resend-length-byte">byte</span>
+
+																</p>
+															</div>
+														</div>
+													</div>
+
+
+												</div>
+
+											</div>
+
+
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-sm" id="modal-footer-cancel"
+												data-dismiss="modal">
+												<i class="ace-icon fa fa-times"></i> 취소
+											</button>
+
+											<button id="msg-resend-btn" class="btn btn-sm btn-primary">
+												<i class="ace-icon fa fa-check"></i> 메시지 전송
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+			<!--row-->
+		</div>
+		<!--page Content-->

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>Dashboard - Ace Admin</title>
+
+<meta name="description" content="overview &amp; stats" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet" href="assets/css/bootstrap.css" />
+<link rel="stylesheet" href="assets/css/font-awesome.css" />
+
+<!-- page specific plugin styles -->
+
+<!-- text fonts -->
+<link rel="stylesheet" href="assets/css/ace-fonts.css" />
+
+<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.css" />
+
+<!-- ace styles -->
+<link rel="stylesheet" href="assets/css/ace.css"
+	class="ace-main-stylesheet" id="main-ace-style" />
+
+<!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-part2.css" class="ace-main-stylesheet" />
+		<![endif]-->
+
+<!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ace-ie.css" />
+		<![endif]-->
+
+<!-- inline styles related to this page -->
+
+<!-- ace settings handler -->
+<script src="assets/js/ace-extra.js"></script>
+
+<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.js"></script>
+		<![endif]-->
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+	type="text/javascript"></script>
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"
+	type="text/javascript"></script>
+<script
+	src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src=""></script>
+<!-- basic scripts -->
+<script src="assets/js/bootstrap.js"></script>
+<!-- page specific plugin scripts -->
+<!-- ace scripts -->
+<script src="assets/js/ace-elements.js"></script>
+
+<script src="assets/js/ace.js"></script>
+<!--back bone js-->
+</head>
+<body class="no-skin">
+	<div class="easymessage">
+		<div id="navbar" class="navbar navbar-default">
+
+			<div class="navbar-container" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left"
+					id="menu-toggler" data-target="#sidebar" >
+					<span class="sr-only">Toggle sidebar</span> <span class="icon-bar"></span>
+
+					<span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand"> <small> <img
+							src="assets/img/KTP_CI_Red.jpg" style="height: 30px">
+					</small>
+					</a>
+				</div>
+
+				<div id="login-user-info-div"
+					class="navbar-buttons navbar-header pull-right" role="navigation"
+					style="display: none;">
+					
+					<ul class="nav ace-nav">
+						<li class="red"><a data-toggle="dropdown" href="#"
+							class="dropdown-toggle"> <i class="ace-icon fa fa-user"></i>
+								<i class="ace-icon fa fa-caret-down"></i>
+						</a>
+
+							<ul
+								class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+
+								<li><a href="#user_info"> <i
+										class="ace-icon fa fa-user"></i> 사용자 정보
+								</a></li>
+
+								<!-- <li class="divider"></li> -->
+
+								<li><a href="#logout"> <i
+										class="ace-icon fa fa-power-off"></i> 로그아웃
+								</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /.navbar-container -->
+		</div>
+
+		<div id="modal-form" class="modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h4 class="blue bigger">Please fill the following form fields</h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-5">
+								<div class="space"></div>
+
+								<label class="ace-file-input ace-file-multiple"><input
+									type="file"><span class="ace-file-container"
+									data-title="Drop files here or click to choose"><span
+										class="ace-file-name" data-title="No File ..."><i
+											class=" ace-icon ace-icon fa fa-cloud-upload"></i></span></span><a
+									class="remove" href="#"><i class=" ace-icon fa fa-times"></i></a></label>
+							</div>
+
+							<div class="col-xs-12 col-sm-7">
+								<div class="form-group">
+									<label for="form-field-select-3">Location</label>
+
+									<div>
+										<select class="chosen-select"
+											data-placeholder="Choose a Country..." style="display: none;">
+											<option value="">&nbsp;</option>
+											<option value="AL">Alabama</option>
+											<option value="AK">Alaska</option>
+											<option value="AZ">Arizona</option>
+											<option value="AR">Arkansas</option>
+											<option value="CA">California</option>
+											<option value="CO">Colorado</option>
+											<option value="CT">Connecticut</option>
+											<option value="DE">Delaware</option>
+											<option value="FL">Florida</option>
+											<option value="GA">Georgia</option>
+											<option value="HI">Hawaii</option>
+											<option value="ID">Idaho</option>
+											<option value="IL">Illinois</option>
+											<option value="IN">Indiana</option>
+											<option value="IA">Iowa</option>
+											<option value="KS">Kansas</option>
+											<option value="KY">Kentucky</option>
+											<option value="LA">Louisiana</option>
+											<option value="ME">Maine</option>
+											<option value="MD">Maryland</option>
+											<option value="MA">Massachusetts</option>
+											<option value="MI">Michigan</option>
+											<option value="MN">Minnesota</option>
+											<option value="MS">Mississippi</option>
+											<option value="MO">Missouri</option>
+											<option value="MT">Montana</option>
+											<option value="NE">Nebraska</option>
+											<option value="NV">Nevada</option>
+											<option value="NH">New Hampshire</option>
+											<option value="NJ">New Jersey</option>
+											<option value="NM">New Mexico</option>
+											<option value="NY">New York</option>
+											<option value="NC">North Carolina</option>
+											<option value="ND">North Dakota</option>
+											<option value="OH">Ohio</option>
+											<option value="OK">Oklahoma</option>
+											<option value="OR">Oregon</option>
+											<option value="PA">Pennsylvania</option>
+											<option value="RI">Rhode Island</option>
+											<option value="SC">South Carolina</option>
+											<option value="SD">South Dakota</option>
+											<option value="TN">Tennessee</option>
+											<option value="TX">Texas</option>
+											<option value="UT">Utah</option>
+											<option value="VT">Vermont</option>
+											<option value="VA">Virginia</option>
+											<option value="WA">Washington</option>
+											<option value="WV">West Virginia</option>
+											<option value="WI">Wisconsin</option>
+											<option value="WY">Wyoming</option>
+										</select>
+										<div class="chosen-container chosen-container-single"
+											style="width: 0px;" title="">
+											<a class="chosen-single" tabindex="-1"><span>&nbsp;</span>
+												<div>
+													<b></b>
+												</div></a>
+											<div class="chosen-drop">
+												<div class="chosen-search">
+													<input type="text" autocomplete="off">
+												</div>
+												<ul class="chosen-results"></ul>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label for="form-field-username">Username</label>
+
+									<div>
+										<input type="text" id="form-field-username"
+											placeholder="Username" value="alexdoe">
+									</div>
+								</div>
+
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label for="form-field-first">Name</label>
+
+									<div>
+										<input type="text" id="form-field-first"
+											placeholder="First Name" value="Alex"> <input
+											type="text" id="form-field-last" placeholder="Last Name"
+											value="Doe">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn btn-sm" data-dismiss="modal">
+							<i class="ace-icon fa fa-times"></i> Cancel
+						</button>
+
+						<button class="btn btn-sm btn-primary">
+							<i class="ace-icon fa fa-check"></i> Save
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="main-container" id="main-container">
+			<div id="sidebar" class="sidebar responsive">
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts"
+					style="display: none;">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+
+						<button id="sidebar_btn_msg_send" class="btn btn-success">
+							<i class="ace-icon fa fa-envelope"></i>
+						</button>
+
+						<button id="sidebar_btn_msg_list" class="btn btn-info">
+							<i class="ace-icon fa fa-list"></i>
+						</button>
+
+						<button id="sidebar_btn_reservation_list" class="btn btn-warning">
+							<i class="ace-icon fa fa-clock-o"></i>
+						</button>
+
+						<button id="sidebar_btn_stats" class="btn btn-danger">
+							<i class="ace-icon fa fa-bar-chart-o"></i>
+						</button>
+					</div>
+
+
+				</div>
+				<!-- /.sidebar-shortcuts -->
+				<ul class="nav nav-list" id="sidebar-ul-list" style="display: none;">
+					<li name="sidebar_li" id="sidebar_li_msg_send" class=""><a
+						href="#msg_send"> <i class="menu-icon fa fa-envelope"></i> <span
+							class="menu-text"> 메시지 전송 </span>
+
+
+					</a></li>
+					<li name="sidebar_li" id="sidebar_li_msg_list" class=""><a
+						href="#msg_list"> <i class="menu-icon fa fa-list"></i> <span
+							class="menu-text"> 메시지 발송 현황 </span>
+
+
+					</a></li>
+					<li name="sidebar_li" id="sidebar_li_reservation_list" class="">
+						<a href="#reservation_list"> <i
+							class="menu-icon fa fa-clock-o"></i> <span class="menu-text">
+								예약 메시지 관리 </span>
+
+
+					</a>
+					</li>
+					<li name="sidebar_li" id="sidebar_li_stats" class=""><a
+						href="#msg_stats"> <i class="menu-icon fa fa-bar-chart-o"></i>
+							<span class="menu-text"> 통계 </span>
+					</a></li>
+					<li name="sidebar_li" id="sidebar_li_user_info" class=""><a
+						href="#user_info"> <i class="menu-icon fa fa-user"></i> <span
+							class="menu-text"> 사용자 정보 </span>
+					</a></li>
+				</ul>
+				<!-- /.nav-list -->
+			</div>
+			<!--sidebar  -->
+
+			<div class="main-content">
+				<div class="main-content-inner"></div>
+			</div>
+			<!-- /.main-content -->
+
+			<div class="footer">
+				<a href="#" id="btn-scroll-up"
+					class="btn-scroll-up btn btn-sm btn-inverse"> <i
+					class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+				</a>
+			</div>
+			<!-- footer -->
+
+		</div>
+	</div>
+	<script type="text/javascript" src="assets/js/moment.js"></script>
+	<script type="text/javascript"
+		src="assets/js/dataTables/jquery.dataTables.js"></script>
+	<script type="text/javascript"
+		src="assets/js/dataTables/jquery.dataTables.bootstrap.js"></script>
+
+	<!-- jquery.dataTables.js -->
+	<script type="text/javascript"
+		src="pages/js/util/push_util.js"></script>
+	<script type="text/javascript"
+		src="assets/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="assets/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript"
+		src="pages/js/views/push_msg_send_view.js"></script>
+	<script type="text/javascript"
+		src="pages/js/views/push_msg_list_view.js"></script>
+	<script type="text/javascript"
+		src="pages/js/views/push_reservation_list_view.js"></script>
+	<script type="text/javascript" src="pages/js/views/push_stats_view.js"></script>
+	<script type="text/javascript" src="pages/js/views/push_login_view.js"></script>
+	<script type="text/javascript"
+		src="pages/js/views/push_user_info_view.js"></script>
+	<script type="text/javascript" src="pages/js/push_router.js"></script>
+
+
+</body>
+</html>
