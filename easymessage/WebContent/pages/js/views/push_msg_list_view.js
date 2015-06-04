@@ -48,7 +48,7 @@ ADF.PushMsgListView = Backbone.View
 				$('#sidebar-shortcuts').show();
 				$('#sidebar-ul-list').show();
 				$('#login-user-info-div').show();
-				var userId=sessionStorage.getItem('userId');
+				var userId = sessionStorage.getItem('userId');
 				$('#user-id-span').text(userId);
 
 			},
@@ -92,8 +92,8 @@ ADF.PushMsgListView = Backbone.View
 
 					messageContent = pushUtil.utf8_to_b64(messageContent);
 					messageTarget = messageTarget.split(",");
-//					console.log('메지시 수신자 변경');
-//					messageTarget[0] = 'mms/P1/82/50/g130';
+					// console.log('메지시 수신자 변경');
+					// messageTarget[0] = 'mms/P1/82/50/g130';
 					var messageData = new Object();
 					messageData.receivers = messageTarget;
 					messageData.content = messageContent;
@@ -943,40 +943,6 @@ ADF.PushMsgListView = Backbone.View
 																	"data" : null,
 																	"defaultContent" : '<button type="button" id="msg-list-detail-btn" class="btn btn-xs btn-white">상세보기</button>&nbsp;<button id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal">재전송 </button>'
 																},
-
-														// //
-														// defaultContent":
-														// "<button>Click!</button>"
-
-														// {
-														// "data" : "msgId",
-														// "visible" : false
-														// },
-														// {
-														// "data" :
-														// "contentType",
-														// "visible" : false
-														// },
-														// {
-														// "data" :
-														// "pmaAckType",
-														// "visible" : false
-														// },
-														// {
-														// "data" :
-														// "pmaAckTime",
-														// "visible" : false
-														// },
-														// {
-														// "data" :
-														// "appAckType",
-														// "visible" : false
-														// },
-														// {
-														// "data" :
-														// "appAckTime",
-														// "visible" : false
-														// }
 
 														],
 														'sPaginationType' : 'full_numbers',

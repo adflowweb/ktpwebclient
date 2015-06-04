@@ -4,6 +4,7 @@ ADF.PushMsgSendView = Backbone.View
 
 			events : {
 				"change #msg-send-private-user-repeat-check" : "msgRepeatCheck",
+				"change #msg-send-contact-private-user-repeat-check" : "msgRepeatCheckContact",
 				"input #send-private-input" : "checkSendPrivateInput",
 				"input #send-private-fleep-bunch-input" : "checkSendBunchInput",
 				"input #contact-add-private-input" : "checkContactPrivateInput",
@@ -11,15 +12,19 @@ ADF.PushMsgSendView = Backbone.View
 				"click #msg-send-private-plus-span" : "plusUfmiCheck",
 				"click #contact-add-plus-span" : "plusContactUfmiCheck",
 				"input #msg-send-private-content-textarea" : "checkContentArea",
+				"input #msg-send-contact-private-content-textarea" : "checkContactContentArea",
 				"input #msg-send-private-content-save-textarea" : "checkContentSaveArea",
 				"input #msg-send-private-content-edit-textarea" : "checkContentEditArea",
 				"input #msg-send-private-repeat-time-input" : "checkRepeatTime",
+				"input #msg-send-contact-private-repeat-time-input" : "checkRepeatTimeContact",
 				"click #msg-send-private-btn" : "msgSend",
 				"click #msg-send-private-cancel-btn" : "msgSendCancel",
+				"click #msg-send-contact-private-cancel-btn" : "msgSendCancelContact",
 				"click #msg-send-private-save-btn" : "msgSaveBtnClick",
 				"click #msg-save-btn" : "msgSave",
 				"click #modal-footer-cancel" : "msgSaveCancel",
 				"change #msg-send-private-content-load-select" : "selectContentList",
+				"change #msg-send-contact-private-content-load-select" : "selectContactContentList",
 				"click a[href=#msg-content-edit-modal]" : "clickHrefEdit",
 				"click a[href=#msg-content-delete-modal]" : "clickHrefDelete",
 				"click #msg-edit-btn" : "msgEdit",
@@ -28,9 +33,15 @@ ADF.PushMsgSendView = Backbone.View
 				"click #contact-add-btn" : "contactAdd",
 				"click #contact-add-footer-cancel" : "contactAddCancel",
 				"click #contact-delete-id" : "contactAllCheckBox",
-				"click #contact-delete-btn" : "contactDelete"
+				"click #contact-delete-btn" : "contactDelete",
+				"click button[name='editContactBtn']" : "editContactModal",
+				"click #contact-edit-footer-cancel" : "cancelContactModal",
+				"click #contact-edit-btn" : "editContactBtn",
+				"click #msg-send-contact-change-name-btn" : "changeNameBtn",
+				"click #msg-send-contact-change-item1-btn" : "changeItem1Btn",
+				"click #msg-send-contact-change-item2-btn" : "changeItem2Btn",
+				"click #msg-send-contact-change-item3-btn" : "changeItem3Btn"
 
-			// "click #msg-list-detail-btn":"getDetailList"
 			},
 
 			initialize : function() {
@@ -47,7 +58,12 @@ ADF.PushMsgSendView = Backbone.View
 						"plusContactUfmiCheck", "checkContactPrivateInput",
 						"checkContactBunchInput", "contactAdd",
 						"contactAddFormCheck", "contactAllCheckBox",
-						"contactDelete");
+						"contactDelete", "cancelContactModal",
+						"editContactBtn", "editContactBtnFormCheck",
+						"checkContactContentArea", "changeNameBtn",
+						"changeItem1Btn", "changeItem2Btn", "changeItem3Btn",
+						"selectContactContentList", "msgRepeatCheckContact",
+						"checkRepeatTimeContact", "msgSendCancelContact");
 				var _this = this;
 				this.render = _.wrap(this.render, function(render) {
 					_this.beforeRender();
@@ -73,56 +89,185 @@ ADF.PushMsgSendView = Backbone.View
 				// contentListView.render();
 
 			},
-
-			contactDelete : function() {
-
-				var that = this;
-				var checkedLength = $('input[name="contact-delete-checkbox"]:checked').length;
-				var token = sessionStorage.getItem("token");
-				if (checkedLength == 0) {
-					alert('삭제할 대상을 선택해주세요');
-					return false;
+			changeItem1Btn : function() {
+				var contentValue = $(
+						'#msg-send-contact-private-content-textarea').val();
+				contentValue = contentValue + "#항목1#";
+				$('#msg-send-contact-private-content-textarea').val(
+						contentValue);
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
 				} else {
-					var contactDelete = new Object();
-					contactDelete.ufmi = new Array();
-					$('input[name="contact-delete-checkbox"]:checked').each(
-							function() {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
 
-								if (this.value != "on") {
+			},
+			changeItem2Btn : function() {
+				var contentValue = $(
+						'#msg-send-contact-private-content-textarea').val();
+				contentValue = contentValue + "#항목2#";
+				$('#msg-send-contact-private-content-textarea').val(
+						contentValue);
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
 
-									contactDelete.ufmi.push(this.value);
-								}
-							});
+			},
+			changeItem3Btn : function() {
+				var contentValue = $(
+						'#msg-send-contact-private-content-textarea').val();
+				contentValue = contentValue + "#항목3#";
+				$('#msg-send-contact-private-content-textarea').val(
+						contentValue);
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
+			},
 
-					if (contactDelete.ufmi.length == 0) {
-						alert('취소할 대상이 없습니다.');
-						return false;
+			changeNameBtn : function() {
+				var contentValue = $(
+						'#msg-send-contact-private-content-textarea').val();
+				contentValue = contentValue + "#이름#";
+				$('#msg-send-contact-private-content-textarea').val(
+						contentValue);
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
+
+			},
+
+			editContactBtnFormCheck : function() {
+				var editName = $('#contact-edit-user-name-input').val();
+
+				if (editName == null || editName == "") {
+					alert('수정할 이름을 입력해 주세요!');
+					return flase;
+				}
+				return true;
+			},
+
+			editContactBtn : function() {
+
+				if (this.editContactBtnFormCheck()) {
+					var token = sessionStorage.getItem('token');
+					var contactUfmi = $('#contact-edit-user-target-show-input')
+							.val();
+					var contactName = $('#contact-edit-user-name-input').val();
+					var contactItem1 = $('#contact-edit-user-item1-input')
+							.val();
+					var contactItem2 = $('#contact-edit-user-item2-input')
+							.val();
+					var contactItem3 = $('#contact-edit-user-item3-input')
+							.val();
+
+					var contactEditData = new Object();
+					contactEditData.ufmi = contactUfmi;
+					contactEditData.ufmiName = contactName;
+
+					if (contactItem1 != null && contactItem1 != "") {
+						contactEditData.item1 = contactItem1;
 					}
-					reservationReq = JSON.stringify(reservationReq);
+					if (contactItem2 != null && contactItem2 != "") {
+						contactEditData.item2 = contactItem2;
+					}
+					if (contactItem3 != null && contactItem3 != "") {
+						contactEditData.item3 = contactItem3;
+					}
 
-					if (confirm("예약 메시지를 취소합니다.") == true) {
+					var contactEditDataReq = JSON.stringify(contactEditData);
+					console.log(contactEditDataReq);
+					// /v1/pms/adm/svc/address
+
+					if (confirm("해당내용을 수정 하시겠습니까?") == true) {
 
 						$.ajax({
-							url : '/v1/pms/adm/svc/messages/cancel',
-							type : 'POST',
+							url : '/v1/pms/adm/svc/address',
+							type : 'PUT',
 							headers : {
 								'X-Application-Token' : token
 							},
 							contentType : "application/json",
 							dataType : 'json',
 							async : false,
-							data : reservationReq,
+							data : contactEditDataReq,
 
 							success : function(data) {
 
 								if (!data.result.errors) {
 
-									var dataResult = data.result.data;
-									alert(dataResult + "건의 예약 메시지를 취소하였습니다.");
-									that.reservationSearch();
+									alert('주소록을 수정 하였습니다!');
+									$('#contact-edit-footer-cancel').click();
+									window.location.reload();
 
 								} else {
-									alert("예약 메시지 취소에 실패 하였습니다.");
+
+									alert('주소록을 수정에 실패 하였습니다!');
 
 								}
 
@@ -143,7 +288,115 @@ ADF.PushMsgSendView = Backbone.View
 									});
 									return false;
 								}
-								alert("예약 메시지 취소에 실패 하였습니다.");
+								alert('주소록을 수정 하였습니다!');
+
+							}
+						});
+
+					} else {
+						return false;
+					}
+				}
+
+			},
+
+			cancelContactModal : function() {
+				$('#contact-edit-user-target-show-input').val("");
+				$('#contact-edit-user-name-input').val("");
+				$('#contact-edit-user-item1-input').val("");
+				$('#contact-edit-user-item2-input').val("");
+				$('#contact-edit-user-item3-input').val("");
+			},
+
+			editContactModal : function(e) {
+				console.log('수정하기 이벤트0');
+				console.log(e.target);
+				var aData = contactTable.fnGetData($(e.target).parents('tr'));
+				console.log(aData);
+				$('#contact-edit-user-target-show-input').val(aData.hiddenUfmi);
+				$('#contact-edit-user-name-input').val(aData.ufmiName);
+				$('#contact-edit-user-item1-input').val(aData.item1);
+				$('#contact-edit-user-item2-input').val(aData.item2);
+				$('#contact-edit-user-item3-input').val(aData.item3);
+
+				// /v1/pms/adm/svc/address
+
+			},
+
+			contactTable : {
+
+			},
+
+			contactDelete : function() {
+
+				var that = this;
+				var checkedLength = $('input[name="contact-delete-checkbox"]:checked').length;
+				var token = sessionStorage.getItem("token");
+				if (checkedLength == 0) {
+					alert('삭제할 대상을 선택해주세요');
+					return false;
+				} else {
+					var contactDelete = new Object();
+					contactDelete.ufmiArray = new Array();
+					$('input[name="contact-delete-checkbox"]:checked').each(
+							function() {
+
+								if (this.value != "on") {
+
+									contactDelete.ufmiArray.push(this.value);
+								}
+							});
+
+					if (contactDelete.ufmiArray.length == 0) {
+						alert('삭제할 대상이 없습니다.');
+						return false;
+					}
+					contactDelete = JSON.stringify(contactDelete);
+
+					if (confirm("선택된 목록을 삭제 하시겠습니까?") == true) {
+
+						$.ajax({
+							url : '/v1/pms/adm/svc/address/delete',
+							type : 'POST',
+							headers : {
+								'X-Application-Token' : token
+							},
+							contentType : "application/json",
+							dataType : 'json',
+							async : false,
+							data : contactDelete,
+
+							success : function(data) {
+
+								if (!data.result.errors) {
+
+									var dataResult = data.result.data;
+									alert(dataResult + "개의 목록을  삭제 하였습니다.");
+									window.location.reload();
+
+								} else {
+									alert("목록 삭제에 실패하였습니다.");
+
+								}
+
+							},
+							error : function(data, textStatus, request) {
+								if (data.status == 401) {
+									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+									sessionStorage.removeItem("token");
+									sessionStorage.removeItem("userId");
+									sessionStorage.removeItem("role");
+									sessionStorage
+											.removeItem("monitoringStatus");
+									sessionStorage.removeItem("groupTopic");
+									sessionStorage.removeItem("ufmi");
+									sessionStorage.removeItem("userName");
+									pushRouter.navigate('login', {
+										trigger : true
+									});
+									return false;
+								}
+								alert("목록 삭제에 실패하였습니다.");
 
 							}
 						});
@@ -231,48 +484,57 @@ ADF.PushMsgSendView = Backbone.View
 					console.log(contactDataReq);
 					if (confirm("해당 내용을 등록 하시겠습니까?") == true) {
 
-						$.ajax({
-							url : '/v1/pms/adm/svc/address',
-							type : 'POST',
-							headers : {
-								'X-Application-Token' : token
-							},
-							contentType : "application/json",
-							dataType : 'json',
-							async : false,
-							data : contactDataReq,
+						$
+								.ajax({
+									url : '/v1/pms/adm/svc/address',
+									type : 'POST',
+									headers : {
+										'X-Application-Token' : token
+									},
+									contentType : "application/json",
+									dataType : 'json',
+									async : false,
+									data : contactDataReq,
 
-							success : function(data) {
+									success : function(data) {
 
-								if (!data.result.errors) {
-									$('#contact-add-footer-cancel').click();
-									alert('주소록을 등록 하였습니다.');
-									window.location.reload();
-								} else {
-									alert('주소록 등록에 실패 하였습니다.');
+										if (!data.result.errors) {
+											$('#contact-add-footer-cancel')
+													.click();
+											alert('주소록을 등록 하였습니다.');
+											window.location.reload();
+										} else {
+											if (data.result.errors[0] == 'DuplicateKeyException') {
+												alert('이미 등록된 무전 번호가 있습니다!');
+												return false;
+											}
+											alert('주소록 등록에 실패 하였습니다!');
+											// DuplicateKeyException
 
-								}
+										}
 
-							},
-							error : function(data, textStatus, request) {
-								if (data.status == 401) {
-									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("token");
-									sessionStorage.removeItem("userId");
-									sessionStorage.removeItem("role");
+									},
+									error : function(data, textStatus, request) {
+										if (data.status == 401) {
+											alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+											sessionStorage.removeItem("token");
+											sessionStorage.removeItem("userId");
+											sessionStorage.removeItem("role");
 
-									sessionStorage.removeItem("groupTopic");
-									sessionStorage.removeItem("ufmi");
-									sessionStorage.removeItem("userName");
-									pushRouter.navigate('login', {
-										trigger : true
-									});
-									return false;
-								}
-								alert('주소록 등록에 실패 하였습니다.');
+											sessionStorage
+													.removeItem("groupTopic");
+											sessionStorage.removeItem("ufmi");
+											sessionStorage
+													.removeItem("userName");
+											pushRouter.navigate('login', {
+												trigger : true
+											});
+											return false;
+										}
+										alert('주소록 등록에 실패 하였습니다.');
 
-							}
-						});
+									}
+								});
 					} else {
 						return false;
 					}
@@ -510,6 +772,37 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			selectContactContentList : function() {
+				console.log('change select ');
+				var contentSelect = $(
+						'#msg-send-contact-private-content-load-select').val();
+				console.log(contentSelect);
+				var contentMsg = $('p.' + contentSelect).text();
+				console.log(contentMsg);
+				$('#msg-send-contact-private-content-textarea').val(contentMsg);
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
+
+			},
+
 			selectContentList : function() {
 				console.log('change select ');
 				var contentSelect = $('#msg-send-private-content-load-select')
@@ -598,7 +891,7 @@ ADF.PushMsgSendView = Backbone.View
 				var selectSize = $(
 						'#msg-send-private-content-load-select option').size();
 
-				if (selectSize > 12) {
+				if (selectSize > 13) {
 					alert('내용저장은 12개까지만 가능합니다');
 					return false;
 				}
@@ -726,6 +1019,55 @@ ADF.PushMsgSendView = Backbone.View
 				$('#msg-send-private-repeat-div').hide();
 				$('#msg-send-private-repeat-cnt-select').val(0);
 				$('#msg-send-private-repeat-time-input').val("");
+				var input_messageContent = $(
+						'#msg-send-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-private-length-max').text("");
+					$('#msg-send-private-length-byte').text("MMS");
+					$('#msg-send-private-length-strong').text(strongLength);
+				} else {
+					$('#msg-send-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-private-length-max').text("140");
+					$('#msg-send-private-length-byte').text("byte");
+					$('#msg-send-private-length-strong').text(strongLength);
+				}
+
+			},
+
+			msgSendCancelContact : function() {
+				$('#msg-send-contact-private-content-textarea').val("");
+				$('#msg-send-contact-private-user-repeat-check').attr(
+						'checked', false);
+				$('#msg-send-contact-private-reservation-date-input').val("");
+				$('#msg-send-contact-private-repeat-div').hide();
+				$('#msg-send-contact-private-repeat-cnt-select').val(0);
+				$('#msg-send-contact-private-repeat-time-input').val("");
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
 
 			},
 
@@ -738,6 +1080,18 @@ ADF.PushMsgSendView = Backbone.View
 				if (!num_check.test(private_input)) {
 					alert('숫자 만 입력 가능합니다!');
 					$("#msg-send-private-repeat-time-input").focus();
+					return false;
+				}
+			},
+			checkRepeatTimeContact : function() {
+				console.log('asdf');
+				var num_check = /^[0-9]*$/;
+				var private_input = $(
+						"#msg-send-contact-private-repeat-time-input").val();
+
+				if (!num_check.test(private_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#msg-send-contact-private-repeat-time-input").focus();
 					return false;
 				}
 			},
@@ -814,7 +1168,7 @@ ADF.PushMsgSendView = Backbone.View
 					 * alert('메시지 사이즈가 너무 큽니다.'); return false; }
 					 */
 
-					var sendCount;
+					var sendCount = 0;
 					if (messageData.resendMaxCount) {
 						console.log('반복 있음');
 
@@ -878,7 +1232,8 @@ ADF.PushMsgSendView = Backbone.View
 						success : function(data) {
 
 							if (!data.result.errors) {
-								alert(messageData.receivers.length
+								sendCount = sendCount - 1;
+								alert(messageData.receivers.length + sendCount
 										+ '건의 메시지를 발송하였습니다.');
 
 							} else {
@@ -984,6 +1339,30 @@ ADF.PushMsgSendView = Backbone.View
 
 				return true;
 
+			},
+
+			checkContactContentArea : function() {
+				console.log('주소록 발송 내용 변d');
+				var input_messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-contact-private-length-max').text("");
+					$('#msg-send-contact-private-length-byte').text("MMS");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				} else {
+					$('#msg-send-contact-private-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-contact-private-length-max').text("140");
+					$('#msg-send-contact-private-length-byte').text("byte");
+					$('#msg-send-contact-private-length-strong').text(
+							strongLength);
+				}
 			},
 
 			checkContentArea : function() {
@@ -1127,6 +1506,26 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			msgRepeatCheckContact : function() {
+				var checkedLength = $('input[id="msg-send-contact-private-user-repeat-check"]:checked').length;
+				if (checkedLength == 0) {
+					// $("#messagelist-search-date-start-input").prop('disabled',
+					// true);
+					$('#msg-send-contact-private-repeat-div').hide();
+					$('#msg-send-contact-private-repeat-cnt-select').val(0);
+					$('#msg-send-contact-private-repeat-time-input').val("");
+
+					return false;
+				} else {
+					$('#msg-send-contact-private-repeat-div').show();
+					$('#msg-send-contact-private-repeat-time-input').prop(
+							'disabled', false);
+
+					return false;
+				}
+
+			},
+
 			msgRepeatCheck : function() {
 				var checkedLength = $('input[id="msg-send-private-user-repeat-check"]:checked').length;
 				if (checkedLength == 0) {
@@ -1163,6 +1562,14 @@ ADF.PushMsgSendView = Backbone.View
 											.getFullYear(), nowDate.getMonth(),
 											nowDate.getDate() + 30, 0, 0, 0, 0);
 									$('#msg-send-private-reservation-div')
+											.datetimepicker({
+												format : "YYYY/MM/DD hh:mm a",
+												minDate : today,
+												maxDate : today_30
+											});
+
+									$(
+											'#msg-send-contact-private-reservation-div')
 											.datetimepicker({
 												format : "YYYY/MM/DD hh:mm a",
 												minDate : today,
@@ -1215,6 +1622,14 @@ ADF.PushMsgSendView = Backbone.View
 																						+ '>'
 																						+ dataResult[i].templateName
 																						+ '</option>');
+																$(
+																		"#msg-send-contact-private-content-load-select")
+																		.append(
+																				'<option value='
+																						+ dataResult[i].templateId
+																						+ '>'
+																						+ dataResult[i].templateName
+																						+ '</option>');
 															}
 															$(
 																	'#msg-content-list-box-div')
@@ -1260,30 +1675,6 @@ ADF.PushMsgSendView = Backbone.View
 												}
 											});
 
-									// v1/pms/adm/svc/address
-									// >
-									// Request Headers
-									// *{
-									// "X-Application-Token":
-									// "24d09fe9c4864a8f82d1224",
-									// "Content-Type":
-									// "application/json;charset=utf-8"
-									// }*
-									// >
-									// Response BodySelect body
-									// *{"result": {
-									// "success": true,
-									// "data": [
-									// {
-									// "userId": "easyConn04",
-									// "ufmi": "82*50*1033",
-									// "ufmiName": "testName",
-									// "item1": "test1",
-									// "item2": "test2",
-									// "item3": "test3",
-									// "issueTime": 1431947842000,
-									// "issueId": "easyConn04"
-
 									var contactTableData = new Array();
 
 									$
@@ -1313,9 +1704,10 @@ ADF.PushMsgSendView = Backbone.View
 																		item3 : '',
 																		item4 : ''
 																	});
+
 														}
 														for ( var i in resultData) {
-
+															var hiddenUfmi = resultData[i].ufmi;
 															resultData[i].ufmi = '<input name="contact-delete-checkbox" type="checkbox" value="'
 																	+ resultData[i].ufmi
 																	+ '"/>&nbsp'
@@ -1327,7 +1719,8 @@ ADF.PushMsgSendView = Backbone.View
 																		item1 : resultData[i].item1,
 																		item2 : resultData[i].item2,
 																		item3 : resultData[i].item3,
-																		item4 : '<button type="button" name="editContactBtn"  data-target="#msg-resend-modal"  data-toggle="modal" class="btn btn-xs btn-white">수정하기</button>',
+																		item4 : '<button type="button" name="editContactBtn"  data-target="#contact-edit-modal"  data-toggle="modal" class="btn btn-xs btn-white">수정하기</button>',
+																		hiddenUfmi : hiddenUfmi
 																	});
 
 														}
@@ -1367,7 +1760,7 @@ ADF.PushMsgSendView = Backbone.View
 												}
 											});
 
-									var detailTable = $('#contact-list-table')
+									contactTable = $('#contact-list-table')
 											.dataTable({
 												aaData : contactTableData,
 												'bSort' : true,
@@ -1382,9 +1775,12 @@ ADF.PushMsgSendView = Backbone.View
 												scrollX : true,
 												"bLengthChange" : true,
 												"dom" : 'T<"clear">lrftip',
+												"columnDefs" : [ {
+													"targets" : 0,
+													"orderable" : false
+												} ],
 												aoColumns : [ {
 													mData : 'ufmi'
-
 												}, {
 													mData : 'ufmiName'
 
@@ -1399,6 +1795,9 @@ ADF.PushMsgSendView = Backbone.View
 
 												}, {
 													mData : 'item4'
+												}, {
+													mData : 'hiddenUfmi',
+													"visible" : false
 												}
 
 												]
