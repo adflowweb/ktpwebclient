@@ -28,6 +28,8 @@ ADF.PushReservationListView = Backbone.View.extend({
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
+		var userId=sessionStorage.getItem('userId');
+		$('#user-id-span').text(userId);
 		
 	},
 	afterRender : function() {

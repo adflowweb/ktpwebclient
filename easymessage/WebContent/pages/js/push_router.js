@@ -28,6 +28,7 @@ var reservationListView = new ADF.PushReservationListView();
 var msgListView = new ADF.PushMsgListView();
 var statsView = new ADF.PushStatsView();
 var userInfoView = new ADF.PushUserInfoView();
+//var contentListView= new ADF.PushContentListView();
 
 pushRouter.on('route:main', function() {
 	var token = sessionStorage.getItem("token");
