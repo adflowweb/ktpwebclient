@@ -4,26 +4,36 @@ ADF.PushMsgSendView = Backbone.View
 
 			events : {
 				"change #msg-send-private-user-repeat-check" : "msgRepeatCheck",
+				"change #msg-send-group-user-repeat-check" : "msgGroupRepeatCheck",
 				"change #msg-send-contact-private-user-repeat-check" : "msgRepeatCheckContact",
 				"input #send-private-input" : "checkSendPrivateInput",
+				"input #send-group-input" : "checkSendGroupInput",
 				"input #send-private-fleep-bunch-input" : "checkSendBunchInput",
+				"input #send-group-fleep-bunch-input" : "checkSendGroupBunchInput",
 				"input #contact-add-private-input" : "checkContactPrivateInput",
 				"input #contact-add-fleep-bunch-input" : "checkContactBunchInput",
 				"click #msg-send-private-plus-span" : "plusUfmiCheck",
 				"click #contact-add-plus-span" : "plusContactUfmiCheck",
+				"click #msg-send-group-plus-span" : "plusGroupTopicCheck",
 				"input #msg-send-private-content-textarea" : "checkContentArea",
+				"input #msg-send-group-content-textarea" : "checkGroupContentArea",
 				"input #msg-send-contact-private-content-textarea" : "checkContactContentArea",
 				"input #msg-send-private-content-save-textarea" : "checkContentSaveArea",
 				"input #msg-send-private-content-edit-textarea" : "checkContentEditArea",
 				"input #msg-send-private-repeat-time-input" : "checkRepeatTime",
 				"input #msg-send-contact-private-repeat-time-input" : "checkRepeatTimeContact",
 				"click #msg-send-private-btn" : "msgSend",
+				"click #msg-send-group-btn" : "msgSendGroup",
 				"click #msg-send-private-cancel-btn" : "msgSendCancel",
+				"click #msg-send-group-cancel-btn" : "msgGroupSendCancel",
 				"click #msg-send-contact-private-cancel-btn" : "msgSendCancelContact",
 				"click #msg-send-private-save-btn" : "msgSaveBtnClick",
+				"click #msg-send-group-save-btn" : "msgSaveGroupBtnClick",
+				"click #msg-send-contact-private-save-btn" : "msgSaveContactBtnClick",
 				"click #msg-save-btn" : "msgSave",
 				"click #modal-footer-cancel" : "msgSaveCancel",
 				"change #msg-send-private-content-load-select" : "selectContentList",
+				"change #msg-send-group-content-load-select" : "selectGroupContentList",
 				"change #msg-send-contact-private-content-load-select" : "selectContactContentList",
 				"click a[href=#msg-content-edit-modal]" : "clickHrefEdit",
 				"click a[href=#msg-content-delete-modal]" : "clickHrefDelete",
@@ -40,7 +50,11 @@ ADF.PushMsgSendView = Backbone.View
 				"click #msg-send-contact-change-name-btn" : "changeNameBtn",
 				"click #msg-send-contact-change-item1-btn" : "changeItem1Btn",
 				"click #msg-send-contact-change-item2-btn" : "changeItem2Btn",
-				"click #msg-send-contact-change-item3-btn" : "changeItem3Btn"
+				"click #msg-send-contact-change-item3-btn" : "changeItem3Btn",
+				"click #msg-send-contact-private-btn" : "msgSendContact",
+				"click #msg-send-private-div" : "clickPrivateSendDiv",
+				"click #msg-send-contact-div" : "clickContactSendDiv",
+				"click #msg-send-group-div" : "clickGroupSendDiv"
 
 			},
 
@@ -63,7 +77,15 @@ ADF.PushMsgSendView = Backbone.View
 						"checkContactContentArea", "changeNameBtn",
 						"changeItem1Btn", "changeItem2Btn", "changeItem3Btn",
 						"selectContactContentList", "msgRepeatCheckContact",
-						"checkRepeatTimeContact", "msgSendCancelContact");
+						"checkRepeatTimeContact", "msgSendCancelContact",
+						"msgSendContactFormCheck", "msgSendContact",
+						"clickPrivateSendDiv", "clickContactSendDiv",
+						"clickGroupSendDiv", "msgSaveContactBtnClick",
+						"checkSendGroupInput", "checkSendGroupBunchInput",
+						"plusGroupTopicCheck", "checkGroupContentArea",
+						"msgSaveGroupBtnClick", "selectGroupContentList",
+						"msgGroupRepeatCheck", "msgGroupSendCancel",
+						"msgSendGroup", "msgSendGroupFormCheck");
 				var _this = this;
 				this.render = _.wrap(this.render, function(render) {
 					_this.beforeRender();
@@ -89,10 +111,32 @@ ADF.PushMsgSendView = Backbone.View
 				// contentListView.render();
 
 			},
+
+			clickPrivateSendDiv : function() {
+				console.log('개인발송 클릭');
+				$('#contact-list-div').fadeOut();
+				$("#tab-div").removeClass('col-lg-4');
+				$("#tab-div").addClass('col-lg-8');
+			},
+
+			clickContactSendDiv : function() {
+				console.log('개인발송 클릭');
+				$('#contact-list-div').fadeIn();
+				$("#tab-div").removeClass('col-lg-8');
+				$("#tab-div").addClass('col-lg-4');
+			},
+
+			clickGroupSendDiv : function() {
+				console.log('개인발송 클릭');
+				$('#contact-list-div').fadeOut();
+				$("#tab-div").removeClass('col-lg-4');
+				$("#tab-div").addClass('col-lg-8');
+			},
+
 			changeItem1Btn : function() {
 				var contentValue = $(
 						'#msg-send-contact-private-content-textarea').val();
-				contentValue = contentValue + "#항목1#";
+				contentValue = contentValue + "$항목1$";
 				$('#msg-send-contact-private-content-textarea').val(
 						contentValue);
 				var input_messageContent = $(
@@ -120,7 +164,7 @@ ADF.PushMsgSendView = Backbone.View
 			changeItem2Btn : function() {
 				var contentValue = $(
 						'#msg-send-contact-private-content-textarea').val();
-				contentValue = contentValue + "#항목2#";
+				contentValue = contentValue + "$항목2$";
 				$('#msg-send-contact-private-content-textarea').val(
 						contentValue);
 				var input_messageContent = $(
@@ -148,7 +192,7 @@ ADF.PushMsgSendView = Backbone.View
 			changeItem3Btn : function() {
 				var contentValue = $(
 						'#msg-send-contact-private-content-textarea').val();
-				contentValue = contentValue + "#항목3#";
+				contentValue = contentValue + "$항목3$";
 				$('#msg-send-contact-private-content-textarea').val(
 						contentValue);
 				var input_messageContent = $(
@@ -176,7 +220,7 @@ ADF.PushMsgSendView = Backbone.View
 			changeNameBtn : function() {
 				var contentValue = $(
 						'#msg-send-contact-private-content-textarea').val();
-				contentValue = contentValue + "#이름#";
+				contentValue = contentValue + "$이름$";
 				$('#msg-send-contact-private-content-textarea').val(
 						contentValue);
 				var input_messageContent = $(
@@ -330,7 +374,7 @@ ADF.PushMsgSendView = Backbone.View
 			contactDelete : function() {
 
 				var that = this;
-				var checkedLength = $('input[name="contact-delete-checkbox"]:checked').length;
+				var checkedLength = $('input[name="contact-list-checkbox"]:checked').length;
 				var token = sessionStorage.getItem("token");
 				if (checkedLength == 0) {
 					alert('삭제할 대상을 선택해주세요');
@@ -338,7 +382,7 @@ ADF.PushMsgSendView = Backbone.View
 				} else {
 					var contactDelete = new Object();
 					contactDelete.ufmiArray = new Array();
-					$('input[name="contact-delete-checkbox"]:checked').each(
+					$('input[name="contact-list-checkbox"]:checked').each(
 							function() {
 
 								if (this.value != "on") {
@@ -412,7 +456,7 @@ ADF.PushMsgSendView = Backbone.View
 			contactAllCheckBox : function() {
 				console.log('asdf');
 				checkboxes = document
-						.getElementsByName('contact-delete-checkbox');
+						.getElementsByName('contact-list-checkbox');
 				for (var i = 0, n = checkboxes.length; i < n; i++) {
 					if (checkboxes[i].checked == true) {
 						checkboxes[i].checked = false;
@@ -554,6 +598,8 @@ ADF.PushMsgSendView = Backbone.View
 
 				if (ufmiVerCheck_radio == "1") {
 					$("#contact-add-fleep-bunch-input").attr('maxlength', '4');
+				} else {
+					$("#contact-add-fleep-bunch-input").attr('maxlength', '6');
 				}
 				if (!num_check.test(fleep_bunch_input)) {
 					alert('숫자 만 입력 가능합니다!');
@@ -571,8 +617,10 @@ ADF.PushMsgSendView = Backbone.View
 						'input:radio[name="contact-add-pnum-radio"]:checked')
 						.val();
 
-				if (ufmiVerCheck_radio == "01") {
+				if (ufmiVerCheck_radio == "1") {
 					$("#contact-add-private-input").attr('maxlength', '4');
+				} else {
+					$("#contact-add-private-input").attr('maxlength', '6');
 				}
 
 				if (!num_check.test(private_input)) {
@@ -803,6 +851,34 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			selectGroupContentList : function() {
+				console.log('change select ');
+				var contentSelect = $('#msg-send-group-content-load-select')
+						.val();
+				console.log(contentSelect);
+				var contentMsg = $('p.' + contentSelect).text();
+				console.log(contentMsg);
+				$('#msg-send-group-content-textarea').val(contentMsg);
+				var input_messageContent = $('#msg-send-group-content-textarea')
+						.val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-group-length-max').text("");
+					$('#msg-send-group-length-byte').text("MMS");
+					$('#msg-send-group-length-strong').text(strongLength);
+				} else {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-group-length-max').text("140");
+					$('#msg-send-group-length-byte').text("byte");
+					$('#msg-send-group-length-strong').text(strongLength);
+				}
+
+			},
 			selectContentList : function() {
 				console.log('change select ');
 				var contentSelect = $('#msg-send-private-content-load-select')
@@ -888,10 +964,12 @@ ADF.PushMsgSendView = Backbone.View
 			},
 
 			msgSave : function() {
+				console.log('메시지 저장');
 				var selectSize = $(
 						'#msg-send-private-content-load-select option').size();
 
-				if (selectSize > 13) {
+				console.log(selectSize);
+				if (selectSize >= 13) {
 					alert('내용저장은 12개까지만 가능합니다');
 					return false;
 				}
@@ -977,10 +1055,71 @@ ADF.PushMsgSendView = Backbone.View
 				return true;
 			},
 
+			msgSaveGroupBtnClick : function() {
+				console.log('msgCaaa');
+				var contentTextAreaVal = $('#msg-send-group-content-textarea')
+						.val();
+				if (contentTextAreaVal != null && contentTextAreaVal != "") {
+					$('#msg-send-private-content-save-textarea').val(
+							contentTextAreaVal);
+					var input_messageContent = $(
+							'#msg-send-private-content-save-textarea').val();
+					input_messageContent = input_messageContent.trim();
+					console.log(input_messageContent.Length());
+					var strongLength = input_messageContent.Length();
+					if (strongLength > 140) {
+						$('#msg-send-private-content-save-textarea').css(
+								'background-color', '#ddd');
+						$('#msg-send-private-length-save-max').text("");
+						$('#msg-send-private-length-save-byte').text("MMS");
+						$('#msg-send-private-length-save-strong').text(
+								strongLength);
+					} else {
+						$('#msg-send-private-content-save-textarea').css(
+								'background-color', 'white');
+						$('#msg-send-private-length-save-max').text("140");
+						$('#msg-send-private-length-save-byte').text("byte");
+						$('#msg-send-private-length-save-strong').text(
+								strongLength);
+					}
+				}
+			},
+
 			msgSaveBtnClick : function() {
 				console.log('msgCaaa');
 				var contentTextAreaVal = $('#msg-send-private-content-textarea')
 						.val();
+				if (contentTextAreaVal != null && contentTextAreaVal != "") {
+					$('#msg-send-private-content-save-textarea').val(
+							contentTextAreaVal);
+					var input_messageContent = $(
+							'#msg-send-private-content-save-textarea').val();
+					input_messageContent = input_messageContent.trim();
+					console.log(input_messageContent.Length());
+					var strongLength = input_messageContent.Length();
+					if (strongLength > 140) {
+						$('#msg-send-private-content-save-textarea').css(
+								'background-color', '#ddd');
+						$('#msg-send-private-length-save-max').text("");
+						$('#msg-send-private-length-save-byte').text("MMS");
+						$('#msg-send-private-length-save-strong').text(
+								strongLength);
+					} else {
+						$('#msg-send-private-content-save-textarea').css(
+								'background-color', 'white');
+						$('#msg-send-private-length-save-max').text("140");
+						$('#msg-send-private-length-save-byte').text("byte");
+						$('#msg-send-private-length-save-strong').text(
+								strongLength);
+					}
+				}
+
+			},
+
+			msgSaveContactBtnClick : function() {
+				console.log('msgCaaa');
+				var contentTextAreaVal = $(
+						'#msg-send-contact-private-content-textarea').val();
 				if (contentTextAreaVal != null && contentTextAreaVal != "") {
 					$('#msg-send-private-content-save-textarea').val(
 							contentTextAreaVal);
@@ -1036,6 +1175,38 @@ ADF.PushMsgSendView = Backbone.View
 					$('#msg-send-private-length-max').text("140");
 					$('#msg-send-private-length-byte').text("byte");
 					$('#msg-send-private-length-strong').text(strongLength);
+				}
+
+			},
+
+			msgGroupSendCancel : function() {
+				$('#send-group-fleep-bunch-input').val("");
+				$('#send-group-input').val("");
+				$('#msg-send-group-user-target-show-input').val("");
+				$('#msg-send-group-user-target-show-div').hide();
+				$('#msg-send-group-content-textarea').val("");
+				$('#msg-send-group-user-repeat-check').attr('checked', false);
+				$('#msg-send-group-reservation-date-input').val("");
+				$('#msg-send-group-repeat-div').hide();
+				$('#msg-send-group-repeat-cnt-select').val(0);
+				$('#msg-send-group-repeat-time-input').val("");
+				var input_messageContent = $('#msg-send-group-content-textarea')
+						.val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-group-length-max').text("");
+					$('#msg-send-group-length-byte').text("MMS");
+					$('#msg-send-group-length-strong').text(strongLength);
+				} else {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-group-length-max').text("140");
+					$('#msg-send-group-length-byte').text("byte");
+					$('#msg-send-group-length-strong').text(strongLength);
 				}
 
 			},
@@ -1184,7 +1355,7 @@ ADF.PushMsgSendView = Backbone.View
 
 					if (messageData.reservationTime) {
 						if (confirm(messageData.receivers + " 해당 무전번호로 총 "
-								+ sendCount + "건의 메시지가 예약발송 됩니다. 전송 하시겠습니까?") == true) {
+								+ sendCount + "건의 메시지가 예약전송 됩니다. 전송 하시겠습니까?") == true) {
 							$('#msg-send-private-user-target-show-input').val(
 									"");
 							$('#msg-send-private-user-textarea').val("");
@@ -1232,9 +1403,8 @@ ADF.PushMsgSendView = Backbone.View
 						success : function(data) {
 
 							if (!data.result.errors) {
-								sendCount = sendCount - 1;
-								alert(messageData.receivers.length + sendCount
-										+ '건의 메시지를 발송하였습니다.');
+
+								alert('메시지를 전송 하였습니다.');
 
 							} else {
 								alert('메시지 전송에 실패 하였습니다.');
@@ -1265,6 +1435,251 @@ ADF.PushMsgSendView = Backbone.View
 				}
 
 			},
+
+			msgSendGroup : function() {
+				var userName = sessionStorage.getItem('userName');
+				if (userName == null || userName == "" || userName == "null") {
+					alert('발송번호를 등록해야 정상 사용이 가능합니다.!');
+					pushRouter.navigate('user_info', {
+						trigger : true
+					});
+					return false;
+				}
+				if (this.msgSendGroupFormCheck()) {
+
+					var messageTarget = $(
+							'#msg-send-group-user-target-show-input').val();
+					console.log(messageTarget);
+					console.log('123123123123');
+					messageTarget = pushUtil.compactTrim(messageTarget);
+					console.log('123');
+					var messageContent = $('#msg-send-group-content-textarea')
+							.val();
+					var input_reservation = $(
+							'#msg-send-group-reservation-date-input').val();
+					var input_resendCount = $(
+							'#msg-send-group-repeat-cnt-select').val();
+					var input_resendInterval = $(
+							'#msg-send-group-repeat-time-input').val();
+					var dateResult = "";
+					var messageData = new Object();
+					console.log('34666');
+					if (input_reservation != "") {
+
+						dateResult = pushUtil.dateFormating(input_reservation);
+						dateResult = dateResult.toISOString();
+					}
+
+					if (dateResult != "") {
+						messageData.reservationTime = dateResult;
+
+					}
+
+					if (input_resendCount != 0) {
+						messageData.resendMaxCount = input_resendCount;
+					}
+					if (input_resendInterval != "") {
+						messageData.resendInterval = input_resendInterval;
+					}
+
+					console.log('346123123');
+					messageContent = pushUtil.utf8_to_b64(messageContent);
+					messageTarget = messageTarget.split(",");
+					// console.log('메지시 수신자 변경');
+					// messageTarget[0] = 'mms/P1/82/50/g130';
+
+					messageData.receivers = messageTarget;
+					messageData.content = messageContent;
+					messageData.contentType = "application/base64";
+
+					// end 전송대상 체크
+
+					var contentLength = $('#msg-send-group-length-strong')
+							.text();
+					messageData.contentLength = contentLength;
+					console.log('메시지 전송전 길이');
+					console.log(messageData.contentLength);
+
+					var messageDataResult = JSON.stringify(messageData);
+					console.log('메시시 발송 데이터');
+					console.log(messageDataResult);
+					/*
+					 * if (utf8ByteLength(messageDataResult) > 512000) {
+					 * alert('메시지 사이즈가 너무 큽니다.'); return false; }
+					 */
+
+					var sendCount = 0;
+					if (messageData.resendMaxCount) {
+						console.log('반복 있음');
+
+						messageData.receivers.length = messageData.receivers.length * 1;
+						messageData.resendMaxCount = messageData.resendMaxCount * 1;
+						sendCount = (messageData.receivers.length * messageData.resendMaxCount)
+								+ messageData.receivers.length
+
+					} else {
+						sendCount = messageData.receivers.length;
+
+					}
+
+					// if (messageData.reservationTime) {
+					// if (confirm(messageData.receivers + " 해당 무전번호로 총 "
+					// + sendCount + "건의 메시지가 예약전송 됩니다. 전송 하시겠습니까?") == true) {
+					// $('#msg-send-private-user-target-show-input').val(
+					// "");
+					// $('#msg-send-private-user-textarea').val("");
+					// $('#msg-send-private-length-strong').text("0");
+					// $('#msg-send-private-user-reservationdate-input')
+					// .val("");
+					// $('#msg-send-private-user-resendCount-input').val(
+					// "");
+					// $('#msg-send-private-user-resendInterval-input')
+					// .val("");
+					// } else {
+					// return false;
+					// }
+					// } else {
+					// if (confirm(messageData.receivers + " 해당 무전번호로 총 "
+					// + sendCount + "건의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
+					// $('#msg-send-private-user-target-show-input').val(
+					// "");
+					// $('#msg-send-private-user-textarea').val("");
+					// $('#msg-send-private-length-strong').text("0");
+					// $('#msg-send-private-user-reservationdate-input')
+					// .val("");
+					// $('#msg-send-private-user-resendCount-input').val(
+					// "");
+					// $('#msg-send-private-user-resendInterval-input')
+					// .val("");
+					// } else {
+					// return false;
+					// }
+					// }
+
+					var token = sessionStorage.getItem("token");
+
+					$.ajax({
+						url : '/v1/pms/adm/svc/messages',
+						type : 'POST',
+						headers : {
+							'X-Application-Token' : token
+						},
+						contentType : "application/json",
+						dataType : 'json',
+						async : false,
+						data : messageDataResult,
+
+						success : function(data) {
+
+							if (!data.result.errors) {
+
+								alert('메시지를 전송 하였습니다.');
+
+							} else {
+								alert('메시지 전송에 실패 하였습니다.');
+
+							}
+
+						},
+						error : function(data, textStatus, request) {
+							if (data.status == 401) {
+								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+								sessionStorage.removeItem("token");
+								sessionStorage.removeItem("userId");
+								sessionStorage.removeItem("role");
+
+								sessionStorage.removeItem("groupTopic");
+								sessionStorage.removeItem("ufmi");
+								sessionStorage.removeItem("userName");
+								pushRouter.navigate('login', {
+									trigger : true
+								});
+								return false;
+							}
+							alert('메시지 전송에 실패 하였습니다.');
+
+						}
+					});
+
+				}
+
+			},
+
+			msgSendGroupFormCheck : function() {
+				var messageTarget = $('#msg-send-group-user-target-show-input')
+						.val();
+				messageTarget = pushUtil.compactTrim(messageTarget);
+				var messageContent = $('#msg-send-group-content-textarea')
+						.val();
+				var input_reservation = $(
+						'#msg-send-group-reservation-date-input').val();
+
+				if (messageTarget == null || messageTarget == "") {
+					alert("+ 버튼을 눌러 그룹번호를 추가해 주세요!");
+					$('#send-group-input').focus();
+					return false;
+				}
+				if (messageContent == null || messageContent == "") {
+					alert("메세지 보낼 내용을 입력해주세요");
+					$('#msg-send-group-content-textarea').focus();
+					return false;
+				}
+
+				var checkedLength = $('input[id="msg-send-group-user-repeat-check"]:checked').length;
+				if (checkedLength != 0) {
+					var selectValue = $('#msg-send-group-repeat-cnt-select')
+							.val();
+					if (selectValue == 0) {
+						alert('반복 횟수를 입력해주세요!');
+						$('#msg-send-group-repeat-cnt-select').focus();
+						return false;
+					}
+
+					var repeatValue = $('#msg-send-group-repeat-time-input')
+							.val();
+					if (repeatValue == null || repeatValue == "") {
+						alert('반복 시간을 입력해주세요!');
+						$('#msg-send-group-repeat-time-input').focus();
+						return false;
+					} else {
+						repeatValue = repeatValue * 1;
+						if (repeatValue > 1440) {
+							alert('반복시간은 최대 24시간(1440)분을 넘을 수 없습니다!');
+							$('#msg-send-group-repeat-time-input').focus();
+							return false;
+						}
+					}
+
+				}
+
+				if (input_reservation == null || input_reservation == "") {
+					console.log('예약 메시지 없음');
+				} else {
+
+					if (input_reservation) { // 예약 메세지
+						var convertDate = input_reservation;
+
+						input_reservation = pushUtil
+								.compactTrim(input_reservation);
+
+						input_reservation = input_reservation.substring(0, 10);
+
+						convertDate = pushUtil.dateFormating(convertDate);
+						var nowDateTime = new Date();
+						var nowTime = nowDateTime.getTime() + 300000;
+						var convertPickerTime = convertDate.getTime();
+						if (nowTime > convertPickerTime) {
+							alert('예약메세지는 현재 시각기준보다 5분 이상 설정 되어야 합니다.');
+							return false;
+						}
+
+					}
+				}
+
+				return true;
+
+			},
+
 			msgSendFormCheck : function() {
 
 				var messageTarget = $(
@@ -1341,6 +1756,267 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			msgSendContactFormCheck : function() {
+
+				// var messageTarget = $(
+				// '#msg-send-private-user-target-show-input').val();
+				// messageTarget = pushUtil.compactTrim(messageTarget);
+
+				var checkedLength = $('input[name="contact-list-checkbox"]:checked').length;
+				if (checkedLength == 0) {
+					alert('전송할 대상을 주소록에서 선택해주세요');
+					return false;
+
+				}
+
+				var messageContent = $(
+						'#msg-send-contact-private-content-textarea').val();
+				var input_reservation = $(
+						'#msg-send-contact-private-reservation-date-input')
+						.val();
+
+				if (messageContent == null || messageContent == "") {
+					alert("메세지 보낼 내용을 입력해주세요");
+					$('#msg-send-contact-private-content-textarea').focus();
+					return false;
+				}
+
+				var checkedLength = $('input[id="msg-send-contact-private-user-repeat-check"]:checked').length;
+				if (checkedLength != 0) {
+					var selectValue = $(
+							'#msg-send-contact-private-repeat-cnt-select')
+							.val();
+
+					if (selectValue == 0) {
+						alert('반복 횟수를 입력해주세요!');
+						$('#msg-send-contact-private-repeat-cnt-select')
+								.focus();
+						return false;
+					}
+
+					var repeatValue = $(
+							'#msg-send-contact-private-repeat-time-input')
+							.val();
+					if (repeatValue == null || repeatValue == "") {
+						alert('반복 시간을 입력해주세요!');
+						$('#msg-send-contact-private-repeat-time-input')
+								.focus();
+						return false;
+					} else {
+						repeatValue = repeatValue * 1;
+						if (repeatValue > 1440) {
+							alert('반복시간은 최대 24시간(1440)분을 넘을 수 없습니다!');
+							$('#msg-send-contact-private-repeat-time-input')
+									.focus();
+							return false;
+						}
+					}
+
+				}
+
+				if (input_reservation == null || input_reservation == "") {
+					console.log('예약 메시지 없음');
+				} else {
+
+					if (input_reservation) { // 예약 메세지
+						var convertDate = input_reservation;
+
+						input_reservation = pushUtil
+								.compactTrim(input_reservation);
+
+						input_reservation = input_reservation.substring(0, 10);
+
+						convertDate = pushUtil.dateFormating(convertDate);
+						var nowDateTime = new Date();
+						var nowTime = nowDateTime.getTime() + 300000;
+						var convertPickerTime = convertDate.getTime();
+						if (nowTime > convertPickerTime) {
+							alert('예약메세지는 현재 시각기준보다 5분 이상 설정 되어야 합니다.');
+							return false;
+						}
+
+					}
+				}
+
+				return true;
+
+			},
+
+			msgSendContact : function() {
+
+				var messageData = new Object();
+				var token = sessionStorage.getItem('token');
+				messageData.addressMessageArray = new Array();
+				messageData.contentType = "application/base64";
+				var mmsCount = 0;
+				var smsCount = 0;
+
+				var input_resendCount = $(
+						'#msg-send-contact-private-repeat-cnt-select').val();
+				var input_resendInterval = $(
+						'#msg-send-contact-private-repeat-time-input').val();
+
+				var input_reservation = $(
+						'#msg-send-contact-private-reservation-date-input')
+						.val();
+				var dateResult = "";
+				if (input_reservation != "") {
+					dateResult = pushUtil.dateFormating(input_reservation);
+					dateResult = dateResult.toISOString();
+				}
+				if (dateResult != "") {
+					messageData.reservationTime = dateResult;
+				}
+				if (input_resendCount != 0) {
+					messageData.resendMaxCount = input_resendCount;
+				}
+				if (input_resendInterval != "") {
+					messageData.resendInterval = input_resendInterval;
+				}
+
+				if (this.msgSendContactFormCheck()) {
+
+					$('input[name="contact-list-checkbox"]:checked')
+							.each(
+									function() {
+										if (this.value != "on") {
+											var messageDataDetail = new Object();
+											var aData = contactTable
+													.fnGetData($(this).parents(
+															'tr'));
+											var messageContent = $(
+													'#msg-send-contact-private-content-textarea')
+													.val();
+											messageDataDetail.receiver = aData.hiddenUfmi;
+
+											var name = aData.ufmiName;
+											var item1 = aData.item1;
+											var item2 = aData.item2;
+											var item3 = aData.item3;
+											if (messageContent.indexOf("$이름$") > -1) {
+												messageContent = messageContent
+														.replace('$이름$', name);
+											}
+
+											if (messageContent.indexOf("$항목1$") > -1) {
+												messageContent = messageContent
+														.replace('$항목1$', item1);
+											}
+											if (messageContent.indexOf("$항목2$") > -1) {
+												messageContent = messageContent
+														.replace('$항목2$', item2);
+											}
+											if (messageContent.indexOf("$항목3$") > -1) {
+												messageContent = messageContent
+														.replace('$항목3$', item3);
+											}
+
+											if (messageContent.indexOf("null") > -1) {
+												messageContent = messageContent
+														.replace(/null/gi, '');
+											}
+
+											messageDataDetail.content = messageContent
+													.trim();
+											messageDataDetail.contentLength = messageDataDetail.content
+													.Length();
+											if (messageDataDetail.contentLength > 140) {
+												mmsCount++;
+
+											} else {
+												smsCount++;
+											}
+											console.log('메시지 내용');
+											console
+													.log(messageDataDetail.content);
+											messageDataDetail.content = pushUtil
+													.utf8_to_b64(messageDataDetail.content);
+
+											messageData.addressMessageArray
+													.push(messageDataDetail);
+										}
+									});
+					var messageDataReq = JSON.stringify(messageData);
+					console.log('발송 데이터 ');
+					console.log(messageDataReq);
+
+					var sendCount = 0;
+					var repeatCount = 0;
+					if (messageData.resendMaxCount) {
+						console.log('반복 있음');
+						messageData.resendMaxCount = messageData.resendMaxCount * 1;
+						sendCount = (messageData.addressMessageArray.length * messageData.resendMaxCount)
+								+ messageData.addressMessageArray.length;
+
+					} else {
+						sendCount = messageData.addressMessageArray.length;
+					}
+
+					if (messageData.reservationTime) {
+						if (confirm(sendCount + "건의 메시지가 예약전송 됩니다.(mms:"
+								+ mmsCount + ",sms:" + smsCount
+								+ "). 전송 하시겠습니까?") == true) {
+
+						} else {
+							return false;
+						}
+					} else {
+						if (confirm(sendCount + "건의 메시지가 전송 됩니다.(mms:"
+								+ mmsCount + ",sms:" + smsCount
+								+ ") 전송 하시겠습니까?") == true) {
+
+						} else {
+							return false;
+						}
+					}
+
+					$.ajax({
+						url : '/v1/pms/adm/svc/address/messages',
+						type : 'POST',
+						headers : {
+							'X-Application-Token' : token
+						},
+						contentType : "application/json",
+						dataType : 'json',
+						async : false,
+						data : messageDataReq,
+
+						success : function(data) {
+
+							if (!data.result.errors) {
+
+								console.log('전송 갯수');
+
+								alert('메시지를 전송 하였습니다.');
+
+							} else {
+								alert('메시지 전송에 실패 하였습니다.');
+
+							}
+
+						},
+						error : function(data, textStatus, request) {
+							if (data.status == 401) {
+								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+								sessionStorage.removeItem("token");
+								sessionStorage.removeItem("userId");
+								sessionStorage.removeItem("role");
+
+								sessionStorage.removeItem("groupTopic");
+								sessionStorage.removeItem("ufmi");
+								sessionStorage.removeItem("userName");
+								pushRouter.navigate('login', {
+									trigger : true
+								});
+								return false;
+							}
+							alert('메시지 전송에 실패 하였습니다.');
+
+						}
+					});
+				}
+			},
+
 			checkContactContentArea : function() {
 				console.log('주소록 발송 내용 변d');
 				var input_messageContent = $(
@@ -1387,6 +2063,28 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			checkGroupContentArea : function() {
+				var input_messageContent = $('#msg-send-group-content-textarea')
+						.val();
+				input_messageContent = input_messageContent.trim();
+				console.log(input_messageContent.Length());
+				var strongLength = input_messageContent.Length();
+				if (strongLength > 140) {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', '#ddd');
+					$('#msg-send-group-length-max').text("");
+					$('#msg-send-group-length-byte').text("MMS");
+					$('#msg-send-group-length-strong').text(strongLength);
+				} else {
+					$('#msg-send-group-content-textarea').css(
+							'background-color', 'white');
+					$('#msg-send-group-length-max').text("140");
+					$('#msg-send-group-length-byte').text("byte");
+					$('#msg-send-group-length-strong').text(strongLength);
+				}
+
+			},
+
 			plusUfmiCheck : function() {
 				var ufmiVerCheck_radio = $(
 						'input:radio[name="send-private-pnum-radio"]:checked')
@@ -1402,6 +2100,20 @@ ADF.PushMsgSendView = Backbone.View
 				}
 				if (private_input == null || private_input == "") {
 					alert('개별 번호를 입력해주세요!');
+					$('#send-private-input').focus();
+					return false;
+				}
+
+				if (fleep_bunch_input.substring(0, 1) == "0"
+						&& fleep_bunch_input.length > 1) {
+					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					$('#send-private-fleep-bunch-input').focus();
+					return false;
+				}
+
+				if (private_input.substring(0, 1) == "0"
+						&& private_input.length > 1) {
+					alert('개별번호 첫자리는 0을 입력할수 없습니다.');
 					$('#send-private-input').focus();
 					return false;
 				}
@@ -1444,6 +2156,19 @@ ADF.PushMsgSendView = Backbone.View
 					$('#contact-add-private-input').focus();
 					return false;
 				}
+				if (fleep_bunch_input.substring(0, 1) == "0"
+						&& fleep_bunch_input.length > 1) {
+					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					$('#contact-add-fleep-bunch-input').focus();
+					return false;
+				}
+
+				if (private_input.substring(0, 1) == "0"
+						&& private_input.length > 1) {
+					alert('개별번호 첫자리는 0을 입력할수 없습니다.');
+					$('#contact-add-private-input').focus();
+					return false;
+				}
 
 				var ufmiResult = ufmiVerCheck_radio + "*" + fleep_bunch_input
 						+ "*" + private_input;
@@ -1466,6 +2191,89 @@ ADF.PushMsgSendView = Backbone.View
 
 			},
 
+			plusGroupTopicCheck : function() {
+
+				var ufmiVerCheck_radio = $(
+						'input:radio[name="send-group-pnum-radio"]:checked')
+						.val();
+				var private_input = $('#send-group-input').val();
+				var fleep_bunch_input = $('#send-group-fleep-bunch-input')
+						.val();
+
+				if (fleep_bunch_input == null || fleep_bunch_input == "") {
+					alert('fleep번호 또는 bunch 번호 를 입력해주세요!');
+					$('#send-group-fleep-bunch-input').focus();
+					return false;
+				}
+				if (private_input == null || private_input == "") {
+					alert('그룹 번호를 입력해주세요!');
+					$('#send-group-input').focus();
+					return false;
+				}
+				if (fleep_bunch_input.substring(0, 1) == "0"
+						&& fleep_bunch_input.length > 1) {
+					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					$('#send-group-fleep-bunch-input').focus();
+					return false;
+				}
+
+				if (private_input.substring(0, 1) == "0"
+						&& private_input.length > 1) {
+					alert('그룹번호 첫자리는 0을 입력할수 없습니다.');
+					$('#send-group-input').focus();
+					return false;
+				}
+
+				var groupTopic = "";
+				if (ufmiVerCheck_radio == "82") {
+					groupTopic = "mms/P1/82/" + fleep_bunch_input + "/g"
+							+ private_input;
+
+				} else {
+					groupTopic = "mms/P2/1/b" + fleep_bunch_input + "/g"
+							+ private_input;
+				}
+
+				console.log('그룹 토픽 결과');
+				console.log(groupTopic);
+
+				var showInputVal = $('#msg-send-group-user-target-show-input')
+						.val();
+				if (showInputVal == "" || showInputVal == null) {
+					$('#msg-send-group-user-target-show-div').show();
+
+					$('#msg-send-group-user-target-show-input').val(
+							showInputVal + groupTopic);
+				} else {
+					$('#msg-send-group-user-target-show-input').val(
+							showInputVal + "," + groupTopic);
+				}
+				$('#send-group-input').val("");
+
+			},
+
+			checkSendGroupInput : function() {
+				console.log('asdf');
+				var num_check = /^[0-9]*$/;
+				var group_input = $("#send-group-input").val();
+				var ufmiVerCheck_radio = $(
+						'input:radio[name="send-group-pnum-radio"]:checked')
+						.val();
+
+				if (ufmiVerCheck_radio == "1") {
+					$("#send-group-input").attr('maxlength', '4');
+				} else {
+					$("#send-group-input").attr('maxlength', '6');
+				}
+
+				if (!num_check.test(group_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#send-group-input").focus();
+					return false;
+				}
+
+			},
+
 			checkSendPrivateInput : function() {
 				console.log('asdf');
 				var num_check = /^[0-9]*$/;
@@ -1474,8 +2282,10 @@ ADF.PushMsgSendView = Backbone.View
 						'input:radio[name="send-private-pnum-radio"]:checked')
 						.val();
 
-				if (ufmiVerCheck_radio == "01") {
+				if (ufmiVerCheck_radio == "1") {
 					$("#send-private-input").attr('maxlength', '4');
+				} else {
+					$("#send-private-input").attr('maxlength', '6');
 				}
 
 				if (!num_check.test(private_input)) {
@@ -1485,6 +2295,29 @@ ADF.PushMsgSendView = Backbone.View
 				}
 
 			},
+			checkSendGroupBunchInput : function() {
+				console.log('fikfkfkf');
+				var num_check = /^[0-9]*$/;
+				// resend-fleep-bunch-input
+				var group_fleep_bunch_input = $("#send-group-fleep-bunch-input")
+						.val();
+				var ufmiVerCheck_radio = $(
+						'input:radio[name="send-group-pnum-radio"]:checked')
+						.val();
+
+				if (ufmiVerCheck_radio == "1") {
+					$("#send-group-fleep-bunch-input").attr('maxlength', '4');
+				} else {
+					$("#send-group-fleep-bunch-input").attr('maxlength', '6');
+				}
+				if (!num_check.test(group_fleep_bunch_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#send-group-fleep-bunch-input").focus();
+					return false;
+				}
+
+			},
+
 			checkSendBunchInput : function() {
 				console.log('fikfkfkf');
 				var num_check = /^[0-9]*$/;
@@ -1497,6 +2330,8 @@ ADF.PushMsgSendView = Backbone.View
 
 				if (ufmiVerCheck_radio == "1") {
 					$("#send-private-fleep-bunch-input").attr('maxlength', '4');
+				} else {
+					$("#send-private-fleep-bunch-input").attr('maxlength', '6');
 				}
 				if (!num_check.test(fleep_bunch_input)) {
 					alert('숫자 만 입력 가능합니다!');
@@ -1545,6 +2380,25 @@ ADF.PushMsgSendView = Backbone.View
 				}
 			},
 
+			msgGroupRepeatCheck : function() {
+				var checkedLength = $('input[id="msg-send-group-user-repeat-check"]:checked').length;
+				if (checkedLength == 0) {
+					// $("#messagelist-search-date-start-input").prop('disabled',
+					// true);
+					$('#msg-send-group-repeat-div').hide();
+					$('#msg-send-group-repeat-cnt-select').val(0);
+					$('#msg-send-group-repeat-time-input').val("");
+
+					return false;
+				} else {
+					$('#msg-send-group-repeat-div').show();
+					$('#msg-send-group-repeat-time-input').prop('disabled',
+							false);
+
+					return false;
+				}
+			},
+
 			render : function() {
 
 				var that = this;
@@ -1570,6 +2424,13 @@ ADF.PushMsgSendView = Backbone.View
 
 									$(
 											'#msg-send-contact-private-reservation-div')
+											.datetimepicker({
+												format : "YYYY/MM/DD hh:mm a",
+												minDate : today,
+												maxDate : today_30
+											});
+
+									$('#msg-send-group-reservation-div')
 											.datetimepicker({
 												format : "YYYY/MM/DD hh:mm a",
 												minDate : today,
@@ -1624,6 +2485,15 @@ ADF.PushMsgSendView = Backbone.View
 																						+ '</option>');
 																$(
 																		"#msg-send-contact-private-content-load-select")
+																		.append(
+																				'<option value='
+																						+ dataResult[i].templateId
+																						+ '>'
+																						+ dataResult[i].templateName
+																						+ '</option>');
+
+																$(
+																		"#msg-send-group-content-load-select")
 																		.append(
 																				'<option value='
 																						+ dataResult[i].templateId
@@ -1708,7 +2578,7 @@ ADF.PushMsgSendView = Backbone.View
 														}
 														for ( var i in resultData) {
 															var hiddenUfmi = resultData[i].ufmi;
-															resultData[i].ufmi = '<input name="contact-delete-checkbox" type="checkbox" value="'
+															resultData[i].ufmi = '<input name="contact-list-checkbox" type="checkbox" value="'
 																	+ resultData[i].ufmi
 																	+ '"/>&nbsp'
 																	+ resultData[i].ufmi;
@@ -1803,7 +2673,6 @@ ADF.PushMsgSendView = Backbone.View
 												]
 
 											});
-
 								}, 'html');
 			}
 

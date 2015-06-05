@@ -212,8 +212,10 @@ ADF.PushMsgListView = Backbone.View
 				var ufmiVerCheck_radio = $(
 						'input:radio[name="resend-pnum-radio"]:checked').val();
 
-				if (ufmiVerCheck_radio == "01") {
+				if (ufmiVerCheck_radio == "1") {
 					$("#resend-private-input").attr('maxlength', '4');
+				} else {
+					$("#resend-private-input").attr('maxlength', '6');
 				}
 
 				if (!num_check.test(private_input)) {
@@ -232,6 +234,8 @@ ADF.PushMsgListView = Backbone.View
 
 				if (ufmiVerCheck_radio == "1") {
 					$("#resend-fleep-bunch-input").attr('maxlength', '4');
+				} else {
+					$("#resend-fleep-bunch-input").attr('maxlength', '6');
 				}
 				if (!num_check.test(fleep_bunch_input)) {
 					alert('숫자 만 입력 가능합니다!');
@@ -253,6 +257,19 @@ ADF.PushMsgListView = Backbone.View
 				}
 				if (private_input == null || private_input == "") {
 					alert('개별 번호를 입력해주세요!');
+					$('#resend-private-input').focus();
+					return false;
+				}
+				if (fleep_bunch_input.substring(0, 1) == "0"
+						&& fleep_bunch_input.length > 1) {
+					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					$('#resend-fleep-bunch-input').focus();
+					return false;
+				}
+
+				if (private_input.substring(0, 1) == "0"
+						&& private_input.length > 1) {
+					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
 					$('#resend-private-input').focus();
 					return false;
 				}
