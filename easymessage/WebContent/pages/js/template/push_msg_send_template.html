@@ -1,3 +1,5 @@
+
+
 <div class="breadcrumbs" id="breadcrumbs">
 	<ul class="breadcrumb">
 		<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
@@ -111,6 +113,20 @@
 											<i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>&nbsp;내용저장
 										</button>
 									</div>
+									<!-- 									<div class="form-group"> -->
+									<!-- 										<form id="image-upload-form" method="post" -->
+									<!-- 											enctype="multipart/form-data"> -->
+									<!-- 											<i class="ace-icon fa fa-caret-right blue"></i><label>&nbsp;파일 -->
+									<!-- 												첨부</label> <input type="file" id="image-upload-input"> -->
+
+
+									<!-- 										</form> -->
+									<!-- 									</div> -->
+
+
+
+
+
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>메시지
 											불러오기</label> <select class="form-control"
@@ -149,6 +165,16 @@
 												maxlength="4" id="msg-send-private-repeat-time-input"
 												placeholder="옵션       반복 시간(분 단위)" disabled="disabled">
 										</div>
+									</div>
+									<div>
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
+											첨부</label>
+										<!-- #section:custom/file-input -->
+
+										<form id="private-image-upload-form" method="post"
+											enctype="multipart/form-data">
+											<input type="file" id="private-image-upload-input">
+											</form>
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
@@ -211,6 +237,7 @@
 										</button>
 									</div>
 
+
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>치환
 											전송</label><br> <span
@@ -235,6 +262,7 @@
 											<i class="ace-icon fa fa-tags bigger-120 blue"></i>&nbsp;항목3
 										</button>
 									</div>
+
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>메시지
 											불러오기</label> <select class="form-control"
@@ -276,6 +304,19 @@
 												id="msg-send-contact-private-repeat-time-input"
 												placeholder="옵션       반복 시간(분 단위)" disabled="disabled">
 										</div>
+									</div>
+									<div>
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
+											첨부</label>
+										<!-- #section:custom/file-input -->
+
+										<form id="contact-image-upload-form" method="post"
+											enctype="multipart/form-data">
+											<input type="file" id="contact-image-upload-input">
+											</form>
+											<input type="hidden" id="file-md5">
+											<input type="hidden" id="file-thumbnail">
+										
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
@@ -322,10 +363,9 @@
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>Ptalk
 											유형 선택 : </label> <label>Ptalk1.0</label> <input type="radio"
-											name="send-group-pnum-radio"
-											id="send-group-pnum-p1-radio" value="82" checked="checked">
-										&nbsp;<label>Ptalk2.0</label> <input type="radio"
-											name="send-group-pnum-radio"
+											name="send-group-pnum-radio" id="send-group-pnum-p1-radio"
+											value="82" checked="checked"> &nbsp;<label>Ptalk2.0</label>
+										<input type="radio" name="send-group-pnum-radio"
 											id="send-group-pnum-p2-radio" value="1">
 									</div>
 
@@ -379,6 +419,8 @@
 											<i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>&nbsp;내용저장
 										</button>
 									</div>
+
+
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>메시지
 											불러오기</label> <select class="form-control"
@@ -386,6 +428,7 @@
 											<option value="0">선택</option>
 										</select>
 									</div>
+
 									<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>
 											반복 메시지 </label>&nbsp; <input id="msg-send-group-user-repeat-check"
@@ -419,6 +462,16 @@
 										</div>
 									</div>
 									<div>
+										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
+											첨부</label>
+										<!-- #section:custom/file-input -->
+
+										<form id="group-image-upload-form" method="post"
+											enctype="multipart/form-data">
+											<input type="file" id="group-image-upload-input">
+											</form>
+									</div>
+									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
 											예약 메시지 설정</label><br> <span
 											style="font-size: x-small; font-weight: lighter;">(예약메시지
@@ -426,9 +479,9 @@
 									</div>
 									<div class="input-group" id="msg-send-group-reservation-div">
 
-										<input id="msg-send-group-reservation-date-input"
-											type="text" class="form-control" disabled="disabled">
-										<span class="input-group-addon"> <i
+										<input id="msg-send-group-reservation-date-input" type="text"
+											class="form-control" disabled="disabled"> <span
+											class="input-group-addon"> <i
 											class="fa fa-clock-o bigger-110"></i>
 										</span>
 
@@ -440,8 +493,7 @@
 										<i class="ace-icon fa fa-times"></i> 취소
 									</button>
 
-									<button id="msg-send-group-btn"
-										class="btn btn-sm btn-primary ">
+									<button id="msg-send-group-btn" class="btn btn-sm btn-primary ">
 										<i class="ace-icon fa fa-check"></i> 메시지 전송
 									</button>
 								</div>

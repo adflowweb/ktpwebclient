@@ -392,7 +392,7 @@ ADF.PushMsgListView = Backbone.View
 							var resultData = data.result.data.data;
 							if (resultData.length == 0) {
 								$('#msg-list-detail-div').hide();
-								alert('상세 내용이 없습니다.');
+								alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
 								return false;
 							}
 							for ( var i in resultData) {
@@ -957,6 +957,10 @@ ADF.PushMsgListView = Backbone.View
 
 																},
 																{
+																	"data" : "groupId"
+
+																},
+																{
 																	"data" : null,
 																	"defaultContent" : '<button type="button" id="msg-list-detail-btn" class="btn btn-xs btn-white">상세보기</button>&nbsp;<button id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal">재전송 </button>'
 																},
@@ -1007,7 +1011,11 @@ ADF.PushMsgListView = Backbone.View
 																										15)
 																								+ "..";
 																					}
-
+																					if (dataResult[i].groupId == null) {
+																						dataResult[i].groupId = '<i class="fa fa-user">(개인)</i>';
+																					} else {
+																						dataResult[i].groupId = '<i class="fa fa-users">(그룹)</i>';
+																					}
 																					switch (dataResult[i].status) {
 																					case -99:
 																						dataResult[i].status = "발송오류";
