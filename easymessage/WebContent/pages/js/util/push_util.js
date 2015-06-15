@@ -9,7 +9,15 @@ pushUtil.utf8ByteLength = function(str) {
 };
 
 pushUtil.utf8_to_b64 = function(str) {
-	return window.btoa(unescape(encodeURIComponent(str)));
+
+	if (window.btoa) {
+		return window.btoa(unescape(encodeURIComponent(str)));
+
+	} else { // for <= IE9
+
+		return jQuery.base64.encode(unescape(encodeURIComponent(str)));
+	}
+
 };
 
 pushUtil.b64_to_utf8 = function(str) {
@@ -60,11 +68,10 @@ pushUtil.chageDateL = function(year, month) {
 
 };
 
-//compactTrim
-pushUtil.compactTrim=function(value) {
+// compactTrim
+pushUtil.compactTrim = function(value) {
 	return value.replace(/(\s*)/g, "");
 };
-
 
 // dateFormating
 pushUtil.dateFormating = function(value) {
@@ -83,6 +90,29 @@ pushUtil.dateFormating = function(value) {
 	value = new Date(year, month - 1, day, hour, minute);
 	return value;
 
+};
+
+pushUtil.dataURItoBlob = function(dataURI) {
+	// convert base64/URLEncoded data component to raw binary data held in a
+	// string
+	var byteString;
+	if (dataURI.split(',')[0].indexOf('base64') >= 0)
+		byteString = atob(dataURI.split(',')[1]);
+	else
+		byteString = unescape(dataURI.split(',')[1]);
+
+	// separate out the mime component
+	var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+	// write the bytes of the string to a typed array
+	var ia = new Uint8Array(byteString.length);
+	for (var i = 0; i < byteString.length; i++) {
+		ia[i] = byteString.charCodeAt(i);
+	}
+
+	return new Blob([ ia ], {
+		type : mimeString
+	});
 };
 
 String.prototype.Length = function() {
@@ -111,4 +141,3 @@ String.Length = function(arg) {
 		}
 	}
 };
-
