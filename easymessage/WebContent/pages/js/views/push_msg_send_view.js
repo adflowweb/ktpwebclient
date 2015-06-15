@@ -2436,9 +2436,13 @@ ADF.PushMsgSendView = Backbone.View
 						messageData.resendMaxCount = messageData.resendMaxCount * 1;
 						sendCount = (messageData.addressMessageArray.length * messageData.resendMaxCount)
 								+ messageData.addressMessageArray.length;
+						mmsCount = (mmsCount* messageData.resendMaxCount)+mmsCount;							
 
+						smsCount = (smsCount * messageData.resendMaxCount)+smsCount;
+							
 					} else {
 						sendCount = messageData.addressMessageArray.length;
+					
 					}
 
 					if (messageData.reservationTime) {

@@ -83,7 +83,7 @@ ADF.PushMsgListView = Backbone.View
 					return false;
 				}
 				if (this.resendFormCheck()) {
-
+					var token = sessionStorage.getItem("token");
 					var messageTarget = $('#msg-resend-user-target-show-input')
 							.val();
 					messageTarget = pushUtil.compactTrim(messageTarget);
@@ -112,8 +112,66 @@ ADF.PushMsgListView = Backbone.View
 					 * if (utf8ByteLength(messageDataResult) > 512000) {
 					 * alert('메시지 사이즈가 너무 큽니다.'); return false; }
 					 */
+					var groupTopicCount = 0;
+					if ($('#resend-group-check').val() == 1) {
+
+						$.ajax({
+							url : '/v1/pms/adm/svc/subscribe/count?topic='
+									+ messageData.receivers[0],
+							type : 'GET',
+							headers : {
+								'X-Application-Token' : token
+							},
+							contentType : "application/json",
+							dataType : 'json',
+							async : false,
+							data : messageDataResult,
+
+							success : function(data) {
+
+								if (!data.result.errors) {
+									// groupTopicCount add
+									console.log(data.result.data);
+									groupTopicCount = data.result.data;
+
+								} else {
+									$('#msg-resend-user-target-show-input')
+											.val("");
+									alert('해당 그룹에 수신자가 없습니다. 다른 그룹을 입력해 주세요!');
+									return false;
+								}
+
+							},
+							error : function(data, textStatus, request) {
+								if (data.status == 401) {
+									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+									sessionStorage.removeItem("token");
+									sessionStorage.removeItem("userId");
+									sessionStorage.removeItem("role");
+									sessionStorage.removeItem("groupTopic");
+									sessionStorage.removeItem("ufmi");
+									sessionStorage.removeItem("userName");
+									pushRouter.navigate('login', {
+										trigger : true
+									});
+									return false;
+								}
+								alert('그룹 대상조회에 실패 했습니다!');
+								return false;
+							}
+						});
+
+						if (groupTopicCount == 0) {
+							return false;
+						}
+
+					}
+
 					var sendCount = messageData.receivers.length;
-					var token = sessionStorage.getItem("token");
+					if (groupTopicCount != 0) {
+						sendCount = groupTopicCount;
+					}
+
 					if (confirm(messageData.receivers + " 해당 무전번호로 총 "
 							+ sendCount + "건의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
 						$.ajax({
@@ -130,9 +188,8 @@ ADF.PushMsgListView = Backbone.View
 							success : function(data) {
 
 								if (!data.result.errors) {
-									alert(messageData.receivers.length
-											+ '건의 메시지를 발송하였습니다.');
-
+									alert('메시지를 발송하였습니다.');
+									window.location.reload();
 								} else {
 									alert('메시지 전송에 실패 하였습니다.');
 
@@ -274,23 +331,48 @@ ADF.PushMsgListView = Backbone.View
 					return false;
 				}
 
-				var ufmiResult = ufmiVerCheck_radio + "*" + fleep_bunch_input
-						+ "*" + private_input;
+				if ($('#resend-group-check').val == 0) {
 
-				console.log('무전번호 결과');
-				console.log(ufmiResult);
+					var ufmiResult = ufmiVerCheck_radio + "*"
+							+ fleep_bunch_input + "*" + private_input;
 
-				$('#msg-resend-user-target-show-div').show();
-				var showInputVal = $('#msg-resend-user-target-show-input')
-						.val();
-				if (showInputVal == "" || showInputVal == null) {
-					$('#msg-resend-user-target-show-input').val(
-							showInputVal + ufmiResult);
+					console.log('무전번호 결과');
+					console.log(ufmiResult);
+
+					$('#msg-resend-user-target-show-div').show();
+					var showInputVal = $('#msg-resend-user-target-show-input')
+							.val();
+					if (showInputVal == "" || showInputVal == null) {
+						$('#msg-resend-user-target-show-input').val(
+								showInputVal + ufmiResult);
+					} else {
+						$('#msg-resend-user-target-show-input').val(
+								showInputVal + "," + ufmiResult);
+					}
+					$('#resend-private-input').val("");
 				} else {
-					$('#msg-resend-user-target-show-input').val(
-							showInputVal + "," + ufmiResult);
+					var groupTopic = "";
+					if (ufmiVerCheck_radio == "82") {
+						groupTopic = "mms/P1/82/" + fleep_bunch_input + "/g"
+								+ private_input;
+
+					} else {
+						groupTopic = "mms/P2/1/b" + fleep_bunch_input + "/g"
+								+ private_input;
+					}
+
+					$('#msg-resend-user-target-show-div').show();
+					var showInputVal = $('#msg-resend-user-target-show-input')
+							.val();
+					if (showInputVal == "" || showInputVal == null) {
+						$('#msg-resend-user-target-show-input').val(
+								showInputVal + groupTopic);
+					} else {
+						alert('한개의 그룹만 등록 가능합니다!');
+						return false;
+					}
+					$('#resend-private-input').val("");
 				}
-				$('#resend-private-input').val("");
 			},
 
 			msgResendModal : function(e) {
@@ -298,31 +380,60 @@ ADF.PushMsgListView = Backbone.View
 				console.log(e.target);
 				var aData = msgListTable.fnGetData($(e.target).parents('tr')); // fails
 				console.log(aData);
-
+				var groupCheck = aData.groupId;
 				var messageListContent = "";
-				var receiver_split = aData.receiver.split('*');
-				if (receiver_split[0] == "82") {
-					$('input:radio[id="resend-pnum-p1-radio"]').attr("checked",
-							true);
+
+				if (groupCheck.indexOf("개인") != -1) {
+					console.log('개인');
+					$('#resend-group-check').val(0);
+					var receiver_split = aData.receiver.split('*');
+					// p1
+					if (receiver_split[0] == "82") {
+						$('input:radio[id="resend-pnum-p1-radio"]').attr(
+								"checked", true);
+						// p2
+					} else {
+						$('input:radio[id="resend-pnum-p2-radio"]').attr(
+								"checked", true);
+					}
+					$('#resend-fleep-bunch-input').val(receiver_split[1]);
+					$('#resend-private-input').val(receiver_split[2]);
 				} else {
-					$('input:radio[id="resend-pnum-p2-radio"]').attr("checked",
-							true);
+					console.log('그룹');
+					$('#resend-group-check').val(1);
+					var topicP1P2Check = aData.receiver;
+					// p1
+					if (topicP1P2Check.indexOf("P1") != -1) {
+						$('input:radio[id="resend-pnum-p1-radio"]').attr(
+								"checked", true);
+						topicP1P2Check = topicP1P2Check.split('/');
+						console.log(topicP1P2Check);
+						$('#resend-fleep-bunch-input').val(topicP1P2Check[3]);
+						$('#resend-private-input').val(
+								topicP1P2Check[4].substr(1));
+						// p2
+					} else {
+						$('input:radio[id="resend-pnum-p2-radio"]').attr(
+								"checked", true);
+						topicP1P2Check = topicP1P2Check.split('/');
+						console.log(topicP1P2Check);
+						$('#resend-fleep-bunch-input').val(
+								topicP1P2Check[3].substr(1));
+						$('#resend-private-input').val(
+								topicP1P2Check[4].substr(1));
+
+					}
+
+					/*
+					 * groupTopic = "mms/P1/82/" + fleep_bunch_input + "/g" +
+					 * private_input; } else { groupTopic = "mms/P2/1/b" +
+					 * fleep_bunch_input + "/g" + private_input;
+					 */
 				}
-				$('#resend-fleep-bunch-input').val(receiver_split[1]);
-				$('#resend-private-input').val(receiver_split[2]);
 
 				messageListContent = aData.contentType;
 				console.log('메시지 내용입니다.');
 				console.log(messageListContent);
-
-				/*
-				 * <p id="msg-resend-length-p"> <strong
-				 * id="msg-resend-length-strong">0</strong>/<span
-				 * id="msg-resend-length-max">140</span><span
-				 * id="msg-resend-length-byte">byte</span>
-				 * 
-				 * </p>
-				 */
 
 				$('#msg-resend-content-textarea').val(messageListContent);
 				// $('#msg-resend-length-p').show();
