@@ -1428,7 +1428,8 @@ ADF.PushMsgSendView = Backbone.View
 					return false;
 				}
 				if (this.msgSendFormCheck()) {
-
+					$('#private-send-before-i').hide();
+					$('#private-send-after-i').show();
 					var messageTarget = $(
 							'#msg-send-private-user-target-show-input').val();
 					console.log(messageTarget);
@@ -1542,11 +1543,15 @@ ADF.PushMsgSendView = Backbone.View
 
 							} else {
 								console.log(xhrThumb.status);
+								$('#private-send-before-i').show();
+								$('#private-send-after-i').hide();
 								alert('첨부 파일 전송에 실패 하였습니다!');
 								return false;
 							}
 						} else {
 							console.log(xhr.status);
+							$('#private-send-before-i').show();
+							$('#private-send-after-i').hide();
 							alert('첨부 파일 전송에 실패 하였습니다!');
 							return false;
 						}
@@ -1602,6 +1607,8 @@ ADF.PushMsgSendView = Backbone.View
 							// msg-send-private-user-repeat-check
 
 						} else {
+							$('#private-send-before-i').show();
+							$('#private-send-after-i').hide();
 							return false;
 						}
 					} else {
@@ -1630,6 +1637,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-private-user-target-show-div')
 									.fadeOut();
 						} else {
+							$('#private-send-before-i').show();
+							$('#private-send-after-i').hide();
 							return false;
 						}
 					}
@@ -1648,10 +1657,13 @@ ADF.PushMsgSendView = Backbone.View
 						success : function(data) {
 
 							if (!data.result.errors) {
-
+								$('#private-send-before-i').show();
+								$('#private-send-after-i').hide();
 								alert('메시지를 전송 하였습니다.');
 
 							} else {
+								$('#private-send-before-i').show();
+								$('#private-send-after-i').hide();
 								alert('메시지 전송에 실패 하였습니다.');
 
 							}
@@ -1659,7 +1671,10 @@ ADF.PushMsgSendView = Backbone.View
 						},
 						error : function(data, textStatus, request) {
 							if (data.status == 401) {
+								$('#private-send-before-i').show();
+								$('#private-send-after-i').hide();
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+
 								sessionStorage.removeItem("token");
 								sessionStorage.removeItem("userId");
 								sessionStorage.removeItem("role");
@@ -1672,6 +1687,8 @@ ADF.PushMsgSendView = Backbone.View
 								});
 								return false;
 							}
+							$('#private-send-before-i').show();
+							$('#private-send-after-i').hide();
 							alert('메시지 전송에 실패 하였습니다.');
 
 						}
@@ -1692,6 +1709,8 @@ ADF.PushMsgSendView = Backbone.View
 					return false;
 				}
 				if (this.msgSendGroupFormCheck()) {
+					$('#group-send-before-i').hide();
+					$('#group-send-after-i').show();
 					var messageTarget = $(
 							'#msg-send-group-user-target-show-input').val();
 					console.log(messageTarget);
@@ -1794,11 +1813,15 @@ ADF.PushMsgSendView = Backbone.View
 
 							} else {
 								console.log(xhrThumb.status);
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert('첨부 파일 전송에 실패 하였습니다!');
 								return false;
 							}
 						} else {
 							console.log(xhr.status);
+							$('#group-send-before-i').show();
+							$('#group-send-after-i').hide();
 							alert('첨부 파일 전송에 실패 하였습니다!');
 							return false;
 						}
@@ -1834,6 +1857,8 @@ ADF.PushMsgSendView = Backbone.View
 							} else {
 								$('#msg-send-group-user-target-show-input')
 										.val("");
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert('해당 그룹에 수신자가 없습니다. 다른 그룹을 입력해 주세요!');
 								return false;
 							}
@@ -1841,6 +1866,8 @@ ADF.PushMsgSendView = Backbone.View
 						},
 						error : function(data, textStatus, request) {
 							if (data.status == 401) {
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
 								sessionStorage.removeItem("token");
 								sessionStorage.removeItem("userId");
@@ -1853,6 +1880,8 @@ ADF.PushMsgSendView = Backbone.View
 								});
 								return false;
 							}
+							$('#group-send-before-i').show();
+							$('#group-send-after-i').hide();
 							alert('그룹 대상조회에 실패 했습니다!');
 							return false;
 						}
@@ -1940,6 +1969,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-group-repeat-div').fadeOut();
 							$('#msg-send-group-user-target-show-div').fadeOut();
 						} else {
+							$('#group-send-before-i').show();
+							$('#group-send-after-i').hide();
 							return false;
 						}
 					} else {
@@ -1962,6 +1993,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-group-repeat-div').fadeOut();
 							$('#msg-send-group-user-target-show-div').fadeOut();
 						} else {
+							$('#group-send-before-i').show();
+							$('#group-send-after-i').hide();
 							return false;
 						}
 					}
@@ -1980,10 +2013,13 @@ ADF.PushMsgSendView = Backbone.View
 						success : function(data) {
 
 							if (!data.result.errors) {
-
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert('메시지를 전송 하였습니다.');
 
 							} else {
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert('메시지 전송에 실패 하였습니다.');
 
 							}
@@ -1991,6 +2027,8 @@ ADF.PushMsgSendView = Backbone.View
 						},
 						error : function(data, textStatus, request) {
 							if (data.status == 401) {
+								$('#group-send-before-i').show();
+								$('#group-send-after-i').hide();
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
 								sessionStorage.removeItem("token");
 								sessionStorage.removeItem("userId");
@@ -2004,6 +2042,8 @@ ADF.PushMsgSendView = Backbone.View
 								});
 								return false;
 							}
+							$('#group-send-before-i').show();
+							$('#group-send-after-i').hide();
 							alert('메시지 전송에 실패 하였습니다.');
 
 						}
@@ -2286,7 +2326,8 @@ ADF.PushMsgSendView = Backbone.View
 				}
 
 				if (this.msgSendContactFormCheck()) {
-
+					$('#contact-send-before-i').hide();
+					$('#contact-send-after-i').show();
 					$('input[name="contact-list-checkbox"]:checked')
 							.each(
 									function() {
@@ -2415,11 +2456,15 @@ ADF.PushMsgSendView = Backbone.View
 
 							} else {
 								console.log(xhrThumb.status);
+								$('#contact-send-before-i').show();
+								$('#contact-send-after-i').hide();
 								alert('첨부 파일 전송에 실패 하였습니다!');
 								return false;
 							}
 						} else {
 							console.log(xhr.status);
+							$('#contact-send-before-i').show();
+							$('#contact-send-after-i').hide();
 							alert('첨부 파일 전송에 실패 하였습니다!');
 							return false;
 						}
@@ -2436,29 +2481,37 @@ ADF.PushMsgSendView = Backbone.View
 						messageData.resendMaxCount = messageData.resendMaxCount * 1;
 						sendCount = (messageData.addressMessageArray.length * messageData.resendMaxCount)
 								+ messageData.addressMessageArray.length;
-						mmsCount = (mmsCount* messageData.resendMaxCount)+mmsCount;							
+						mmsCount = (mmsCount * messageData.resendMaxCount)
+								+ mmsCount;
 
-						smsCount = (smsCount * messageData.resendMaxCount)+smsCount;
-							
+						smsCount = (smsCount * messageData.resendMaxCount)
+								+ smsCount;
+
 					} else {
 						sendCount = messageData.addressMessageArray.length;
-					
+
 					}
 
 					if (messageData.reservationTime) {
+
 						if (confirm(sendCount + "건의 메시지가 예약전송 됩니다.(mms:"
 								+ mmsCount + ",sms:" + smsCount
 								+ "). 전송 하시겠습니까?") == true) {
 
 						} else {
+							$('#contact-send-before-i').show();
+							$('#contact-send-after-i').hide();
 							return false;
 						}
 					} else {
+
 						if (confirm(sendCount + "건의 메시지가 전송 됩니다.(mms:"
 								+ mmsCount + ",sms:" + smsCount
 								+ ") 전송 하시겠습니까?") == true) {
 
 						} else {
+							$('#contact-send-before-i').show();
+							$('#contact-send-after-i').hide();
 							return false;
 						}
 					}
@@ -2483,6 +2536,8 @@ ADF.PushMsgSendView = Backbone.View
 								$('.remove').click();
 								$('#msg-send-contact-private-cancel-btn')
 										.click();
+								$('#contact-send-before-i').show();
+								$('#contact-send-after-i').hide();
 								/*
 								 * $(
 								 * '#msg-send-contact-private-user-target-show-input')
@@ -2517,9 +2572,13 @@ ADF.PushMsgSendView = Backbone.View
 								 * 
 								 * checkboxes[i].checked = false; }
 								 */
+
 								alert('메시지를 전송 하였습니다.');
 
 							} else {
+								$('#contact-send-before-i').show();
+								$('#contact-send-after-i').hide();
+
 								alert('메시지 전송에 실패 하였습니다.');
 
 							}
@@ -2527,6 +2586,8 @@ ADF.PushMsgSendView = Backbone.View
 						},
 						error : function(data, textStatus, request) {
 							if (data.status == 401) {
+								$('#contact-send-before-i').show();
+								$('#contact-send-after-i').hide();
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
 								sessionStorage.removeItem("token");
 								sessionStorage.removeItem("userId");
@@ -2540,6 +2601,9 @@ ADF.PushMsgSendView = Backbone.View
 								});
 								return false;
 							}
+							$('#contact-send-before-i').show();
+							$('#contact-send-after-i').hide();
+
 							alert('메시지 전송에 실패 하였습니다.');
 
 						}

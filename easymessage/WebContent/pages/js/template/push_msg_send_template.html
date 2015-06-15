@@ -168,14 +168,15 @@
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
-											첨부</label> <br><span
-											style="font-size: x-small; font-weight: lighter;">(파일 첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
+											첨부</label> <br> <span
+											style="font-size: x-small; font-weight: lighter;">(파일
+											첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
 										<!-- #section:custom/file-input -->
 
 										<form id="private-image-upload-form" method="post"
 											enctype="multipart/form-data">
 											<input type="file" id="private-image-upload-input">
-											</form>
+										</form>
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
@@ -201,7 +202,10 @@
 
 									<button id="msg-send-private-btn"
 										class="btn btn-sm btn-primary ">
-										<i class="ace-icon fa fa-check"></i> 메시지 전송
+										<i id="private-send-before-i" class="ace-icon fa fa-check"></i>
+										<i id="private-send-after-i"
+											class="fa fa-circle-o-notch fa-spin" style="display: none;"></i>
+										메시지 전송
 									</button>
 								</div>
 							</div>
@@ -308,17 +312,18 @@
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
-											첨부</label><br><span
-											style="font-size: x-small; font-weight: lighter;">(파일 첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
+											첨부</label><br> <span
+											style="font-size: x-small; font-weight: lighter;">(파일
+											첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
 										<!-- #section:custom/file-input -->
 
 										<form id="contact-image-upload-form" method="post"
 											enctype="multipart/form-data">
 											<input type="file" id="contact-image-upload-input">
-											</form>
-											<input type="hidden" id="file-md5">
-											<input type="hidden" id="file-thumbnail">
-										
+										</form>
+										<input type="hidden" id="file-md5"> <input
+											type="hidden" id="file-thumbnail">
+
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
@@ -346,7 +351,10 @@
 
 									<button id="msg-send-contact-private-btn"
 										class="btn btn-sm btn-primary ">
-										<i class="ace-icon fa fa-check"></i> 메시지 전송
+										<i id="contact-send-before-i" class="ace-icon fa fa-check"></i><i
+											id="contact-send-after-i"
+											class="fa fa-circle-o-notch fa-spin" style="display: none;"></i>
+										메시지 전송
 									</button>
 								</div>
 							</div>
@@ -465,14 +473,15 @@
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일
-											첨부</label><br><span
-											style="font-size: x-small; font-weight: lighter;">(파일 첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
+											첨부</label><br> <span
+											style="font-size: x-small; font-weight: lighter;">(파일
+											첨부시 mms 메시지로 전환되어 전송 됩니다!)</span>
 										<!-- #section:custom/file-input -->
 
 										<form id="group-image-upload-form" method="post"
 											enctype="multipart/form-data">
 											<input type="file" id="group-image-upload-input">
-											</form>
+										</form>
 									</div>
 									<div>
 										<i class="ace-icon fa fa-caret-right blue"></i><label>
@@ -497,7 +506,10 @@
 									</button>
 
 									<button id="msg-send-group-btn" class="btn btn-sm btn-primary ">
-										<i class="ace-icon fa fa-check"></i> 메시지 전송
+										<i id="group-send-before-i" class="ace-icon fa fa-check"></i> <i
+											id="group-send-after-i"
+											class="fa fa-circle-o-notch fa-spin" style="display: none;"></i>
+										메시지 전송
 									</button>
 								</div>
 							</div>
