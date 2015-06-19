@@ -43,7 +43,7 @@ ADF.PushStatsView = Backbone.View.extend({
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
-		var userId = sessionStorage.getItem('userId');
+		var userId = sessionStorage.getItem('easy-userId');
 		$('#user-id-span').text(userId);
 
 	},
@@ -121,7 +121,7 @@ ADF.PushStatsView = Backbone.View.extend({
 		// <script type="text/javascript"
 		// src="assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-		var token = sessionStorage.getItem('token');
+		var token = sessionStorage.getItem('easy-token');
 		if (this.clickStatsSearchFormCheck()) {
 			var input_month_value = $('#msg-stats-month-date-input').val();
 			input_month_value = input_month_value.replace("/", "");
@@ -440,13 +440,13 @@ ADF.PushStatsView = Backbone.View.extend({
 				error : function(data, textStatus, request) {
 					if (data.status == 401) {
 						alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-						sessionStorage.removeItem("token");
-						sessionStorage.removeItem("userId");
-						sessionStorage.removeItem("role");
+						sessionStorage.removeItem("easy-token");
+						sessionStorage.removeItem("easy-userId");
+						sessionStorage.removeItem("easy-role");
 
-						sessionStorage.removeItem("groupTopic");
-						sessionStorage.removeItem("ufmi");
-						sessionStorage.removeItem("userName");
+						sessionStorage.removeItem("easy-groupTopic");
+						sessionStorage.removeItem("easy-ufmi");
+						sessionStorage.removeItem("easy-userName");
 						pushRouter.navigate('login', {
 							trigger : true
 						});

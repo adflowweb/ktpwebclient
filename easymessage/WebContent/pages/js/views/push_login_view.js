@@ -107,19 +107,38 @@ ADF.PushLoginView = Backbone.View.extend({
 					var userName = data.result.data.userName;
 
 					if (ufmi != null) {
-						sessionStorage.setItem("ufmi", ufmi);
+						sessionStorage.setItem("easy-ufmi", ufmi);
 
 					}
 					if (groupTopic != null) {
-						sessionStorage.setItem("groupTopic", groupTopic);
+						sessionStorage.setItem("easy-groupTopic", groupTopic);
 					}
-					sessionStorage.setItem("role", role);
-					sessionStorage.setItem("token", token);
-					sessionStorage.setItem("userId", userId);
-					sessionStorage.setItem("userName", userName);
+					sessionStorage.setItem("easy-role", role);
+					sessionStorage.setItem("easy-token", token);
+					sessionStorage.setItem("easy-userId", userId);
+					sessionStorage.setItem("easy-userName", userName);
 					if (userId != null && userId != "") {
 						$('#user-id-span').text(userId);
 					}
+
+					if (token == null || token == "" || token == "null"
+							|| userId == null || userId == ""
+							|| userId == "null" || ufmi == "null"
+							|| ufmi == null || ufmi == "") {
+
+						sessionStorage.removeItem("easy-token");
+						sessionStorage.removeItem("easy-userId");
+						sessionStorage.removeItem("easy-role");
+						sessionStorage.removeItem("easy-groupTopic");
+						sessionStorage.removeItem("easy-ufmi");
+						sessionStorage.removeItem("easy-userName");
+						alert('해당 정보가 올바르지 않아 로그인 할 수 없습니다!');
+						pushRouter.navigate('login', {
+							trigger : true
+						});
+						return false;
+					}
+
 					if (userName == null || userName == "") {
 
 						pushRouter.navigate('user_info', {
@@ -133,6 +152,12 @@ ADF.PushLoginView = Backbone.View.extend({
 							trigger : true
 						});
 					} else {
+						sessionStorage.removeItem("easy-token");
+						sessionStorage.removeItem("easy-userId");
+						sessionStorage.removeItem("easy-role");
+						sessionStorage.removeItem("easy-groupTopic");
+						sessionStorage.removeItem("easy-ufmi");
+						sessionStorage.removeItem("easy-userName");
 						alert('해당 계정으로는 로그인 할 수 없습니다!');
 
 					}

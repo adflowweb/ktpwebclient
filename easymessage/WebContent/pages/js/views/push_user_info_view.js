@@ -26,7 +26,7 @@ ADF.PushUserInfoView = Backbone.View.extend({
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
-		var userId=sessionStorage.getItem('userId');
+		var userId=sessionStorage.getItem('easy-userId');
 		$('#user-id-span').text(userId);
 
 	},
@@ -38,10 +38,10 @@ ADF.PushUserInfoView = Backbone.View.extend({
 	render : function() {
 		console.log("user Info view render..");
 		var that = this;
-		var token = sessionStorage.getItem("token");
-		var userId = sessionStorage.getItem("userId");
-		var userName = sessionStorage.getItem("userName");
-		var ufmi = sessionStorage.getItem("ufmi");
+		var token = sessionStorage.getItem("easy-token");
+		var userId = sessionStorage.getItem("easy-userId");
+		var userName = sessionStorage.getItem("easy-userName");
+		var ufmi = sessionStorage.getItem("easy-ufmi");
 
 		console.log(token);
 		console.log(userId);
@@ -83,8 +83,8 @@ ADF.PushUserInfoView = Backbone.View.extend({
 
 	},
 	userInfoConfirm : function() {
-		var sessionSendNum = sessionStorage.getItem("userName");
-		var token = sessionStorage.getItem("token");
+		var sessionSendNum = sessionStorage.getItem("easy-userName");
+		var token = sessionStorage.getItem("easy-token");
 		var sendNumInput = $('#user-info-sendnum-input').val();
 		if (sendNumInput == null || sendNumInput == "") {
 			alert('발송 번호가 없습니다! 발송번호를 입력해주세요.');
@@ -114,7 +114,7 @@ ADF.PushUserInfoView = Backbone.View.extend({
 						success : function(data) {
 							if (!data.result.errors) {
 								alert('발송번호를 수정 하였습니다.');
-								sessionStorage.setItem("userName",
+								sessionStorage.setItem("easy-userName",
 										user_Info_sendnum_input);
 								$('#user-info-sendnum-input').prop('disabled',
 										true);
@@ -127,13 +127,12 @@ ADF.PushUserInfoView = Backbone.View.extend({
 						error : function(data) {
 							if (data.status == 401) {
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-								sessionStorage.removeItem("token");
-								sessionStorage.removeItem("userId");
-								sessionStorage.removeItem("role");
-								sessionStorage.removeItem("monitoringStatus");
-								sessionStorage.removeItem("groupTopic");
-								sessionStorage.removeItem("ufmi");
-								sessionStorage.removeItem("userName");
+								sessionStorage.removeItem("easy-token");
+								sessionStorage.removeItem("easy-userId");
+								sessionStorage.removeItem("easy-role");
+								sessionStorage.removeItem("easy-groupTopic");
+								sessionStorage.removeItem("easy-ufmi");
+								sessionStorage.removeItem("easy-userName");
 								pushRouter.navigate('login', {
 									trigger : true
 								});

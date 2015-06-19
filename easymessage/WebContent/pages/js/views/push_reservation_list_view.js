@@ -28,7 +28,7 @@ ADF.PushReservationListView = Backbone.View.extend({
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
-		var userId=sessionStorage.getItem('userId');
+		var userId=sessionStorage.getItem('easy-userId');
 		$('#user-id-span').text(userId);
 		
 	},
@@ -61,7 +61,7 @@ ADF.PushReservationListView = Backbone.View.extend({
 	reservationCancel:function(){
 		var that=this;
 		var checkedLength = $('input[name="reservatoin-checkbox"]:checked').length;
-		var token = sessionStorage.getItem("token");
+		var token = sessionStorage.getItem("easy-token");
 		if (checkedLength == 0) {
 			alert('취소할 메시지를 선택해주세요');
 			return false;
@@ -112,13 +112,12 @@ ADF.PushReservationListView = Backbone.View.extend({
 					error : function(data, textStatus, request) {
 						if(data.status==401){
 							alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-							sessionStorage.removeItem("token");
-							sessionStorage.removeItem("userId");
-							sessionStorage.removeItem("role");
-							sessionStorage.removeItem("monitoringStatus");
-							sessionStorage.removeItem("groupTopic");
-							sessionStorage.removeItem("ufmi");
-							sessionStorage.removeItem("userName");
+							sessionStorage.removeItem("easy-token");
+							sessionStorage.removeItem("easy-userId");
+							sessionStorage.removeItem("easy-role");
+							sessionStorage.removeItem("easy-groupTopic");
+							sessionStorage.removeItem("easy-ufmi");
+							sessionStorage.removeItem("easy-userName");
 							pushRouter.navigate('login', {
 								trigger : true
 							});
@@ -195,7 +194,7 @@ ADF.PushReservationListView = Backbone.View.extend({
 	render : function() {
 		console.log("reservation view  render..");
 		var that = this;
-		var token = sessionStorage.getItem("token");
+		var token = sessionStorage.getItem("easy-token");
 
 		$.get('pages/js/template/push_reservation_list_template.html',
 				function(data) {
@@ -312,13 +311,13 @@ ADF.PushReservationListView = Backbone.View.extend({
 						
 													if(data.status==401){
 														alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-														sessionStorage.removeItem("token");
-														sessionStorage.removeItem("userId");
-														sessionStorage.removeItem("role");
-														sessionStorage.removeItem("monitoringStatus");
-														sessionStorage.removeItem("groupTopic");
-														sessionStorage.removeItem("ufmi");
-														sessionStorage.removeItem("userName");
+														sessionStorage.removeItem("easy-token");
+														sessionStorage.removeItem("easy-userId");
+														sessionStorage.removeItem("easy-role");
+													
+														sessionStorage.removeItem("easy-groupTopic");
+														sessionStorage.removeItem("easy-ufmi");
+														sessionStorage.removeItem("easy-userName");
 														pushRouter.navigate('login', {
 															trigger : true
 														});

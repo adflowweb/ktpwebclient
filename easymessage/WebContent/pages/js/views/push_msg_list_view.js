@@ -17,7 +17,10 @@ ADF.PushMsgListView = Backbone.View
 				"click #msg-resend-plus-span" : "replusUfmiCheck",
 				"click #msg-resend-btn" : "msgResend",
 				"click #modal-header-close" : "modalHeaderClick",
-				"click #modal-footer-cancel" : "modalFooterClick"
+				"click #modal-footer-cancel" : "modalFooterClick",
+				"click #msg-resend-minus-span" : "resendMinusClick",
+				"change input[name='resend-check-radio']" : "recheckRadioGroupPrivate",
+				"change input[name='resend-pnum-radio']" : "recheckPtalkRadio",
 
 			// "click #msg-list-detail-btn":"getDetailList"
 			},
@@ -30,7 +33,8 @@ ADF.PushMsgListView = Backbone.View
 						"confirmDetailTable", "getDetailList",
 						"checkBunchInput", "replusUfmiCheck", "msgResend",
 						"resendFormCheck", "modalFooterClick",
-						"modalHeaderClick");
+						"modalHeaderClick", "resendMinusClick",
+						"recheckRadioGroupPrivate", "recheckPtalkRadio");
 				var _this = this;
 				this.render = _.wrap(this.render, function(render) {
 					_this.beforeRender();
@@ -48,13 +52,119 @@ ADF.PushMsgListView = Backbone.View
 				$('#sidebar-shortcuts').show();
 				$('#sidebar-ul-list').show();
 				$('#login-user-info-div').show();
-				var userId = sessionStorage.getItem('userId');
+				var userId = sessionStorage.getItem('easy-userId');
 				$('#user-id-span').text(userId);
 
 			},
 			afterRender : function() {
 				console.log('after render..');
 
+			},
+
+			recheckPtalkRadio : function() {
+				console.log('피톡 버전');
+				var privateGroupCheck = $(
+						'input:radio[name="resend-check-radio"]:checked').val();
+				var p1p2Radio = $(
+						'input:radio[name="resend-pnum-radio"]:checked').val();
+
+				// 개인
+				if (privateGroupCheck == 0) {
+
+					// p1
+					if (p1p2Radio == "82") {
+						$('#resend-fleet-label').text('fleet 번호');
+						$('#resend-fleet-span').text('무전번호의 fleet번호를 입력해주세요!');
+						$('#resend-private-label').text('개별 번호');
+						$('#resend-private-span').text('무전번호의 개별 ID를 입력해주세요!');
+					} else {
+						$('#resend-fleet-label').text('국번');
+						$('#resend-fleet-span').text('무전번호의 국번을 입력해주세요!');
+						$('#resend-private-label').text('개별 번호');
+						$('#resend-private-span').text('무전번호의 개별 ID를 입력해주세요!');
+					}
+
+					// 그룹
+				} else {
+					// p1
+					if (p1p2Radio == "82") {
+						$('#resend-fleet-label').text('fleet 번호');
+						$('#resend-fleet-span').text('무전번호의 fleet번호를 입력해주세요!');
+						$('#resend-private-label').text('그룹 번호');
+						$('#resend-private-span').text('무전번호의 그룹번호를 입력해주세요!');
+						// p2
+					} else {
+						$('#resend-fleet-label').text('번치 ID');
+						$('#resend-fleet-span').text('번치 ID를  입력해주세요!');
+						$('#resend-private-label').text('그룹 번호');
+						$('#resend-private-span').text('무전번호의 그룹번호를 입력해주세요!');
+					}
+
+				}
+			},
+
+			recheckRadioGroupPrivate : function() {
+				console.log('그룹');
+				var privateGroupCheck = $(
+						'input:radio[name="resend-check-radio"]:checked').val();
+				var p1p2Radio = $(
+						'input:radio[name="resend-pnum-radio"]:checked').val();
+				console.log(p1p2Radio);
+
+				// 개인
+				if (privateGroupCheck == 0) {
+
+					// p1
+					if (p1p2Radio == "82") {
+						$('#resend-fleet-label').text('fleet 번호');
+						$('#resend-fleet-span').text('무전번호의 fleet번호를 입력해주세요!');
+						$('#resend-private-label').text('개별 번호');
+						$('#resend-private-span').text('무전번호의 개별 ID를 입력해주세요!');
+					} else {
+						$('#resend-fleet-label').text('국번');
+						$('#resend-fleet-span').text('무전번호의 국번을 입력해주세요!');
+						$('#resend-private-label').text('개별 번호');
+						$('#resend-private-span').text('무전번호의 개별 ID를 입력해주세요!');
+					}
+
+					// 그룹
+				} else {
+					// p1
+					if (p1p2Radio == "82") {
+						console.log('이상함');
+						$('#resend-fleet-label').text('fleet 번호');
+						$('#resend-fleet-span').text('무전번호의 fleet번호를 입력해주세요!');
+						$('#resend-private-label').text('그룹 번호');
+						$('#resend-private-span').text('무전번호의 그룹번호를 입력해주세요!');
+						// p2
+					} else {
+						$('#resend-fleet-label').text('번치 ID');
+						$('#resend-fleet-span').text('번치 ID를  입력해주세요!');
+						$('#resend-private-label').text('그룹 번호');
+						$('#resend-private-span').text('무전번호의 그룹번호를 입력해주세요!');
+					}
+
+				}
+
+			},
+
+			resendMinusClick : function() {
+				console.log('마이너스 클릭');
+				var deleteList = $('#msg-resend-user-target-show-input').val();
+				if (deleteList != null && deleteList != "") {
+
+					if (deleteList.lastIndexOf(',') > -1) {
+						var lastIndex = deleteList.lastIndexOf(',');
+						console.log(deleteList);
+						console.log(deleteList.length);
+						deleteList = deleteList.substring(0, lastIndex);
+						$('#msg-resend-user-target-show-input').val(deleteList);
+					} else {
+						$('#msg-resend-user-target-show-input').val("");
+
+					}
+
+				}
 			},
 
 			msgListTable : {
@@ -74,7 +184,7 @@ ADF.PushMsgListView = Backbone.View
 
 			msgResend : function() {
 
-				var userName = sessionStorage.getItem('userName');
+				var userName = sessionStorage.getItem('easy-userName');
 				if (userName == null || userName == "" || userName == "null") {
 					alert('발송번호를 등록해야 정상 사용이 가능합니다.!');
 					pushRouter.navigate('user_info', {
@@ -83,7 +193,7 @@ ADF.PushMsgListView = Backbone.View
 					return false;
 				}
 				if (this.resendFormCheck()) {
-					var token = sessionStorage.getItem("token");
+					var token = sessionStorage.getItem("easy-token");
 					var messageTarget = $('#msg-resend-user-target-show-input')
 							.val();
 					messageTarget = pushUtil.compactTrim(messageTarget);
@@ -145,12 +255,13 @@ ADF.PushMsgListView = Backbone.View
 							error : function(data, textStatus, request) {
 								if (data.status == 401) {
 									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("token");
-									sessionStorage.removeItem("userId");
-									sessionStorage.removeItem("role");
-									sessionStorage.removeItem("groupTopic");
-									sessionStorage.removeItem("ufmi");
-									sessionStorage.removeItem("userName");
+									sessionStorage.removeItem("easy-token");
+									sessionStorage.removeItem("easy-userId");
+									sessionStorage.removeItem("easy-role");
+									sessionStorage
+											.removeItem("easy-groupTopic");
+									sessionStorage.removeItem("easy-ufmi");
+									sessionStorage.removeItem("easy-userName");
 									pushRouter.navigate('login', {
 										trigger : true
 									});
@@ -199,13 +310,14 @@ ADF.PushMsgListView = Backbone.View
 							error : function(data, textStatus, request) {
 								if (data.status == 401) {
 									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("token");
-									sessionStorage.removeItem("userId");
-									sessionStorage.removeItem("role");
+									sessionStorage.removeItem("easy-token");
+									sessionStorage.removeItem("easy-userId");
+									sessionStorage.removeItem("easy-role");
 
-									sessionStorage.removeItem("groupTopic");
-									sessionStorage.removeItem("ufmi");
-									sessionStorage.removeItem("userName");
+									sessionStorage
+											.removeItem("easy-groupTopic");
+									sessionStorage.removeItem("easy-ufmi");
+									sessionStorage.removeItem("easy-userName");
 									pushRouter.navigate('login', {
 										trigger : true
 									});
@@ -382,12 +494,15 @@ ADF.PushMsgListView = Backbone.View
 				console.log(aData);
 				var groupCheck = aData.groupId;
 				var messageListContent = "";
-
+				// resend-check-radio
 				if (groupCheck.indexOf("개인") != -1) {
 					console.log('개인');
 					$('#resend-group-check').val(0);
 					var receiver_split = aData.receiver.split('*');
 					// p1
+
+					$('input:radio[id="resend-check-radio-private"]').attr(
+							"checked", true);
 					if (receiver_split[0] == "82") {
 						$('input:radio[id="resend-pnum-p1-radio"]').attr(
 								"checked", true);
@@ -401,6 +516,8 @@ ADF.PushMsgListView = Backbone.View
 				} else {
 					console.log('그룹');
 					$('#resend-group-check').val(1);
+					$('input:radio[id="resend-check-radio-group"]').attr(
+							"checked", true);
 					var topicP1P2Check = aData.receiver;
 					// p1
 					if (topicP1P2Check.indexOf("P1") != -1) {
@@ -457,6 +574,9 @@ ADF.PushMsgListView = Backbone.View
 
 				// $('#remessage-send-serviceid').val(clickData.serviceId);
 
+				this.recheckPtalkRadio();
+				this.recheckRadioGroupPrivate();
+
 			},
 
 			confirmDetailTable : function() {
@@ -482,7 +602,7 @@ ADF.PushMsgListView = Backbone.View
 				reqMonth = splitMonth[0] + splitMonth[1];
 				console.log(reqMonth);
 
-				var token = sessionStorage.getItem('token');
+				var token = sessionStorage.getItem('easy-token');
 				var detailTableData = new Array();
 
 				$.ajax({
@@ -548,13 +668,12 @@ ADF.PushMsgListView = Backbone.View
 					error : function(data) {
 						if (data.status == 401) {
 							alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-							sessionStorage.removeItem("token");
-							sessionStorage.removeItem("userId");
-							sessionStorage.removeItem("role");
-							sessionStorage.removeItem("monitoringStatus");
-							sessionStorage.removeItem("groupTopic");
-							sessionStorage.removeItem("ufmi");
-							sessionStorage.removeItem("userName");
+							sessionStorage.removeItem("easy-token");
+							sessionStorage.removeItem("easy-userId");
+							sessionStorage.removeItem("easy-role");
+							sessionStorage.removeItem("easy-groupTopic");
+							sessionStorage.removeItem("easy-ufmi");
+							sessionStorage.removeItem("easy-userName");
 							pushRouter.navigate('login', {
 								trigger : true
 							});
@@ -769,13 +888,13 @@ ADF.PushMsgListView = Backbone.View
 
 							} else if (xmlhttp.status == 401) {
 								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-								sessionStorage.removeItem("token");
-								sessionStorage.removeItem("userId");
-								sessionStorage.removeItem("role");
-								sessionStorage.removeItem("monitoringStatus");
-								sessionStorage.removeItem("groupTopic");
-								sessionStorage.removeItem("ufmi");
-								sessionStorage.removeItem("userName");
+								sessionStorage.removeItem("easy-token");
+								sessionStorage.removeItem("easy-userId");
+								sessionStorage.removeItem("easy-role");
+
+								sessionStorage.removeItem("easy-groupTopic");
+								sessionStorage.removeItem("easy-ufmi");
+								sessionStorage.removeItem("easy-userName");
 								pushRouter.navigate('login', {
 									trigger : true
 								});
@@ -789,7 +908,7 @@ ADF.PushMsgListView = Backbone.View
 								return false;
 							}
 						};
-						var token = sessionStorage.getItem("token");
+						var token = sessionStorage.getItem("easy-token");
 						xmlhttp.open("GET", '/v1/pms/adm/svc/messages/csv'
 								+ requestUrl, true);
 						xmlhttp.setRequestHeader("X-Application-Token", token);
@@ -957,7 +1076,7 @@ ADF.PushMsgListView = Backbone.View
 			render : function() {
 				console.log("msg list view render..");
 				var that = this;
-				var token = sessionStorage.getItem("token");
+				var token = sessionStorage.getItem("easy-token");
 				$
 						.get(
 								'pages/js/template/push_msg_list_template.html',
@@ -1073,7 +1192,7 @@ ADF.PushMsgListView = Backbone.View
 																},
 																{
 																	"data" : null,
-																	"defaultContent" : '<button type="button" id="msg-list-detail-btn" class="btn btn-xs btn-white">상세보기</button>&nbsp;<button id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal">재전송 </button>'
+																	"defaultContent" : '<a class="blue"  data-tooltip="tooltip" title="상세보기" id="msg-list-detail-btn"   ><i class="ace-icon fa fa-search-plus  bigger-130"></i></a>&nbsp;&nbsp;<a class="green"  data-tooltip="tooltip" title="재전송" id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal"><i class="ace-icon fa fa-pencil-square-o  bigger-130"></i></a>'
 																},
 
 														],
@@ -1123,9 +1242,9 @@ ADF.PushMsgListView = Backbone.View
 																								+ "..";
 																					}
 																					if (dataResult[i].groupId == null) {
-																						dataResult[i].groupId = '<i class="fa fa-user">(개인)</i>';
+																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="개인" class="fa fa-user"></i>';
 																					} else {
-																						dataResult[i].groupId = '<i class="fa fa-users">(그룹)</i>';
+																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="그룹" class="fa fa-users"></i>';
 																					}
 																					switch (dataResult[i].status) {
 																					case -99:
@@ -1195,7 +1314,12 @@ ADF.PushMsgListView = Backbone.View
 																				alert('발송 메시지 목록을 가지고 오는데 실패 하였습니다.');
 
 																			}
-
+																			$(
+																					'[data-tooltip="tooltip"]')
+																					.tooltip(
+																							{
+																								placement : 'top'
+																							});
 																		},
 
 																		error : function(
@@ -1203,18 +1327,18 @@ ADF.PushMsgListView = Backbone.View
 																			if (data.status == 401) {
 																				alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
 																				sessionStorage
-																						.removeItem("token");
+																						.removeItem("easy-token");
 																				sessionStorage
-																						.removeItem("userId");
+																						.removeItem("easy-userId");
 																				sessionStorage
-																						.removeItem("role");
+																						.removeItem("easy-role");
 
 																				sessionStorage
-																						.removeItem("groupTopic");
+																						.removeItem("easy-groupTopic");
 																				sessionStorage
-																						.removeItem("ufmi");
+																						.removeItem("easy-ufmi");
 																				sessionStorage
-																						.removeItem("userName");
+																						.removeItem("easy-userName");
 																				pushRouter
 																						.navigate(
 																								'login',
@@ -1395,6 +1519,9 @@ ADF.PushMsgListView = Backbone.View
 															}
 														}
 													});
+									$('[data-tooltip="tooltip"]').tooltip({
+										placement : 'top'
+									});
 								}, 'html');
 
 			}
