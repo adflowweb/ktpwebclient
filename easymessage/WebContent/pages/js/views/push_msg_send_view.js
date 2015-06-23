@@ -448,6 +448,7 @@ ADF.PushMsgSendView = Backbone.View
 
 					if (!file.type.match(imageType)) {
 						console.log('이미지가 아님');
+						$('#file-thumbnail').val("");
 						// $('#file-thumbnail')
 						// .val(
 						// '
@@ -1534,7 +1535,7 @@ ADF.PushMsgSendView = Backbone.View
 					console.log('34666');
 					if (input_reservation != "") {
 
-						dateResult = pushUtil.dateFormating(input_reservation);
+						dateResult = pushUtil.dateFormatingRes(input_reservation);
 						dateResult = dateResult.toISOString();
 					}
 
@@ -1578,6 +1579,7 @@ ADF.PushMsgSendView = Backbone.View
 
 					var userId = sessionStorage.getItem("easy-userId");
 					if (fileName != null && fileData != null) {
+
 						var fileFormat = fileName.substr(fileName
 								.lastIndexOf('.') + 1);
 						var replaceImageText = fileName.replace(/^.*\\/, "");
@@ -1598,6 +1600,7 @@ ADF.PushMsgSendView = Backbone.View
 						messageData.fileFormat = fileFormat;
 						if (xhrHeadReq.status == 404) {
 							console.log(xhrHeadReq.status);
+
 							var formdata = new FormData();
 							formdata.append("fileData", fileData);
 							var xhrFileReq = new XMLHttpRequest();
@@ -1610,6 +1613,7 @@ ADF.PushMsgSendView = Backbone.View
 							xhrFileReq.send(formdata);
 							if (xhrFileReq.status == 200) {
 								console.log('파일 전송 성공');
+
 								console.log(xhrFileReq.status);
 
 							} else {
@@ -1619,9 +1623,11 @@ ADF.PushMsgSendView = Backbone.View
 								return false;
 							}
 						} else if (xhrHeadReq.status == 409) {
+
 							console.log(xhrHeadReq.status);
 							console.log('파일이 존재함');
 						} else {
+
 							console.log(xhrHeadReq.status);
 
 							alert('첨부 파일 전송에 실패 하였습니다!');
@@ -1631,6 +1637,7 @@ ADF.PushMsgSendView = Backbone.View
 						// 이미지 파일일 경우 thumbnail 전송
 						if (fileFormat == "jpg" || fileFormat == "jpeg"
 								|| fileFormat == "png") {
+
 							var xhrHeadThumReq = new XMLHttpRequest();
 							xhrHeadThumReq.open("HEAD", "/cts/v1/users/"
 									+ userId + "/thumb", false);
@@ -1698,6 +1705,12 @@ ADF.PushMsgSendView = Backbone.View
 
 					} else {
 						sendCount = messageData.receivers.length;
+
+					}
+
+					if (sendCount == 0) {
+						alert('수신 대상자가 없습니다!');
+						return false;
 
 					}
 
@@ -1844,7 +1857,7 @@ ADF.PushMsgSendView = Backbone.View
 					var messageData = new Object();
 					if (input_reservation != "") {
 
-						dateResult = pushUtil.dateFormating(input_reservation);
+						dateResult = pushUtil.dateFormatingRes(input_reservation);
 						dateResult = dateResult.toISOString();
 					}
 
@@ -1879,106 +1892,124 @@ ADF.PushMsgSendView = Backbone.View
 
 					var userId = sessionStorage.getItem("easy-userId");
 					if (fileName != null && fileData != null) {
-						var fileFormat = fileName.substr(fileName
-								.lastIndexOf('.') + 1);
-						var replaceImageText = fileName.replace(/^.*\\/, "");
-						console.log(fileFormat);
-						var md5 = $('#file-md5').val();
-						replaceImageText = encodeURIComponent(replaceImageText);
+						$('#fileprogress').show();
+						if (confirm('첨부된 파일이 있습니다 파일을 업로드 하시겠습니까?') == true) {
 
-						// head check
-						var xhrHeadReq = new XMLHttpRequest();
-						xhrHeadReq.open("HEAD", "/cts/v1/users/" + userId,
-								false);
-						xhrHeadReq.setRequestHeader("md5", md5);
-						xhrHeadReq.setRequestHeader("token", token);
-						xhrHeadReq.setRequestHeader("file", replaceImageText);
-						xhrHeadReq.send();
-						messageData.mms = true;
-						messageData.fileName = md5;
-						messageData.fileFormat = fileFormat;
-						if (xhrHeadReq.status == 404) {
-							console.log(xhrHeadReq.status);
-							var formdata = new FormData();
-							formdata.append("fileData", fileData);
-							var xhrFileReq = new XMLHttpRequest();
-							xhrFileReq.open("POST", "/cts/v1/users/" + userId,
+							var fileFormat = fileName.substr(fileName
+									.lastIndexOf('.') + 1);
+							var replaceImageText = fileName
+									.replace(/^.*\\/, "");
+							console.log(fileFormat);
+							var md5 = $('#file-md5').val();
+							replaceImageText = encodeURIComponent(replaceImageText);
+
+							// head check
+							var xhrHeadReq = new XMLHttpRequest();
+							xhrHeadReq.open("HEAD", "/cts/v1/users/" + userId,
 									false);
-							xhrFileReq.setRequestHeader("md5", md5);
-							xhrFileReq.setRequestHeader("token", token);
-							xhrFileReq.setRequestHeader("file",
+							xhrHeadReq.setRequestHeader("md5", md5);
+							xhrHeadReq.setRequestHeader("token", token);
+							xhrHeadReq.setRequestHeader("file",
 									replaceImageText);
-							xhrFileReq.send(formdata);
-							if (xhrFileReq.status == 200) {
-								console.log('파일 전송 성공');
-								console.log(xhrFileReq.status);
+							xhrHeadReq.send();
+							messageData.mms = true;
+							messageData.fileName = md5;
+							messageData.fileFormat = fileFormat;
+							if (xhrHeadReq.status == 404) {
+								console.log(xhrHeadReq.status);
 
-							} else {
-								console.log(xhrFileReq.status);
+								var formdata = new FormData();
+								formdata.append("fileData", fileData);
+								var xhrFileReq = new XMLHttpRequest();
+								xhrFileReq.open("POST", "/cts/v1/users/"
+										+ userId, false);
+								xhrFileReq.setRequestHeader("md5", md5);
+								xhrFileReq.setRequestHeader("token", token);
+								xhrFileReq.setRequestHeader("file",
+										replaceImageText);
+								xhrFileReq.send(formdata);
+								if (xhrFileReq.status == 200) {
 
-								alert('첨부 파일 전송에 실패 하였습니다!');
-								return false;
-							}
-						} else if (xhrHeadReq.status == 409) {
-							console.log(xhrHeadReq.status);
-							console.log('파일이 존재함');
-						} else {
-							console.log(xhrHeadReq.status);
-
-							alert('첨부 파일 전송에 실패 하였습니다!');
-							return false;
-						}
-
-						// 이미지 파일일 경우 thumbnail 전송
-						if (fileFormat == "jpg" || fileFormat == "jpeg"
-								|| fileFormat == "png") {
-							var xhrHeadThumReq = new XMLHttpRequest();
-							xhrHeadThumReq.open("HEAD", "/cts/v1/users/"
-									+ userId + "/thumb", false);
-							xhrHeadThumReq.setRequestHeader("md5", md5);
-							xhrHeadThumReq.setRequestHeader("token", token);
-							xhrHeadThumReq.setRequestHeader("file", ".png");
-							xhrHeadThumReq.send();
-							if (xhrHeadThumReq.status == 404) {
-								console.log(xhrHeadThumReq.status);
-								var thumbNail = $('#file-thumbnail').val();
-								console.log('썸네일');
-								console.log(thumbNail);
-								if (thumbNail == null || thumbNail == "") {
-
-									alert('첨부 파일 전송에 실패 하였습니다!');
-									return false;
-								}
-								thumbNail = pushUtil.dataURItoBlob(thumbNail);
-								var formDataThumb = new FormData();
-								formDataThumb.append("fileData", thumbNail);
-								var xhrFileThumReq = new XMLHttpRequest();
-								xhrFileThumReq.open("POST", "/cts/v1/users/"
-										+ userId + "/thumb", false);
-								xhrFileThumReq.setRequestHeader("md5", md5);
-								xhrFileThumReq.setRequestHeader("token", token);
-								xhrFileThumReq.setRequestHeader("file", ".png");
-								xhrFileThumReq.send(formDataThumb);
-								if (xhrFileThumReq.status == 200) {
-									console.log('썸 파일 전송 성공');
-									console.log(xhrFileThumReq.status);
+									console.log('파일 전송 성공');
+									console.log(xhrFileReq.status);
 
 								} else {
-									console.log(xhrFileThumReq.status);
+
+									console.log(xhrFileReq.status);
 
 									alert('첨부 파일 전송에 실패 하였습니다!');
 									return false;
 								}
-							} else if (xhrHeadThumReq.status == 409) {
-								console.log(xhrHeadThumReq.status);
+							} else if (xhrHeadReq.status == 409) {
+
+								console.log(xhrHeadReq.status);
 								console.log('파일이 존재함');
 							} else {
-								console.log(xhrHeadThumReq.status);
+
+								console.log(xhrHeadReq.status);
 
 								alert('첨부 파일 전송에 실패 하였습니다!');
 								return false;
 							}
 
+							// 이미지 파일일 경우 thumbnail 전송
+							if (fileFormat == "jpg" || fileFormat == "jpeg"
+									|| fileFormat == "png") {
+								var xhrHeadThumReq = new XMLHttpRequest();
+								xhrHeadThumReq.open("HEAD", "/cts/v1/users/"
+										+ userId + "/thumb", false);
+								xhrHeadThumReq.setRequestHeader("md5", md5);
+								xhrHeadThumReq.setRequestHeader("token", token);
+								xhrHeadThumReq.setRequestHeader("file", ".png");
+								xhrHeadThumReq.send();
+								if (xhrHeadThumReq.status == 404) {
+									console.log(xhrHeadThumReq.status);
+									var thumbNail = $('#file-thumbnail').val();
+									console.log('썸네일');
+									console.log(thumbNail);
+									if (thumbNail == null || thumbNail == "") {
+
+										alert('첨부 파일 전송에 실패 하였습니다!');
+										return false;
+									}
+									thumbNail = pushUtil
+											.dataURItoBlob(thumbNail);
+									var formDataThumb = new FormData();
+									formDataThumb.append("fileData", thumbNail);
+									var xhrFileThumReq = new XMLHttpRequest();
+									xhrFileThumReq.open("POST",
+											"/cts/v1/users/" + userId
+													+ "/thumb", false);
+									xhrFileThumReq.setRequestHeader("md5", md5);
+									xhrFileThumReq.setRequestHeader("token",
+											token);
+									xhrFileThumReq.setRequestHeader("file",
+											".png");
+									xhrFileThumReq.send(formDataThumb);
+									if (xhrFileThumReq.status == 200) {
+										console.log('썸 파일 전송 성공');
+										console.log(xhrFileThumReq.status);
+
+									} else {
+										console.log(xhrFileThumReq.status);
+
+										alert('첨부 파일 전송에 실패 하였습니다!');
+										return false;
+									}
+								} else if (xhrHeadThumReq.status == 409) {
+									console.log(xhrHeadThumReq.status);
+									console.log('파일이 존재함');
+								} else {
+									console.log(xhrHeadThumReq.status);
+
+									alert('첨부 파일 전송에 실패 하였습니다!');
+									return false;
+								}
+
+							}
+						} else {
+							$('#fileprogress').hide();
+							$('.remove').click();
 						}
 
 					}
@@ -2017,12 +2048,16 @@ ADF.PushMsgSendView = Backbone.View
 														+ data.result.data;
 
 											} else {
-												$(
-														'#msg-send-group-user-target-show-input')
-														.val("");
-
-												alert('해당 그룹에 수신자가 없습니다. 다른 그룹을 입력해 주세요!');
+												alert(messageData.receivers[i]
+														+ "는 수신자가 없는 그룹입니다.");
 												return false;
+												// $(
+												// '#msg-send-group-user-target-show-input')
+												// .val("");
+												//
+												// alert('해당 그룹에 수신자가 없습니다. 다른
+												// 그룹을 입력해 주세요!');
+												// return false;
 											}
 
 										},
@@ -2055,7 +2090,7 @@ ADF.PushMsgSendView = Backbone.View
 									});
 
 							if (groupTopicCount == 0) {
-								return false;
+								// return false;
 							}
 
 						} else {
@@ -2085,6 +2120,11 @@ ADF.PushMsgSendView = Backbone.View
 
 					// 인원체크
 
+					if (sendCount == 0) {
+						alert('수신 대상자가 없습니다!');
+						return false;
+
+					}
 					if (messageData.reservationTime) {
 						if (confirm("총 " + sendCount + "건(그룹 수신자:"
 								+ groupTopicCount
@@ -2244,7 +2284,7 @@ ADF.PushMsgSendView = Backbone.View
 
 						input_reservation = input_reservation.substring(0, 10);
 
-						convertDate = pushUtil.dateFormating(convertDate);
+						convertDate = pushUtil.dateFormatingRes(convertDate);
 						var nowDateTime = new Date();
 						var nowTime = nowDateTime.getTime() + 300000;
 						var convertPickerTime = convertDate.getTime();
@@ -2320,7 +2360,7 @@ ADF.PushMsgSendView = Backbone.View
 
 						input_reservation = input_reservation.substring(0, 10);
 
-						convertDate = pushUtil.dateFormating(convertDate);
+						convertDate = pushUtil.dateFormatingRes(convertDate);
 						var nowDateTime = new Date();
 						var nowTime = nowDateTime.getTime() + 300000;
 						var convertPickerTime = convertDate.getTime();
@@ -2401,7 +2441,7 @@ ADF.PushMsgSendView = Backbone.View
 
 						input_reservation = input_reservation.substring(0, 10);
 
-						convertDate = pushUtil.dateFormating(convertDate);
+						convertDate = pushUtil.dateFormatingRes(convertDate);
 						var nowDateTime = new Date();
 						var nowTime = nowDateTime.getTime() + 300000;
 						var convertPickerTime = convertDate.getTime();
@@ -2444,7 +2484,7 @@ ADF.PushMsgSendView = Backbone.View
 						.val();
 				var dateResult = "";
 				if (input_reservation != "") {
-					dateResult = pushUtil.dateFormating(input_reservation);
+					dateResult = pushUtil.dateFormatingRes(input_reservation);
 					dateResult = dateResult.toISOString();
 				}
 				if (dateResult != "") {
@@ -2531,109 +2571,140 @@ ADF.PushMsgSendView = Backbone.View
 
 					var userId = sessionStorage.getItem("easy-userId");
 					if (fileName != null && fileData != null) {
+						$('#fileprogress').show();
+						if (confirm('첨부된 파일이 있습니다 파일을 업로드 하시겠습니까?') == true) {
 
-						mmsCount = mmsCount + smsCount;
-						smsCount = 0;
-						var fileFormat = fileName.substr(fileName
-								.lastIndexOf('.') + 1);
-						var replaceImageText = fileName.replace(/^.*\\/, "");
-						console.log(fileFormat);
-						var md5 = $('#file-md5').val();
-						replaceImageText = encodeURIComponent(replaceImageText);
+							mmsCount = mmsCount + smsCount;
+							smsCount = 0;
 
-						// head check
-						var xhrHeadReq = new XMLHttpRequest();
-						xhrHeadReq.open("HEAD", "/cts/v1/users/" + userId,
-								false);
-						xhrHeadReq.setRequestHeader("md5", md5);
-						xhrHeadReq.setRequestHeader("token", token);
-						xhrHeadReq.setRequestHeader("file", replaceImageText);
-						xhrHeadReq.send();
-						messageData.mms = true;
-						messageData.fileName = md5;
-						messageData.fileFormat = fileFormat;
-						if (xhrHeadReq.status == 404) {
-							console.log(xhrHeadReq.status);
-							var formdata = new FormData();
-							formdata.append("fileData", fileData);
-							var xhrFileReq = new XMLHttpRequest();
-							xhrFileReq.open("POST", "/cts/v1/users/" + userId,
+							var fileFormat = fileName.substr(fileName
+									.lastIndexOf('.') + 1);
+							var replaceImageText = fileName
+									.replace(/^.*\\/, "");
+							console.log(fileFormat);
+							var md5 = $('#file-md5').val();
+							replaceImageText = encodeURIComponent(replaceImageText);
+							messageData.mms = true;
+							messageData.fileName = md5;
+							messageData.fileFormat = fileFormat;
+
+							// /
+
+							// head check
+							var xhrHeadReq = new XMLHttpRequest();
+							xhrHeadReq.open("HEAD", "/cts/v1/users/" + userId,
 									false);
-							xhrFileReq.setRequestHeader("md5", md5);
-							xhrFileReq.setRequestHeader("token", token);
-							xhrFileReq.setRequestHeader("file",
+							xhrHeadReq.setRequestHeader("md5", md5);
+							xhrHeadReq.setRequestHeader("token", token);
+							xhrHeadReq.setRequestHeader("file",
 									replaceImageText);
-							xhrFileReq.send(formdata);
-							if (xhrFileReq.status == 200) {
-								console.log('파일 전송 성공');
-								console.log(xhrFileReq.status);
+							xhrHeadReq.send();
 
-							} else {
-								console.log(xhrFileReq.status);
+							if (xhrHeadReq.status == 404) {
 
-								alert('첨부 파일 전송에 실패 하였습니다!');
-								return false;
-							}
-						} else if (xhrHeadReq.status == 409) {
-							console.log(xhrHeadReq.status);
-							console.log('파일이 존재함');
-						} else {
-							console.log(xhrHeadReq.status);
+								console.log('test');
 
-							alert('첨부 파일 전송에 실패 하였습니다!');
-							return false;
-						}
+								console.log(xhrHeadReq.status);
+								var formdata = new FormData();
+								formdata.append("fileData", fileData);
+								var xhrFileReq = new XMLHttpRequest();
+								xhrFileReq.open("POST", "/cts/v1/users/"
+										+ userId, false);
+								xhrFileReq.setRequestHeader("md5", md5);
+								xhrFileReq.setRequestHeader("token", token);
+								xhrFileReq.setRequestHeader("file",
+										replaceImageText);
+								xhrFileReq.send(formdata);
+								if (xhrFileReq.status == 200) {
+									$('#fileprogress').hide();
 
-						// 이미지 파일일 경우 thumbnail 전송
-						if (fileFormat == "jpg" || fileFormat == "jpeg"
-								|| fileFormat == "png") {
-							var xhrHeadThumReq = new XMLHttpRequest();
-							xhrHeadThumReq.open("HEAD", "/cts/v1/users/"
-									+ userId + "/thumb", false);
-							xhrHeadThumReq.setRequestHeader("md5", md5);
-							xhrHeadThumReq.setRequestHeader("token", token);
-							xhrHeadThumReq.setRequestHeader("file", ".png");
-							xhrHeadThumReq.send();
-							if (xhrHeadThumReq.status == 404) {
-								console.log(xhrHeadThumReq.status);
-								var thumbNail = $('#file-thumbnail').val();
-								console.log('썸네일');
-								console.log(thumbNail);
-								if (thumbNail == null || thumbNail == "") {
-
-									alert('첨부 파일 전송에 실패 하였습니다!');
-									return false;
-								}
-								thumbNail = pushUtil.dataURItoBlob(thumbNail);
-								var formDataThumb = new FormData();
-								formDataThumb.append("fileData", thumbNail);
-								var xhrFileThumReq = new XMLHttpRequest();
-								xhrFileThumReq.open("POST", "/cts/v1/users/"
-										+ userId + "/thumb", false);
-								xhrFileThumReq.setRequestHeader("md5", md5);
-								xhrFileThumReq.setRequestHeader("token", token);
-								xhrFileThumReq.setRequestHeader("file", ".png");
-								xhrFileThumReq.send(formDataThumb);
-								if (xhrFileThumReq.status == 200) {
-									console.log('썸 파일 전송 성공');
-									console.log(xhrFileThumReq.status);
+									console.log('파일 전송 성공');
+									console.log(xhrFileReq.status);
 
 								} else {
-									console.log(xhrFileThumReq.status);
+									$('#fileprogress').hide();
+
+									console.log(xhrFileReq.status);
 
 									alert('첨부 파일 전송에 실패 하였습니다!');
 									return false;
 								}
-							} else if (xhrHeadThumReq.status == 409) {
-								console.log(xhrHeadThumReq.status);
+							} else if (xhrHeadReq.status == 409) {
+								$('#fileprogress').hide();
+
+								console.log(xhrHeadReq.status);
 								console.log('파일이 존재함');
 							} else {
-								console.log(xhrHeadThumReq.status);
+								$('#fileprogress').hide();
+
+								console.log(xhrHeadReq.status);
 
 								alert('첨부 파일 전송에 실패 하였습니다!');
 								return false;
 							}
 
+							// 이미지 파일일 경우 thumbnail 전송
+							if (fileFormat == "jpg" || fileFormat == "jpeg"
+									|| fileFormat == "png") {
+								var xhrHeadThumReq = new XMLHttpRequest();
+								xhrHeadThumReq.open("HEAD", "/cts/v1/users/"
+										+ userId + "/thumb", false);
+								xhrHeadThumReq.setRequestHeader("md5", md5);
+								xhrHeadThumReq.setRequestHeader("token", token);
+								xhrHeadThumReq.setRequestHeader("file", ".png");
+								xhrHeadThumReq.send();
+								if (xhrHeadThumReq.status == 404) {
+									console.log(xhrHeadThumReq.status);
+									var thumbNail = $('#file-thumbnail').val();
+									console.log('썸네일');
+									console.log(thumbNail);
+									if (thumbNail == null || thumbNail == "") {
+										$('#fileprogress').hide();
+										alert('첨부 파일 전송에 실패 하였습니다!');
+										return false;
+									}
+									thumbNail = pushUtil
+											.dataURItoBlob(thumbNail);
+									var formDataThumb = new FormData();
+									formDataThumb.append("fileData", thumbNail);
+									var xhrFileThumReq = new XMLHttpRequest();
+									xhrFileThumReq.open("POST",
+											"/cts/v1/users/" + userId
+													+ "/thumb", false);
+									xhrFileThumReq.setRequestHeader("md5", md5);
+									xhrFileThumReq.setRequestHeader("token",
+											token);
+									xhrFileThumReq.setRequestHeader("file",
+											".png");
+									xhrFileThumReq.send(formDataThumb);
+									if (xhrFileThumReq.status == 200) {
+
+										console.log('썸 파일 전송 성공');
+										console.log(xhrFileThumReq.status);
+
+									} else {
+
+										console.log(xhrFileThumReq.status);
+
+										alert('첨부 파일 전송에 실패 하였습니다!');
+										return false;
+									}
+								} else if (xhrHeadThumReq.status == 409) {
+
+									console.log(xhrHeadThumReq.status);
+									console.log('파일이 존재함');
+								} else {
+
+									console.log(xhrHeadThumReq.status);
+
+									alert('첨부 파일 전송에 실패 하였습니다!');
+									return false;
+								}
+
+							}
+						} else {
+							$('#fileprogress').hide();
+							$('.remove').click();
 						}
 
 					}
@@ -2675,7 +2746,9 @@ ADF.PushMsgSendView = Backbone.View
 														+ data.result.data;
 
 											} else {
-
+												alert(messageData.addressMessageArray[i].receiver
+														+ "는 수신자가 없는 그룹입니다.");
+												return false;
 											}
 
 										},
@@ -2738,10 +2811,16 @@ ADF.PushMsgSendView = Backbone.View
 
 					}
 
+					if (sendCount == 0) {
+						alert('수신 대상자가 없습니다!');
+						return false;
+
+					}
+
 					if (messageData.reservationTime) {
 
 						if (confirm(sendCount + "건(그룹 수신자:" + groupTopicCount
-								+ ")의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
+								+ ")의 메시지가 예약 전송 됩니다. 전송 하시겠습니까?") == true) {
 
 						} else {
 
@@ -2750,7 +2829,7 @@ ADF.PushMsgSendView = Backbone.View
 					} else {
 
 						if (confirm(sendCount + "건(그룹 수신자:" + groupTopicCount
-								+ ")의 메시지가 예약전송 됩니다. 전송 하시겠습니까?") == true) {
+								+ ")의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
 
 						} else {
 
@@ -2924,26 +3003,26 @@ ADF.PushMsgSendView = Backbone.View
 						.val();
 
 				if (fleep_bunch_input == null || fleep_bunch_input == "") {
-					alert('fleep번호 또는 bunch 번호 를 입력해주세요!');
+					alert('번호 를 입력해주세요!');
 					$('#send-private-fleep-bunch-input').focus();
 					return false;
 				}
 				if (private_input == null || private_input == "") {
-					alert('개별 번호를 입력해주세요!');
+					alert('번호를 입력해주세요!');
 					$('#send-private-input').focus();
 					return false;
 				}
 
 				if (fleep_bunch_input.substring(0, 1) == "0"
 						&& fleep_bunch_input.length > 1) {
-					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					alert('번호 첫자리는 0을 입력할수 없습니다.');
 					$('#send-private-fleep-bunch-input').focus();
 					return false;
 				}
 
 				if (private_input.substring(0, 1) == "0"
 						&& private_input.length > 1) {
-					alert('개별번호 첫자리는 0을 입력할수 없습니다.');
+					alert('번호 첫자리는 0을 입력할수 없습니다.');
 					$('#send-private-input').focus();
 					return false;
 				}
@@ -3003,26 +3082,26 @@ ADF.PushMsgSendView = Backbone.View
 							.val();
 
 					if (fleep_bunch_input == null || fleep_bunch_input == "") {
-						alert('fleep번호 또는 bunch 번호 를 입력해주세요!');
+						alert('번호 를 입력해주세요!');
 						$('#send-group-fleep-bunch-input').focus();
 						return false;
 					}
 					if (private_input == null || private_input == "") {
-						alert('개별 번호를 입력해주세요!');
+						alert('번호를 입력해주세요!');
 						$('#send-group-input').focus();
 						return false;
 					}
 
 					if (fleep_bunch_input.substring(0, 1) == "0"
 							&& fleep_bunch_input.length > 1) {
-						alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
 						$('#send-group-fleep-bunch-input').focus();
 						return false;
 					}
 
 					if (private_input.substring(0, 1) == "0"
 							&& private_input.length > 1) {
-						alert('개별번호 첫자리는 0을 입력할수 없습니다.');
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
 						$('#send-group-input').focus();
 						return false;
 					}
@@ -3054,25 +3133,25 @@ ADF.PushMsgSendView = Backbone.View
 							.val();
 
 					if (fleep_bunch_input == null || fleep_bunch_input == "") {
-						alert('fleep번호 또는 bunch 번호 를 입력해주세요!');
+						alert('번호 를 입력해주세요!');
 						$('#send-group-fleep-bunch-input').focus();
 						return false;
 					}
 					if (private_input == null || private_input == "") {
-						alert('그룹 번호를 입력해주세요!');
+						alert('번호를 입력해주세요!');
 						$('#send-group-input').focus();
 						return false;
 					}
 					if (fleep_bunch_input.substring(0, 1) == "0"
 							&& fleep_bunch_input.length > 1) {
-						alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
 						$('#send-group-fleep-bunch-input').focus();
 						return false;
 					}
 
 					if (private_input.substring(0, 1) == "0"
 							&& private_input.length > 1) {
-						alert('그룹번호 첫자리는 0을 입력할수 없습니다.');
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
 						$('#send-group-input').focus();
 						return false;
 					}

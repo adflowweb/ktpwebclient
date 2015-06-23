@@ -213,6 +213,14 @@ ADF.PushMsgListView = Backbone.View
 
 					var contentLength = $('#msg-resend-length-strong').text();
 					messageData.contentLength = contentLength;
+					var fileName = $('#resend-file-name-hidden').val();
+					var fileFormat = $('#resend-file-name-hidden').val();
+					if (fileName != "" && fileFormat != "") {
+						messageData.fileName = fileName;
+						messageData.fileFormat = fileFormat;
+						messageData.mms = true;
+					}
+					$('#resend-file-format-hidden').val();
 					console.log('메시지 전송전 길이');
 					console.log(messageData.contentLength);
 
@@ -223,68 +231,90 @@ ADF.PushMsgListView = Backbone.View
 					 * alert('메시지 사이즈가 너무 큽니다.'); return false; }
 					 */
 					var groupTopicCount = 0;
-					if ($('#resend-group-check').val() == 1) {
+					var privateUfmi = 0;
+					for ( var i in messageData.receivers) {
+						if (messageData.receivers[i].indexOf("mms") != -1) {
+							// 그룹 대상
+							console.log(messageData.receivers[i]);
+							$
+									.ajax({
+										url : '/v1/pms/adm/svc/subscribe/count?topic='
+												+ messageData.receivers[i],
+										type : 'GET',
+										headers : {
+											'X-Application-Token' : token
+										},
+										contentType : "application/json",
+										dataType : 'json',
+										async : false,
 
-						$.ajax({
-							url : '/v1/pms/adm/svc/subscribe/count?topic='
-									+ messageData.receivers[0],
-							type : 'GET',
-							headers : {
-								'X-Application-Token' : token
-							},
-							contentType : "application/json",
-							dataType : 'json',
-							async : false,
-							data : messageDataResult,
+										success : function(data) {
 
-							success : function(data) {
+											if (!data.result.errors) {
+												// groupTopicCount add
+												console.log(data.result.data);
+												groupTopicCount = groupTopicCount
+														+ data.result.data;
 
-								if (!data.result.errors) {
-									// groupTopicCount add
-									console.log(data.result.data);
-									groupTopicCount = data.result.data;
+											} else {
 
-								} else {
-									$('#msg-resend-user-target-show-input')
-											.val("");
-									alert('해당 그룹에 수신자가 없습니다. 다른 그룹을 입력해 주세요!');
-									return false;
-								}
+												// $(
+												// '#msg-send-group-user-target-show-input')
+												// .val("");
+												//
+												alert(messageData.receivers[i]
+														+ "는 수신자가 없는 그룹입니다.");
+												return false;
 
-							},
-							error : function(data, textStatus, request) {
-								if (data.status == 401) {
-									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("easy-token");
-									sessionStorage.removeItem("easy-userId");
-									sessionStorage.removeItem("easy-role");
-									sessionStorage
-											.removeItem("easy-groupTopic");
-									sessionStorage.removeItem("easy-ufmi");
-									sessionStorage.removeItem("easy-userName");
-									pushRouter.navigate('login', {
-										trigger : true
+												// return false;
+											}
+
+										},
+										error : function(data, textStatus,
+												request) {
+											if (data.status == 401) {
+
+												alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+												sessionStorage
+														.removeItem("easy-token");
+												sessionStorage
+														.removeItem("easy-userId");
+												sessionStorage
+														.removeItem("easy-role");
+												sessionStorage
+														.removeItem("easy-groupTopic");
+												sessionStorage
+														.removeItem("easy-ufmi");
+												sessionStorage
+														.removeItem("easy-userName");
+												pushRouter.navigate('login', {
+													trigger : true
+												});
+												return false;
+											}
+
+											alert('그룹 대상조회에 실패 했습니다!');
+											return false;
+										}
 									});
-									return false;
-								}
-								alert('그룹 대상조회에 실패 했습니다!');
-								return false;
+
+							if (groupTopicCount == 0) {
+								// return false;
 							}
-						});
 
-						if (groupTopicCount == 0) {
-							return false;
+						} else {
+							privateUfmi++;
 						}
+					}
+					var sendCount = groupTopicCount + privateUfmi;
+					if (sendCount == 0) {
+						alert('수신 대상자가 없습니다!');
+						return false;
 
 					}
 
-					var sendCount = messageData.receivers.length;
-					if (groupTopicCount != 0) {
-						sendCount = groupTopicCount;
-					}
-
-					if (confirm(messageData.receivers + " 해당 무전번호로 총 "
-							+ sendCount + "건의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
+					if (confirm(" 총 " + sendCount + "건(그룹 수신자:"
+							+ groupTopicCount + ")의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
 						$.ajax({
 							url : '/v1/pms/adm/svc/messages',
 							type : 'POST',
@@ -416,35 +446,37 @@ ADF.PushMsgListView = Backbone.View
 			replusUfmiCheck : function() {
 				var ufmiVerCheck_radio = $(
 						'input:radio[name="resend-pnum-radio"]:checked').val();
+				var privateGroupCheckRadio = $(
+						'input:radio[name="resend-check-radio"]:checked').val();
 				var private_input = $('#resend-private-input').val();
 				var fleep_bunch_input = $('#resend-fleep-bunch-input').val();
 
 				if (fleep_bunch_input == null || fleep_bunch_input == "") {
-					alert('fleep번호 또는 bunch 번호 를 입력해주세요!');
+					alert('번호 를 입력해주세요!');
 					$('#resend-fleep-bunch-input').focus();
 					return false;
 				}
 				if (private_input == null || private_input == "") {
-					alert('개별 번호를 입력해주세요!');
+					alert('번호를 입력해주세요!');
 					$('#resend-private-input').focus();
 					return false;
 				}
 				if (fleep_bunch_input.substring(0, 1) == "0"
 						&& fleep_bunch_input.length > 1) {
-					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					alert('번호 첫자리는 0을 입력할수 없습니다.');
 					$('#resend-fleep-bunch-input').focus();
 					return false;
 				}
 
 				if (private_input.substring(0, 1) == "0"
 						&& private_input.length > 1) {
-					alert('fleep번호 또는 bunch번호 첫자리는 0을 입력할수 없습니다.');
+					alert('번호 첫자리는 0을 입력할수 없습니다.');
 					$('#resend-private-input').focus();
 					return false;
 				}
 
-				if ($('#resend-group-check').val == 0) {
-
+				if (privateGroupCheckRadio == 0) {
+					console.log('개인');
 					var ufmiResult = ufmiVerCheck_radio + "*"
 							+ fleep_bunch_input + "*" + private_input;
 
@@ -463,6 +495,7 @@ ADF.PushMsgListView = Backbone.View
 					}
 					$('#resend-private-input').val("");
 				} else {
+					console.log('그룹');
 					var groupTopic = "";
 					if (ufmiVerCheck_radio == "82") {
 						groupTopic = "mms/P1/82/" + fleep_bunch_input + "/g"
@@ -480,8 +513,8 @@ ADF.PushMsgListView = Backbone.View
 						$('#msg-resend-user-target-show-input').val(
 								showInputVal + groupTopic);
 					} else {
-						alert('한개의 그룹만 등록 가능합니다!');
-						return false;
+						$('#msg-resend-user-target-show-input').val(
+								showInputVal + "," + groupTopic);
 					}
 					$('#resend-private-input').val("");
 				}
@@ -497,7 +530,7 @@ ADF.PushMsgListView = Backbone.View
 				// resend-check-radio
 				if (groupCheck.indexOf("개인") != -1) {
 					console.log('개인');
-					$('#resend-group-check').val(0);
+
 					var receiver_split = aData.receiver.split('*');
 					// p1
 
@@ -515,7 +548,7 @@ ADF.PushMsgListView = Backbone.View
 					$('#resend-private-input').val(receiver_split[2]);
 				} else {
 					console.log('그룹');
-					$('#resend-group-check').val(1);
+
 					$('input:radio[id="resend-check-radio-group"]').attr(
 							"checked", true);
 					var topicP1P2Check = aData.receiver;
@@ -574,6 +607,20 @@ ADF.PushMsgListView = Backbone.View
 
 				// $('#remessage-send-serviceid').val(clickData.serviceId);
 
+				if (aData.fileName != null && aData.fileFormat != null) {
+					$('#resend-file').show();
+					console.log('파일 이름');
+					console.log(aData.fileName);
+					console.log(aData.fileFormat);
+					// resend-file-name-hidden
+					$('#resend-file-name-hidden').val(aData.fileName);
+					$('#resend-file-format-hidden').val(aData.fileFormat);
+				} else {
+					console.log('첨부된 파일 없음');
+					$('#resend-file-name-hidden').val("");
+					$('#resend-file-format-hidden').val("");
+					$('#resend-file').hide();
+				}
 				this.recheckPtalkRadio();
 				this.recheckRadioGroupPrivate();
 
@@ -765,7 +812,7 @@ ADF.PushMsgListView = Backbone.View
 
 						if (searchDateStart != "") {
 							searchDateStart = pushUtil
-									.dateFormating(searchDateStart);
+									.dateFormatingStart(searchDateStart);
 							if (searchDateStart) {
 								searchDateStart = searchDateStart.toISOString();
 								requestUrl = requestUrl + '&cSearchDateStart='
@@ -775,7 +822,7 @@ ADF.PushMsgListView = Backbone.View
 
 						if (searchDateEnd != "") {
 							searchDateEnd = pushUtil
-									.dateFormating(searchDateEnd);
+									.dateFormatingEnd(searchDateEnd);
 
 							if (searchDateEnd) {
 								searchDateEnd = searchDateEnd.toISOString();
@@ -944,7 +991,7 @@ ADF.PushMsgListView = Backbone.View
 					defaultMonth = defaultMonth.substring(5);
 					defaultMonth = defaultMonth - 1;
 				}
-				searchDateStart = pushUtil.dateFormating(searchDateStart);
+				searchDateStart = pushUtil.dateFormatingStart(searchDateStart);
 
 				if (typeof searchDateStart === undefined
 						|| typeof searchDateStart === 'undefined') {
@@ -953,7 +1000,7 @@ ADF.PushMsgListView = Backbone.View
 
 				var searchDateEnd = $('#msg-list-end-date-input').val();
 
-				searchDateEnd = pushUtil.dateFormating(searchDateEnd);
+				searchDateEnd = pushUtil.dateFormatingEnd(searchDateEnd);
 				if (typeof searchDateEnd === undefined
 						|| typeof searchDateEnd === 'undefined') {
 					searchDateEnd = "";
@@ -968,7 +1015,9 @@ ADF.PushMsgListView = Backbone.View
 				}
 
 				if (searchDateStart != null && searchDateStart != "") {
-
+					console.log('검색 시작 폼체크');
+					console.log(searchDateStart);
+					console.log(searchDateEnd);
 					if (searchDateEnd == null || searchDateEnd == "") {
 						alert('검색 종료일을 입력해 주세요');
 						return false;
@@ -985,7 +1034,12 @@ ADF.PushMsgListView = Backbone.View
 								.getMonth()
 								|| defaultMonth !== searchDateEnd.getMonth()
 								|| defaultMonth !== searchDateStart.getMonth()) {
-							alert('같은 달에서만 검색이 가능합니다');
+
+							var startDate = new Date();
+							startDate.setHours(0, 0, 0, 0);
+							console.log('달');
+
+							// alert('같은 달에서만 검색이 가능합니다');
 							return false;
 						} else {
 							return true;
@@ -1113,26 +1167,28 @@ ADF.PushMsgListView = Backbone.View
 									$('#msg-list-start-date-time-picker-div')
 											.datetimepicker(
 													{
-														format : "YYYY/MM/DD hh:mm a",
+														format : "YYYY/MM/DD",
 														defaultDate : pushUtil
 																.getCurrentDayF(),
 														minDate : pushUtil
 																.getCurrentDayF(),
 														maxDate : pushUtil
-																.getCurrentDayL()
+																.getCurrentDayL(),
+														pickTime : false
 
 													});
 
 									$('#msg-list-end-date-time-picker-div')
 											.datetimepicker(
 													{
-														format : "YYYY/MM/DD hh:mm a",
+														format : "YYYY/MM/DD",
 														defaultDate : pushUtil
 																.getCurrentDayL(),
 														minDate : pushUtil
 																.getCurrentDayF(),
 														maxDate : pushUtil
-																.getCurrentDayL()
+																.getCurrentDayL(),
+														pickTime : false
 													});
 
 									msgListTable = $('#msg-list-table')
@@ -1190,9 +1246,22 @@ ADF.PushMsgListView = Backbone.View
 																	"data" : "groupId"
 
 																},
+																// fileFormat:
+																// "pptx"fileName:
+																// "45890ead2d84d77958c9d39053fb753f"
+
 																{
 																	"data" : null,
 																	"defaultContent" : '<a class="blue"  data-tooltip="tooltip" title="상세보기" id="msg-list-detail-btn"   ><i class="ace-icon fa fa-search-plus  bigger-130"></i></a>&nbsp;&nbsp;<a class="green"  data-tooltip="tooltip" title="재전송" id="msg-list-resend-btn" data-target="#msg-resend-modal" class="btn btn-xs btn-white" data-toggle="modal"><i class="ace-icon fa fa-pencil-square-o  bigger-130"></i></a>'
+																},
+																{
+																	"data" : "fileFormat",
+																	"visible" : false
+																},
+																{
+																	"data" : "fileName",
+																	"visible" : false
+
 																},
 
 														],
@@ -1489,11 +1558,13 @@ ADF.PushMsgListView = Backbone.View
 
 															if (searchDateStart != "") {
 																searchDateStart = pushUtil
-																		.dateFormating(searchDateStart);
+																		.dateFormatingStart(searchDateStart);
 																// 시작일
 																if (searchDateStart) {
+
 																	searchDateStart = searchDateStart
 																			.toISOString();
+
 																	aoData
 																			.push({
 																				'name' : 'cSearchDateStart',
@@ -1504,7 +1575,7 @@ ADF.PushMsgListView = Backbone.View
 
 															if (searchDateEnd != "") {
 																searchDateEnd = pushUtil
-																		.dateFormating(searchDateEnd);
+																		.dateFormatingEnd(searchDateEnd);
 
 																// 종료일
 																if (searchDateEnd) {
