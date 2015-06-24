@@ -60,7 +60,7 @@ ADF.PushMsgSendView = Backbone.View
 				"click #msg-send-contact-change-item2-btn" : "changeItem2Btn",
 				"click #msg-send-contact-change-item3-btn" : "changeItem3Btn",
 				"click #msg-send-contact-private-btn" : "msgSendContact",
-				"click #msg-send-private-div" : "clickPrivateSendDiv",
+				"click #msg-send-excel-div" : "clickExcelSendDiv",
 				"click #msg-send-contact-div" : "clickContactSendDiv",
 				"click #msg-send-group-div" : "clickGroupSendDiv",
 				"change #contact-image-upload-input" : "changeFile",
@@ -85,7 +85,7 @@ ADF.PushMsgSendView = Backbone.View
 						"selectContactContentList", "msgRepeatCheckContact",
 						"checkRepeatTimeContact", "msgSendCancelContact",
 						"msgSendContactFormCheck", "msgSendContact",
-						"clickPrivateSendDiv", "clickContactSendDiv",
+						"clickExcelSendDiv", "clickContactSendDiv",
 						"clickGroupSendDiv", "msgSaveContactBtnClick",
 						"checkSendGroupInput", "checkSendGroupBunchInput",
 						"plusGroupTopicCheck", "checkGroupContentArea",
@@ -124,23 +124,25 @@ ADF.PushMsgSendView = Backbone.View
 
 			groupMiunsClick : function() {
 				console.log('마이너스 클릭');
-				var deleteList = $('#msg-send-group-user-target-show-input')
-						.val();
-				if (deleteList != null && deleteList != "") {
+				// var deleteList = $('#msg-send-group-user-target-show-input')
+				// .val();
+				// if (deleteList != null && deleteList != "") {
+				//
+				// if (deleteList.lastIndexOf(',') > -1) {
+				// var lastIndex = deleteList.lastIndexOf(',');
+				// console.log(deleteList);
+				// console.log(deleteList.length);
+				// deleteList = deleteList.substring(0, lastIndex);
+				// $('#msg-send-group-user-target-show-input').val(
+				// deleteList);
+				// } else {
+				// $('#msg-send-group-user-target-show-input').val("");
+				//
+				// }
+				//
+				// }
 
-					if (deleteList.lastIndexOf(',') > -1) {
-						var lastIndex = deleteList.lastIndexOf(',');
-						console.log(deleteList);
-						console.log(deleteList.length);
-						deleteList = deleteList.substring(0, lastIndex);
-						$('#msg-send-group-user-target-show-input').val(
-								deleteList);
-					} else {
-						$('#msg-send-group-user-target-show-input').val("");
-
-					}
-
-				}
+				$("#msg-send-group-user-target-select option:last").remove();
 
 			},
 			checkRadioContactPrivate : function() {
@@ -488,25 +490,31 @@ ADF.PushMsgSendView = Backbone.View
 			//
 			// },
 
-			clickPrivateSendDiv : function() {
-				console.log('개인발송 클릭');
+			clickExcelSendDiv : function() {
+				console.log('엑셀발송 클릭');
 				$('#contact-list-div').fadeOut();
-				$("#tab-div").removeClass('col-lg-4');
-				$("#tab-div").addClass('col-lg-8');
+				// $('#excel-list-div')
+				$('#send-list-div').fadeOut();
+				$("#tab-div").removeClass('col-lg-8');
+				$("#tab-div").addClass('col-lg-4');
+				// $("#tab-div").removeClass('col-lg-4');
+				// $("#tab-div").addClass('col-lg-8');
 			},
 
 			clickContactSendDiv : function() {
-				console.log('개인발송 클릭');
+				console.log('주소록 발송 클릭');
 				$('#contact-list-div').fadeIn();
+				$('#send-list-div').fadeOut();
 				$("#tab-div").removeClass('col-lg-8');
 				$("#tab-div").addClass('col-lg-4');
 			},
 
 			clickGroupSendDiv : function() {
-				console.log('개인발송 클릭');
+				console.log('직접 발송 클릭');
 				$('#contact-list-div').fadeOut();
-				$("#tab-div").removeClass('col-lg-4');
-				$("#tab-div").addClass('col-lg-8');
+				$('#send-list-div').fadeIn();
+				$("#tab-div").removeClass('col-lg-8');
+				$("#tab-div").addClass('col-lg-4');
 			},
 
 			changeItem1Btn : function() {
@@ -917,13 +925,19 @@ ADF.PushMsgSendView = Backbone.View
 				var contactCheck_radio = $(
 						'input:radio[name="contact-check-radio"]:checked')
 						.val();
-
+				var contactUserName = $('#contact-add-user-name-input').val();
 				var ufmiVerCheck_radio = $(
 						'input:radio[name="contact-add-pnum-radio"]:checked')
 						.val();
 				var private_input = $('#contact-add-private-input').val();
 				var fleep_bunch_input = $('#contact-add-fleep-bunch-input')
 						.val();
+
+				if (contactUserName == null || contactUserName == "") {
+					alert('이름을 입력해 주세요!');
+					$('#contact-add-user-name-input').focus();
+					return false;
+				}
 
 				if (fleep_bunch_input == null || fleep_bunch_input == "") {
 					alert('번호 를 입력해주세요!');
@@ -953,6 +967,7 @@ ADF.PushMsgSendView = Backbone.View
 
 			contactAdd : function() {
 				console.log('주소록 등록 버튼 크릭');
+				var checkTopic = true;
 				if (this.contactAddFormCheck()) {
 					var contactCheck_radio = $(
 							'input:radio[name="contact-check-radio"]:checked')
@@ -969,6 +984,7 @@ ADF.PushMsgSendView = Backbone.View
 						ufmiResult = ufmiVerCheck_radio + "*"
 								+ fleep_bunch_input + "*" + private_input;
 					} else {
+						// 그룹 체크
 
 						if (ufmiVerCheck_radio == "82") {
 							ufmiResult = "mms/P1/82/" + fleep_bunch_input
@@ -979,92 +995,165 @@ ADF.PushMsgSendView = Backbone.View
 									+ "/g" + private_input;
 						}
 
+						var token = sessionStorage.getItem('easy-token');
+						$.ajax({
+							url : '/v1/pms/adm/svc/subscribe/count?topic='
+									+ ufmiResult,
+							type : 'GET',
+							headers : {
+								'X-Application-Token' : token
+							},
+							contentType : "application/json",
+							dataType : 'json',
+							async : false,
+
+							success : function(data) {
+
+								if (!data.result.errors) {
+									// // groupTopicCount add
+									// console.log(data.result.data);
+									// groupTopicCount = groupTopicCount
+									// + data.result.data;
+									if (data.result.data == 0) {
+										checkTopic = false;
+										alert("입력하신 번호는 수신자가 없는 그룹입니다!");
+									}
+
+								} else {
+									/* console.log(messageData.receivers[i]); */
+									console.log('alert');
+									checkTopic = false;
+									alert("입력하신 번호는 수신자가 없는 그룹입니다!");
+
+									// return false;
+									// $(
+									// '#msg-send-group-user-target-show-input')
+									// .val("");
+									//
+									// alert('해당 그룹에 수신자가 없습니다. 다른
+									// 그룹을 입력해 주세요!');
+									// return false;
+								}
+
+							},
+							error : function(data, textStatus, request) {
+								if (data.status == 401) {
+
+									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+									sessionStorage.removeItem("easy-token");
+									sessionStorage.removeItem("easy-userId");
+									sessionStorage.removeItem("easy-role");
+									sessionStorage
+											.removeItem("easy-groupTopic");
+									sessionStorage.removeItem("easy-ufmi");
+									sessionStorage.removeItem("easy-userName");
+									pushRouter.navigate('login', {
+										trigger : true
+									});
+									return false;
+								}
+
+								alert('그룹 대상조회에 실패 했습니다!');
+								return false;
+							}
+						});
+
 					}
 
-					var token = sessionStorage.getItem('easy-token');
-					var contactUfmi = ufmiResult;
-					var contactName = $('#contact-add-user-name-input').val();
-					var contactItem1 = $('#contact-add-user-item1-input').val();
-					var contactItem2 = $('#contact-add-user-item2-input').val();
-					var contactItem3 = $('#contact-add-user-item3-input').val();
+					if (checkTopic == true) {
 
-					var contactData = new Object();
-					contactData.ufmi = contactUfmi;
-					contactData.ufmiName = contactName;
+						var token = sessionStorage.getItem('easy-token');
+						var contactUfmi = ufmiResult;
+						var contactName = $('#contact-add-user-name-input')
+								.val();
+						var contactItem1 = $('#contact-add-user-item1-input')
+								.val();
+						var contactItem2 = $('#contact-add-user-item2-input')
+								.val();
+						var contactItem3 = $('#contact-add-user-item3-input')
+								.val();
 
-					if (contactItem1 != null && contactItem1 != "") {
-						contactData.item1 = contactItem1;
-					}
-					if (contactItem2 != null && contactItem2 != "") {
-						contactData.item2 = contactItem2;
-					}
-					if (contactItem3 != null && contactItem3 != "") {
-						contactData.item3 = contactItem3;
-					}
+						var contactData = new Object();
+						contactData.ufmi = contactUfmi;
+						contactData.ufmiName = contactName;
 
-					var contactDataReq = JSON.stringify(contactData);
-					console.log(contactDataReq);
-					if (confirm("해당 내용을 등록 하시겠습니까?") == true) {
+						if (contactItem1 != null && contactItem1 != "") {
+							contactData.item1 = contactItem1;
+						}
+						if (contactItem2 != null && contactItem2 != "") {
+							contactData.item2 = contactItem2;
+						}
+						if (contactItem3 != null && contactItem3 != "") {
+							contactData.item3 = contactItem3;
+						}
 
-						$
-								.ajax({
-									url : '/v1/pms/adm/svc/address',
-									type : 'POST',
-									headers : {
-										'X-Application-Token' : token
-									},
-									contentType : "application/json",
-									dataType : 'json',
-									async : false,
-									data : contactDataReq,
+						var contactDataReq = JSON.stringify(contactData);
+						console.log(contactDataReq);
+						if (confirm("해당 내용을 등록 하시겠습니까?") == true) {
 
-									success : function(data) {
+							$
+									.ajax({
+										url : '/v1/pms/adm/svc/address',
+										type : 'POST',
+										headers : {
+											'X-Application-Token' : token
+										},
+										contentType : "application/json",
+										dataType : 'json',
+										async : false,
+										data : contactDataReq,
 
-										if (!data.result.errors) {
-											$('#contact-add-footer-cancel')
-													.click();
-											alert('주소록을 등록 하였습니다.');
-											window.location.reload();
-										} else {
-											if (data.result.errors[0] == 'DuplicateKeyException') {
-												alert('이미 등록된 무전 번호가 있습니다!');
+										success : function(data) {
+
+											if (!data.result.errors) {
+												$('#contact-add-footer-cancel')
+														.click();
+												alert('주소록을 등록 하였습니다.');
+												window.location.reload();
+											} else {
+												if (data.result.errors[0] == 'DuplicateKeyException') {
+													alert('이미 등록된 무전 번호가 있습니다!');
+													return false;
+												}
+												alert('주소록 등록에 실패 하였습니다!');
+												// DuplicateKeyException
+
+											}
+
+										},
+										error : function(data, textStatus,
+												request) {
+											if (data.status == 401) {
+												alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+												sessionStorage
+														.removeItem("easy-token");
+												sessionStorage
+														.removeItem("easy-userId");
+												sessionStorage
+														.removeItem("easy-role");
+
+												sessionStorage
+														.removeItem("easy-groupTopic");
+												sessionStorage
+														.removeItem("easy-ufmi");
+												sessionStorage
+														.removeItem("easy-userName");
+												pushRouter.navigate('login', {
+													trigger : true
+												});
 												return false;
 											}
-											alert('주소록 등록에 실패 하였습니다!');
-											// DuplicateKeyException
+											alert('주소록 등록에 실패 하였습니다.');
 
 										}
+									});
+						} else {
+							return false;
+						}
 
-									},
-									error : function(data, textStatus, request) {
-										if (data.status == 401) {
-											alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-											sessionStorage
-													.removeItem("easy-token");
-											sessionStorage
-													.removeItem("easy-userId");
-											sessionStorage
-													.removeItem("easy-role");
-
-											sessionStorage
-													.removeItem("easy-groupTopic");
-											sessionStorage
-													.removeItem("easy-ufmi");
-											sessionStorage
-													.removeItem("easy-userName");
-											pushRouter.navigate('login', {
-												trigger : true
-											});
-											return false;
-										}
-										alert('주소록 등록에 실패 하였습니다.');
-
-									}
-								});
 					} else {
 						return false;
 					}
-
 				}
 			},
 
@@ -1535,7 +1624,8 @@ ADF.PushMsgSendView = Backbone.View
 					console.log('34666');
 					if (input_reservation != "") {
 
-						dateResult = pushUtil.dateFormatingRes(input_reservation);
+						dateResult = pushUtil
+								.dateFormatingRes(input_reservation);
 						dateResult = dateResult.toISOString();
 					}
 
@@ -1586,6 +1676,9 @@ ADF.PushMsgSendView = Backbone.View
 						console.log(fileFormat);
 						var md5 = $('#file-md5').val();
 						replaceImageText = encodeURIComponent(replaceImageText);
+						messageData.mms = true;
+						messageData.fileName = md5;
+						messageData.fileFormat = fileFormat;
 
 						// head check
 						var xhrHeadReq = new XMLHttpRequest();
@@ -1595,9 +1688,7 @@ ADF.PushMsgSendView = Backbone.View
 						xhrHeadReq.setRequestHeader("token", token);
 						xhrHeadReq.setRequestHeader("file", replaceImageText);
 						xhrHeadReq.send();
-						messageData.mms = true;
-						messageData.fileName = md5;
-						messageData.fileFormat = fileFormat;
+
 						if (xhrHeadReq.status == 404) {
 							console.log(xhrHeadReq.status);
 
@@ -1841,10 +1932,19 @@ ADF.PushMsgSendView = Backbone.View
 				}
 				if (this.msgSendGroupFormCheck()) {
 
-					var messageTarget = $(
-							'#msg-send-group-user-target-show-input').val();
+					// var messageTarget = $(
+					// '#msg-send-group-user-target-show-input').val();
+					// console.log(messageTarget);
+					// messageTarget = pushUtil.compactTrim(messageTarget);
+					var messageTarget = [];
+					$("#msg-send-group-user-target-select option").each(
+							function() {
+								messageTarget.push($(this).val());
+								// Add $(this).val() to your list
+							});
+					console.log('전송대상 타겟');
 					console.log(messageTarget);
-					messageTarget = pushUtil.compactTrim(messageTarget);
+
 					var messageContent = $('#msg-send-group-content-textarea')
 							.val();
 					var input_reservation = $(
@@ -1857,7 +1957,8 @@ ADF.PushMsgSendView = Backbone.View
 					var messageData = new Object();
 					if (input_reservation != "") {
 
-						dateResult = pushUtil.dateFormatingRes(input_reservation);
+						dateResult = pushUtil
+								.dateFormatingRes(input_reservation);
 						dateResult = dateResult.toISOString();
 					}
 
@@ -1873,7 +1974,7 @@ ADF.PushMsgSendView = Backbone.View
 						messageData.resendInterval = input_resendInterval;
 					}
 					messageContent = pushUtil.utf8_to_b64(messageContent);
-					messageTarget = messageTarget.split(",");
+
 					messageData.receivers = messageTarget;
 					messageData.content = messageContent;
 					messageData.contentType = "application/base64";
@@ -2016,16 +2117,15 @@ ADF.PushMsgSendView = Backbone.View
 
 					// /file end
 
-					var messageDataResult = JSON.stringify(messageData);
-					console.log('메시시 발송 데이터');
-					console.log(messageDataResult);
 					var groupTopicCount = 0;
 					var privateUfmi = 0;
 					// 그룹 인원체크
 
 					for ( var i in messageData.receivers) {
-						if (messageData.receivers[i].indexOf("mms") != -1) {
+
+						if (messageData.receivers[i].indexOf("mms") > -1) {
 							// 그룹 대상
+							console.log('포문');
 							console.log(messageData.receivers[i]);
 							$
 									.ajax({
@@ -2047,17 +2147,6 @@ ADF.PushMsgSendView = Backbone.View
 												groupTopicCount = groupTopicCount
 														+ data.result.data;
 
-											} else {
-												alert(messageData.receivers[i]
-														+ "는 수신자가 없는 그룹입니다.");
-												return false;
-												// $(
-												// '#msg-send-group-user-target-show-input')
-												// .val("");
-												//
-												// alert('해당 그룹에 수신자가 없습니다. 다른
-												// 그룹을 입력해 주세요!');
-												// return false;
 											}
 
 										},
@@ -2098,6 +2187,9 @@ ADF.PushMsgSendView = Backbone.View
 						}
 					}
 
+					var messageDataResult = JSON.stringify(messageData);
+					console.log('메시시 발송 데이터');
+					console.log(messageDataResult);
 					var sendCount = groupTopicCount + privateUfmi;
 					var fileName = document
 							.getElementById("group-image-upload-input").value;
@@ -2144,7 +2236,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-group-user-repeat-check').prop(
 									'checked', false);
 							$('#msg-send-group-repeat-div').fadeOut();
-							$('#msg-send-group-user-target-show-div').fadeOut();
+							$('#msg-send-group-user-target-select').html('');
+
 						} else {
 
 							return false;
@@ -2168,7 +2261,7 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-group-user-repeat-check').prop(
 									'checked', false);
 							$('#msg-send-group-repeat-div').fadeOut();
-							$('#msg-send-group-user-target-show-div').fadeOut();
+							$('#msg-send-group-user-target-select').html('');
 						} else {
 
 							return false;
@@ -2226,16 +2319,16 @@ ADF.PushMsgSendView = Backbone.View
 			},
 
 			msgSendGroupFormCheck : function() {
-				var messageTarget = $('#msg-send-group-user-target-show-input')
-						.val();
-				messageTarget = pushUtil.compactTrim(messageTarget);
+
+				// messageTarget = pushUtil.compactTrim(messageTarget);
 				var messageContent = $('#msg-send-group-content-textarea')
 						.val();
 				var input_reservation = $(
 						'#msg-send-group-reservation-date-input').val();
-
-				if (messageTarget == null || messageTarget == "") {
-					alert("+ 버튼을 눌러 그룹번호를 추가해 주세요!");
+				var messageTargetSize = $(
+						'#msg-send-group-user-target-select option').size();
+				if (messageTargetSize == 0) {
+					alert("+ 버튼을 눌러 번호를 추가해 주세요!");
 					$('#send-group-input').focus();
 					return false;
 				}
@@ -2742,12 +2835,31 @@ ADF.PushMsgSendView = Backbone.View
 											if (!data.result.errors) {
 												// groupTopicCount add
 												console.log(data.result.data);
-												groupTopicCount = groupTopicCount
-														+ data.result.data;
+
+												if (data.result.data != 0) {
+													groupTopicCount = groupTopicCount
+															+ data.result.data;
+												} else {
+													var convertText = messageData.addressMessageArray[i].receiver;
+													convertText = convertText
+															.substring(
+																	convertText
+																			.lastIndexOf("g") + 1,
+																	convertText.length);
+													alert("그룹"
+															+ convertText
+															+ "은 수신자가 없는 그룹입니다.");
+												}
 
 											} else {
-												alert(messageData.addressMessageArray[i].receiver
-														+ "는 수신자가 없는 그룹입니다.");
+												var convertText = messageData.addressMessageArray[i].receiver;
+												convertText = convertText
+														.substring(
+																convertText
+																		.lastIndexOf("g") + 1,
+																convertText.length);
+												alert("그룹" + convertText
+														+ "은 수신자가 없는 그룹입니다.");
 												return false;
 											}
 
@@ -3069,10 +3181,14 @@ ADF.PushMsgSendView = Backbone.View
 			// 직접 입력
 			plusGroupTopicCheck : function() {
 				// plusGroupTopicCheck
+
+				// Ptalk1.0:그룹130(50)
+				// Ptalk1.0:50*1212
 				var privateGroupCheck = $(
 						'input:radio[name="send-check-radio"]:checked').val();
 
 				if (privateGroupCheck == 0) {
+					var userText = "";
 
 					var ufmiVerCheck_radio = $(
 							'input:radio[name="send-group-pnum-radio"]:checked')
@@ -3106,25 +3222,43 @@ ADF.PushMsgSendView = Backbone.View
 						return false;
 					}
 
+					if (ufmiVerCheck_radio == "82") {
+						userText = "Ptalk1.0 : ";
+
+					} else if (ufmiVerCheck_radio == "1") {
+						userText = "Ptalk2.0 : ";
+					}
+
 					var ufmiResult = ufmiVerCheck_radio + "*"
 							+ fleep_bunch_input + "*" + private_input;
+					userText = userText + fleep_bunch_input + "*"
+							+ private_input
 
 					console.log('무전번호 결과');
 					console.log(ufmiResult);
 
 					$('#msg-send-group-user-target-show-div').show();
-					var showInputVal = $(
-							'#msg-send-group-user-target-show-input').val();
-					if (showInputVal == "" || showInputVal == null) {
-						$('#msg-send-group-user-target-show-input').val(
-								showInputVal + ufmiResult);
-					} else {
-						$('#msg-send-group-user-target-show-input').val(
-								showInputVal + "," + ufmiResult);
-					}
+					// var targetLength =
+					// $('#msg-send-group-user-target-select')
+					// .length();
+
+					$('#msg-send-group-user-target-select').append(
+							'<option value=' + ufmiResult + '>' + userText
+									+ '</option>');
+
+					// if (showInputVal == "" || showInputVal == null) {
+					// $('#msg-send-group-user-target-show-input').val(
+					// showInputVal + ufmiResult);
+					// $('#msg-send-group-user-target-show-input-hidden').val(showInputVal
+					// + ufmiResult);
+					// } else {
+					// $('#msg-send-group-user-target-show-input').val(
+					// showInputVal + "," + ufmiResult);
+					// }
 					$('#send-group-input').val("");
 
 				} else {
+					var userText = "";
 					var ufmiVerCheck_radio = $(
 							'input:radio[name="send-group-pnum-radio"]:checked')
 							.val();
@@ -3154,6 +3288,13 @@ ADF.PushMsgSendView = Backbone.View
 						alert('번호 첫자리는 0을 입력할수 없습니다.');
 						$('#send-group-input').focus();
 						return false;
+					}
+
+					if (ufmiVerCheck_radio == "82") {
+						userText = "Ptalk1.0 : ";
+
+					} else if (ufmiVerCheck_radio == "1") {
+						userText = "Ptalk2.0 : ";
 					}
 
 					var groupTopic = "";
@@ -3165,22 +3306,82 @@ ADF.PushMsgSendView = Backbone.View
 						groupTopic = "mms/P2/1/b" + fleep_bunch_input + "/g"
 								+ private_input;
 					}
+					userText = userText + "그룹" + fleep_bunch_input + "("
+							+ private_input + ")";
 
 					console.log('그룹 토픽 결과');
 					console.log(groupTopic);
+					var checkTopic = false;
+					// groupTopic check
 
-					var showInputVal = $(
-							'#msg-send-group-user-target-show-input').val();
-					if (showInputVal == "" || showInputVal == null) {
-						$('#msg-send-group-user-target-show-div').show();
+					var token = sessionStorage.getItem('easy-token');
+					$.ajax({
+						url : '/v1/pms/adm/svc/subscribe/count?topic='
+								+ groupTopic,
+						type : 'GET',
+						headers : {
+							'X-Application-Token' : token
+						},
+						contentType : "application/json",
+						dataType : 'json',
+						async : false,
 
-						$('#msg-send-group-user-target-show-input').val(
-								showInputVal + groupTopic);
-					} else {
-						// alert('한개의 그룹만 등록 가능합니다!');
-						// return false;
-						$('#msg-send-group-user-target-show-input').val(
-								showInputVal + "," + groupTopic);
+						success : function(data) {
+
+							if (!data.result.errors) {
+								// // groupTopicCount add
+								// console.log(data.result.data);
+								// groupTopicCount = groupTopicCount
+								// + data.result.data;
+								if (data.result.data != 0) {
+									checkTopic = true;
+								} else {
+									console.log('alert');
+									alert(userText + "는 수신자가 없는 그룹입니다.");
+								}
+
+							} else {
+								/* console.log(messageData.receivers[i]); */
+								console.log('alert');
+								alert(userText + "는 수신자가 없는 그룹입니다.");
+
+								// return false;
+								// $(
+								// '#msg-send-group-user-target-show-input')
+								// .val("");
+								//
+								// alert('해당 그룹에 수신자가 없습니다. 다른
+								// 그룹을 입력해 주세요!');
+								// return false;
+							}
+
+						},
+						error : function(data, textStatus, request) {
+							if (data.status == 401) {
+
+								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+								sessionStorage.removeItem("easy-token");
+								sessionStorage.removeItem("easy-userId");
+								sessionStorage.removeItem("easy-role");
+								sessionStorage.removeItem("easy-groupTopic");
+								sessionStorage.removeItem("easy-ufmi");
+								sessionStorage.removeItem("easy-userName");
+								pushRouter.navigate('login', {
+									trigger : true
+								});
+								return false;
+							}
+
+							alert('그룹 대상조회에 실패 했습니다!');
+							return false;
+						}
+					});
+
+					if (checkTopic == true) {
+
+						$('#msg-send-group-user-target-select').append(
+								'<option value=' + groupTopic + '>' + userText
+										+ '</option>');
 					}
 					$('#send-group-input').val("");
 				}
@@ -3532,6 +3733,7 @@ ADF.PushMsgSendView = Backbone.View
 
 															contactTableData
 																	.push({
+																		reveiverType : '',
 																		ufmi : '등록된 번호가 없습니다!',
 																		ufmiName : '',
 																		item1 : '',
@@ -3543,12 +3745,73 @@ ADF.PushMsgSendView = Backbone.View
 														}
 														for ( var i in resultData) {
 															var hiddenUfmi = resultData[i].ufmi;
-															resultData[i].ufmi = '<input name="contact-list-checkbox" type="checkbox" value="'
+															var receiverType = resultData[i].ufmi;
+															// 그룹토픽 체크
+
+															// 그룹
+															if (resultData[i].ufmi
+																	.indexOf("mms") > -1) {
+
+																var topicArr = [];
+																topicArr = resultData[i].ufmi
+																		.split('/');
+																console
+																		.log(topicArr);
+																// p1체크
+																if (resultData[i].ufmi
+																		.indexOf("P1") > -1) {
+
+																	resultData[i].ufmi = "그룹"
+																			+ topicArr[4]
+																					.substring(1)
+																			+ "("
+																			+ topicArr[3]
+																			+ ")";
+
+																	receiverType = "Ptalk1.0";
+																	// p2
+																	// 그룹
+																} else if (dataResult[i].retained
+																		.indexOf("P2") > -1) {
+																	resultData[i].ufmi = "그룹"
+																			+ topicArr[4]
+																					.substring(1)
+																			+ "("
+																			+ topicArr[3]
+																			+ ")";
+																	receiverType = "Ptalk2.0";
+																}
+																// 개인
+															} else {
+
+																if (receiverType
+																		.substring(
+																				0,
+																				2) == "82") {
+																	resultData[i].ufmi = resultData[i].ufmi
+																			.substring(
+																					3,
+																					resultData[i].ufmi.length);
+																	receiverType = "Ptalk1.0";
+
+																} else {
+																	resultData[i].ufmi = resultData[i].ufmi
+																			.substring(
+																					2,
+																					resultData[i].ufmi.length);
+																	receiverType = "Ptalk2.0";
+																}
+
+															}
+
+															receiverType = '<input name="contact-list-checkbox" type="checkbox" value="'
 																	+ resultData[i].ufmi
 																	+ '"/>&nbsp'
-																	+ resultData[i].ufmi;
+																	+ receiverType;
+
 															contactTableData
 																	.push({
+																		receiverType : receiverType,
 																		ufmi : resultData[i].ufmi,
 																		ufmiName : resultData[i].ufmiName,
 																		item1 : resultData[i].item1,
@@ -3637,6 +3900,8 @@ ADF.PushMsgSendView = Backbone.View
 												"aaSorting" : [ [ 0, 'dec' ] ],
 
 												aoColumns : [ {
+													mData : 'receiverType'
+												}, {
 													mData : 'ufmi'
 												}, {
 													mData : 'ufmiName'

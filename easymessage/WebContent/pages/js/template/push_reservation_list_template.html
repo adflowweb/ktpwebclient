@@ -52,7 +52,24 @@
 									</select>
 								</div>
 							</div>
-							<div class="form-group col-lg-12 col-sm-12 col-xs-12">
+							<div class="form-group col-lg-12 col-sm-12 col-xs-12"
+								style="display: none;" id="reservation-search-ptalk-div">
+								<label class="col-lg-1 col-sm-3 col-xs-3"> Ptalk유형</label>
+								<div class="input-group col-lg-11  col-sm-9 col-xs-9">
+									<select class="form-control" id="reservation-search-ptalk-select">
+										<option value="1">Ptalk1.0</option>
+										<option value="2">Ptalk2.0</option>
+
+
+
+									</select>
+								</div>
+
+
+
+							</div>
+
+							<div class="form-group col-lg-12 col-sm-12 col-xs-12" id="reservation-search-div" style="display: none;">
 								<label class="col-lg-1 col-sm-3 col-xs-3">검색 내용</label>
 								<div class="input-group col-lg-11  col-sm-9 col-xs-9">
 									<input id="reservation-search-input" type="text"
@@ -63,8 +80,8 @@
 							<div class="form-group col-lg-12 col-sm-12 col-xs-12">
 
 
-								<button class="btn btn-sm btn-info pull-right" id="reservation-search-btn"
-									type="button">
+								<button class="btn btn-sm btn-info pull-right"
+									id="reservation-search-btn" type="button">
 
 									<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
 									검색
@@ -100,7 +117,7 @@
 										<tr>
 											<th><input name="reservatoin-checkbox"
 												id="reservaton-checkbox-id" type="checkbox" />&nbsp;예약발송 시간</th>
-											<th>발송번호</th>
+											<th>Ptalk유형</th>
 											<th>수신번호</th>
 											<th>메시지 내용</th>
 											<th></th>

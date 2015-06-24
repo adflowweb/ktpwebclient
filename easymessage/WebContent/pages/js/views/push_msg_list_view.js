@@ -149,22 +149,9 @@ ADF.PushMsgListView = Backbone.View
 			},
 
 			resendMinusClick : function() {
-				console.log('마이너스 클릭');
-				var deleteList = $('#msg-resend-user-target-show-input').val();
-				if (deleteList != null && deleteList != "") {
 
-					if (deleteList.lastIndexOf(',') > -1) {
-						var lastIndex = deleteList.lastIndexOf(',');
-						console.log(deleteList);
-						console.log(deleteList.length);
-						deleteList = deleteList.substring(0, lastIndex);
-						$('#msg-resend-user-target-show-input').val(deleteList);
-					} else {
-						$('#msg-resend-user-target-show-input').val("");
+				$("#msg-resend-user-target-select option:last").remove();
 
-					}
-
-				}
 			},
 
 			msgListTable : {
@@ -194,14 +181,17 @@ ADF.PushMsgListView = Backbone.View
 				}
 				if (this.resendFormCheck()) {
 					var token = sessionStorage.getItem("easy-token");
-					var messageTarget = $('#msg-resend-user-target-show-input')
-							.val();
-					messageTarget = pushUtil.compactTrim(messageTarget);
+					var messageTarget = [];
+					$("#msg-resend-user-target-select option").each(function() {
+						messageTarget.push($(this).val());
+						// Add $(this).val() to your list
+					});
+					console.log('전송대상 타겟');
+					console.log(messageTarget);
 					var messageContent = $('#msg-resend-content-textarea')
 							.val();
-
 					messageContent = pushUtil.utf8_to_b64(messageContent);
-					messageTarget = messageTarget.split(",");
+					// messageTarget = messageTarget.split(",");
 					// console.log('메지시 수신자 변경');
 					// messageTarget[0] = 'mms/P1/82/50/g130';
 					var messageData = new Object();
@@ -223,8 +213,6 @@ ADF.PushMsgListView = Backbone.View
 					$('#resend-file-format-hidden').val();
 					console.log('메시지 전송전 길이');
 					console.log(messageData.contentLength);
-
-					var messageDataResult = JSON.stringify(messageData);
 
 					/*
 					 * if (utf8ByteLength(messageDataResult) > 512000) {
@@ -256,17 +244,6 @@ ADF.PushMsgListView = Backbone.View
 												groupTopicCount = groupTopicCount
 														+ data.result.data;
 
-											} else {
-
-												// $(
-												// '#msg-send-group-user-target-show-input')
-												// .val("");
-												//
-												alert(messageData.receivers[i]
-														+ "는 수신자가 없는 그룹입니다.");
-												return false;
-
-												// return false;
 											}
 
 										},
@@ -306,6 +283,8 @@ ADF.PushMsgListView = Backbone.View
 							privateUfmi++;
 						}
 					}
+
+					var messageDataResult = JSON.stringify(messageData);
 					var sendCount = groupTopicCount + privateUfmi;
 					if (sendCount == 0) {
 						alert('수신 대상자가 없습니다!');
@@ -366,13 +345,11 @@ ADF.PushMsgListView = Backbone.View
 
 			},
 			resendFormCheck : function() {
-				var messageTarget = $('#msg-resend-user-target-show-input')
-						.val();
-				messageTarget = pushUtil.compactTrim(messageTarget);
+				var messageTargetSize = $(
+						'#msg-resend-user-target-select option').size();
 				var messageContent = $('#msg-resend-content-textarea').val();
-
-				if (messageTarget == null || messageTarget == "") {
-					alert("+ 버튼을 눌러 무전번호를 추가해 주세요!");
+				if (messageTargetSize == 0) {
+					alert("+ 버튼을 눌러 번호를 추가해 주세요!");
 					$('#resend-private-input').focus();
 					return false;
 				}
@@ -444,58 +421,123 @@ ADF.PushMsgListView = Backbone.View
 			},
 
 			replusUfmiCheck : function() {
-				var ufmiVerCheck_radio = $(
-						'input:radio[name="resend-pnum-radio"]:checked').val();
-				var privateGroupCheckRadio = $(
+				// plusGroupTopicCheck
+
+				// Ptalk1.0:그룹130(50)
+				// Ptalk1.0:50*1212
+				var privateGroupCheck = $(
 						'input:radio[name="resend-check-radio"]:checked').val();
-				var private_input = $('#resend-private-input').val();
-				var fleep_bunch_input = $('#resend-fleep-bunch-input').val();
 
-				if (fleep_bunch_input == null || fleep_bunch_input == "") {
-					alert('번호 를 입력해주세요!');
-					$('#resend-fleep-bunch-input').focus();
-					return false;
-				}
-				if (private_input == null || private_input == "") {
-					alert('번호를 입력해주세요!');
-					$('#resend-private-input').focus();
-					return false;
-				}
-				if (fleep_bunch_input.substring(0, 1) == "0"
-						&& fleep_bunch_input.length > 1) {
-					alert('번호 첫자리는 0을 입력할수 없습니다.');
-					$('#resend-fleep-bunch-input').focus();
-					return false;
-				}
+				if (privateGroupCheck == 0) {
+					var userText = "";
 
-				if (private_input.substring(0, 1) == "0"
-						&& private_input.length > 1) {
-					alert('번호 첫자리는 0을 입력할수 없습니다.');
-					$('#resend-private-input').focus();
-					return false;
-				}
+					var ufmiVerCheck_radio = $(
+							'input:radio[name="resend-pnum-radio"]:checked')
+							.val();
+					var private_input = $('#resend-private-input').val();
+					var fleep_bunch_input = $('#resend-fleep-bunch-input')
+							.val();
 
-				if (privateGroupCheckRadio == 0) {
-					console.log('개인');
+					if (fleep_bunch_input == null || fleep_bunch_input == "") {
+						alert('번호 를 입력해주세요!');
+						$('#resend-fleep-bunch-input').focus();
+						return false;
+					}
+					if (private_input == null || private_input == "") {
+						alert('번호를 입력해주세요!');
+						$('#resend-private-input').focus();
+						return false;
+					}
+
+					if (fleep_bunch_input.substring(0, 1) == "0"
+							&& fleep_bunch_input.length > 1) {
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
+						$('#resend-fleep-bunch-input').focus();
+						return false;
+					}
+
+					if (private_input.substring(0, 1) == "0"
+							&& private_input.length > 1) {
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
+						$('#resend-private-input').focus();
+						return false;
+					}
+
+					if (ufmiVerCheck_radio == "82") {
+						userText = "Ptalk1.0 : ";
+
+					} else if (ufmiVerCheck_radio == "1") {
+						userText = "Ptalk2.0 : ";
+					}
+
 					var ufmiResult = ufmiVerCheck_radio + "*"
 							+ fleep_bunch_input + "*" + private_input;
+					userText = userText + fleep_bunch_input + "*"
+							+ private_input
 
 					console.log('무전번호 결과');
 					console.log(ufmiResult);
 
-					$('#msg-resend-user-target-show-div').show();
-					var showInputVal = $('#msg-resend-user-target-show-input')
-							.val();
-					if (showInputVal == "" || showInputVal == null) {
-						$('#msg-resend-user-target-show-input').val(
-								showInputVal + ufmiResult);
-					} else {
-						$('#msg-resend-user-target-show-input').val(
-								showInputVal + "," + ufmiResult);
-					}
+					// $('#msg-resend-user-target-show-div').show();
+					// var targetLength =
+					// $('#msg-send-group-user-target-select')
+					// .length();
+
+					$('#msg-resend-user-target-select').append(
+							'<option value=' + ufmiResult + '>' + userText
+									+ '</option>');
+
+					// if (showInputVal == "" || showInputVal == null) {
+					// $('#msg-send-group-user-target-show-input').val(
+					// showInputVal + ufmiResult);
+					// $('#msg-send-group-user-target-show-input-hidden').val(showInputVal
+					// + ufmiResult);
+					// } else {
+					// $('#msg-send-group-user-target-show-input').val(
+					// showInputVal + "," + ufmiResult);
+					// }
 					$('#resend-private-input').val("");
+
 				} else {
-					console.log('그룹');
+					var userText = "";
+					var ufmiVerCheck_radio = $(
+							'input:radio[name="resend-pnum-radio"]:checked')
+							.val();
+					var private_input = $('#resend-private-input').val();
+					var fleep_bunch_input = $('#resend-fleep-bunch-input')
+							.val();
+
+					if (fleep_bunch_input == null || fleep_bunch_input == "") {
+						alert('번호 를 입력해주세요!');
+						$('#resend-fleep-bunch-input').focus();
+						return false;
+					}
+					if (private_input == null || private_input == "") {
+						alert('번호를 입력해주세요!');
+						$('#resend-private-input').focus();
+						return false;
+					}
+					if (fleep_bunch_input.substring(0, 1) == "0"
+							&& fleep_bunch_input.length > 1) {
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
+						$('#resend-fleep-bunch-input').focus();
+						return false;
+					}
+
+					if (private_input.substring(0, 1) == "0"
+							&& private_input.length > 1) {
+						alert('번호 첫자리는 0을 입력할수 없습니다.');
+						$('#resend-private-input').focus();
+						return false;
+					}
+
+					if (ufmiVerCheck_radio == "82") {
+						userText = "Ptalk1.0 : ";
+
+					} else if (ufmiVerCheck_radio == "1") {
+						userText = "Ptalk2.0 : ";
+					}
+
 					var groupTopic = "";
 					if (ufmiVerCheck_radio == "82") {
 						groupTopic = "mms/P1/82/" + fleep_bunch_input + "/g"
@@ -505,16 +547,79 @@ ADF.PushMsgListView = Backbone.View
 						groupTopic = "mms/P2/1/b" + fleep_bunch_input + "/g"
 								+ private_input;
 					}
+					userText = userText + "그룹" + fleep_bunch_input + "("
+							+ private_input + ")";
 
-					$('#msg-resend-user-target-show-div').show();
-					var showInputVal = $('#msg-resend-user-target-show-input')
-							.val();
-					if (showInputVal == "" || showInputVal == null) {
-						$('#msg-resend-user-target-show-input').val(
-								showInputVal + groupTopic);
-					} else {
-						$('#msg-resend-user-target-show-input').val(
-								showInputVal + "," + groupTopic);
+					console.log('그룹 토픽 결과');
+					console.log(groupTopic);
+					var checkTopic = false;
+					var token = sessionStorage.getItem('easy-token');
+					$.ajax({
+						url : '/v1/pms/adm/svc/subscribe/count?topic='
+								+ groupTopic,
+						type : 'GET',
+						headers : {
+							'X-Application-Token' : token
+						},
+						contentType : "application/json",
+						dataType : 'json',
+						async : false,
+
+						success : function(data) {
+
+							if (!data.result.errors) {
+								// // groupTopicCount add
+								// console.log(data.result.data);
+								// groupTopicCount = groupTopicCount
+								// + data.result.data;
+								if (data.result.data != 0) {
+									checkTopic = true;
+								} else {
+									console.log('alert');
+									alert(userText + "는 수신자가 없는 그룹입니다.");
+								}
+
+							} else {
+								/* console.log(messageData.receivers[i]); */
+								console.log('alert');
+								alert(userText + "는 수신자가 없는 그룹입니다.");
+
+								// return false;
+								// $(
+								// '#msg-send-group-user-target-show-input')
+								// .val("");
+								//
+								// alert('해당 그룹에 수신자가 없습니다. 다른
+								// 그룹을 입력해 주세요!');
+								// return false;
+							}
+
+						},
+						error : function(data, textStatus, request) {
+							if (data.status == 401) {
+
+								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+								sessionStorage.removeItem("easy-token");
+								sessionStorage.removeItem("easy-userId");
+								sessionStorage.removeItem("easy-role");
+								sessionStorage.removeItem("easy-groupTopic");
+								sessionStorage.removeItem("easy-ufmi");
+								sessionStorage.removeItem("easy-userName");
+								pushRouter.navigate('login', {
+									trigger : true
+								});
+								return false;
+							}
+
+							alert('그룹 대상조회에 실패 했습니다!');
+							return false;
+						}
+					});
+
+					if (checkTopic == true) {
+						$('#msg-resend-user-target-select').append(
+								'<option value=' + groupTopic + '>' + userText
+										+ '</option>');
 					}
 					$('#resend-private-input').val("");
 				}
@@ -532,11 +637,12 @@ ADF.PushMsgListView = Backbone.View
 					console.log('개인');
 
 					var receiver_split = aData.receiver.split('*');
+					var receiver_ver_check = aData.retained;
 					// p1
 
 					$('input:radio[id="resend-check-radio-private"]').attr(
 							"checked", true);
-					if (receiver_split[0] == "82") {
+					if (receiver_ver_check == "Ptalk1.0") {
 						$('input:radio[id="resend-pnum-p1-radio"]').attr(
 								"checked", true);
 						// p2
@@ -544,33 +650,42 @@ ADF.PushMsgListView = Backbone.View
 						$('input:radio[id="resend-pnum-p2-radio"]').attr(
 								"checked", true);
 					}
-					$('#resend-fleep-bunch-input').val(receiver_split[1]);
-					$('#resend-private-input').val(receiver_split[2]);
+					$('#resend-fleep-bunch-input').val(receiver_split[0]);
+					$('#resend-private-input').val(receiver_split[1]);
 				} else {
 					console.log('그룹');
 
 					$('input:radio[id="resend-check-radio-group"]').attr(
 							"checked", true);
 					var topicP1P2Check = aData.receiver;
+					var receiver_ver_check = aData.retained;
 					// p1
-					if (topicP1P2Check.indexOf("P1") != -1) {
+					if (receiver_ver_check == "Ptalk1.0") {
 						$('input:radio[id="resend-pnum-p1-radio"]').attr(
 								"checked", true);
-						topicP1P2Check = topicP1P2Check.split('/');
+
 						console.log(topicP1P2Check);
-						$('#resend-fleep-bunch-input').val(topicP1P2Check[3]);
+
+						$('#resend-fleep-bunch-input').val(
+								topicP1P2Check.substring((topicP1P2Check
+										.indexOf("(") + 1), topicP1P2Check
+										.indexOf(")")));
 						$('#resend-private-input').val(
-								topicP1P2Check[4].substr(1));
+								topicP1P2Check.substring(2, topicP1P2Check
+										.indexOf("(")));
 						// p2
 					} else {
 						$('input:radio[id="resend-pnum-p2-radio"]').attr(
 								"checked", true);
-						topicP1P2Check = topicP1P2Check.split('/');
 						console.log(topicP1P2Check);
+
 						$('#resend-fleep-bunch-input').val(
-								topicP1P2Check[3].substr(1));
+								topicP1P2Check.substring((topicP1P2Check
+										.indexOf(",") + 1), topicP1P2Check
+										.indexOf(")")));
 						$('#resend-private-input').val(
-								topicP1P2Check[4].substr(1));
+								topicP1P2Check.substring(2, topicP1P2Check
+										.indexOf("(")));
 
 					}
 
@@ -652,84 +767,107 @@ ADF.PushMsgListView = Backbone.View
 				var token = sessionStorage.getItem('easy-token');
 				var detailTableData = new Array();
 
-				$.ajax({
-					url : '/v1/pms/adm/svc/messages/' + reqMsgId + '?keyMon='
-							+ reqMonth,
-					type : 'GET',
-					contentType : "application/json",
-					headers : {
-						'X-Application-Token' : token
-					},
-					dataType : 'json',
+				$
+						.ajax({
+							url : '/v1/pms/adm/svc/messages/' + reqMsgId
+									+ '?keyMon=' + reqMonth,
+							type : 'GET',
+							contentType : "application/json",
+							headers : {
+								'X-Application-Token' : token
+							},
+							dataType : 'json',
 
-					async : false,
-					success : function(data) {
-						if (!data.result.errors) {
-							console.log('ajax 호출');
-							console.log(data.result.data.data);
-							var resultData = data.result.data.data;
-							if (resultData.length == 0) {
-								$('#msg-list-detail-div').hide();
-								alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
-								return false;
-							}
-							for ( var i in resultData) {
-								console.log(resultData[i].pmaAckType);
+							async : false,
+							success : function(data) {
+								if (!data.result.errors) {
+									console.log('ajax 호출');
+									console.log(data.result.data.data);
+									var resultData = data.result.data.data;
+									if (resultData.length == 0) {
+										$('#msg-list-detail-div').hide();
+										alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
+										return false;
+									}
+									for ( var i in resultData) {
+										console.log(resultData[i].pmaAckType);
 
-								if (resultData[i].pmaAckType == null) {
+										var receiverType = resultData[i].receiver;
+										console.log('상세 내용');
+										console.log(receiverType);
 
-									resultData[i].pmaAckType = '응답없음';
+										if (receiverType.substring(0, 2) == "82") {
+											resultData[i].receiver = resultData[i].receiver
+													.substring(
+															3,
+															resultData[i].receiver.length);
+											receiverType = "Ptalk1.0";
+
+										} else {
+											resultData[i].receiver = resultData[i].receiver
+													.substring(
+															2,
+															resultData[i].receiver.length);
+											receiverType = "Ptalk2.0";
+										}
+
+										if (resultData[i].pmaAckType == null) {
+
+											resultData[i].pmaAckType = '응답없음';
+										} else {
+											resultData[i].pmaAckType = '수신확인';
+											var dateTime = resultData[i].pmaAckTime;
+											resultData[i].pmaAckTime = new Date(
+													dateTime).toLocaleString();
+										}
+
+										if (resultData[i].appAckType == null) {
+
+											resultData[i].appAckType = '응답없음';
+										} else {
+											resultData[i].appAckType = '메시지확인';
+											var dateTime = resultData[i].appAckTime;
+											resultData[i].appAckTime = new Date(
+													dateTime).toLocaleString();
+										}
+
+										detailTableData
+												.push({
+													receiverType : receiverType,
+													receiver : resultData[i].receiver,
+													pmaAckType : resultData[i].pmaAckType,
+													pmaAckTime : resultData[i].pmaAckTime,
+													appAckType : resultData[i].appAckType,
+													appAckTime : resultData[i].appAckTime
+
+												});
+
+									}
 								} else {
-									resultData[i].pmaAckType = '수신확인';
-									var dateTime = resultData[i].pmaAckTime;
-									resultData[i].pmaAckTime = new Date(
-											dateTime).toLocaleString();
+									alert('상세조회에 실패 하였습니다.');
+									console.log(data);
 								}
 
-								if (resultData[i].appAckType == null) {
-
-									resultData[i].appAckType = '응답없음';
-								} else {
-									resultData[i].appAckType = '메시지확인';
-									var dateTime = resultData[i].appAckTime;
-									resultData[i].appAckTime = new Date(
-											dateTime).toLocaleString();
+							},
+							error : function(data) {
+								if (data.status == 401) {
+									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+									sessionStorage.removeItem("easy-token");
+									sessionStorage.removeItem("easy-userId");
+									sessionStorage.removeItem("easy-role");
+									sessionStorage
+											.removeItem("easy-groupTopic");
+									sessionStorage.removeItem("easy-ufmi");
+									sessionStorage.removeItem("easy-userName");
+									pushRouter.navigate('login', {
+										trigger : true
+									});
+									return false;
 								}
-
-								detailTableData.push({
-									receiver : resultData[i].receiver,
-									pmaAckType : resultData[i].pmaAckType,
-									pmaAckTime : resultData[i].pmaAckTime,
-									appAckType : resultData[i].appAckType,
-									appAckTime : resultData[i].appAckTime
-
-								});
+								alert('상세조회에 실패 하였습니다.');
 
 							}
-						} else {
-							alert('상세조회에 실패 하였습니다.');
-							console.log(data);
-						}
-
-					},
-					error : function(data) {
-						if (data.status == 401) {
-							alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-							sessionStorage.removeItem("easy-token");
-							sessionStorage.removeItem("easy-userId");
-							sessionStorage.removeItem("easy-role");
-							sessionStorage.removeItem("easy-groupTopic");
-							sessionStorage.removeItem("easy-ufmi");
-							sessionStorage.removeItem("easy-userName");
-							pushRouter.navigate('login', {
-								trigger : true
-							});
-							return false;
-						}
-						alert('상세조회에 실패 하였습니다.');
-
-					}
-				});
+						});
 
 				var detailTable = $('#msg-list-detail-table').dataTable({
 					aaData : detailTableData,
@@ -746,20 +884,23 @@ ADF.PushMsgListView = Backbone.View
 					"dom" : 'T<"clear">lrtip',
 
 					aoColumns : [ {
+						mData : 'receiverType',
+						"sWidth" : "15%"
+					}, {
 						mData : 'receiver',
-						"sWidth" : "10%"
+						"sWidth" : "15%"
 					}, {
 						mData : 'pmaAckType',
-						"sWidth" : "20%"
+						"sWidth" : "15%"
 					}, {
 						mData : 'pmaAckTime',
-						"sWidth" : "25%"
-					}, {
-						mData : 'appAckType',
 						"sWidth" : "20%"
 					}, {
+						mData : 'appAckType',
+						"sWidth" : "15%"
+					}, {
 						mData : 'appAckTime',
-						"sWidth" : "25%"
+						"sWidth" : "20%"
 					} ]
 				});
 
@@ -792,9 +933,60 @@ ADF.PushMsgListView = Backbone.View
 						var searchDateEnd = $('#msg-list-end-date-input').val();
 						var messageMonth = $('#msg-list-month-date-input')
 								.val();
+						var searchSelectPtalk = $(
+								'#msg-list-search-ptalk-select option:selected')
+								.val();
 
 						var requestUrl = '?';
 						var csvCSearchStatus = "";
+
+						if (searchInputValue != "") {
+							console.log('검색 수신번호 내용');
+							// 그룹
+							if (searchInputValue.indexOf("그룹") > -1) {
+								if (searchSelectPtalk == "1") {
+									var groupNum = searchInputValue.substring(
+											2, searchInputValue.indexOf('('));
+									var fleet = searchInputValue
+											.substring((searchInputValue
+													.indexOf('(') + 1),
+													searchInputValue
+															.indexOf(')'));
+									searchInputValue = "mms/P1/82/" + fleet
+											+ "/g" + groupNum;
+
+								} else if (searchSelectPtalk == "2") {
+									var groupNum = searchInputValue.substring(
+											2, searchInputValue.indexOf('('));
+									var fleet = searchInputValue
+											.substring((searchInputValue
+													.indexOf('(') + 1),
+													searchInputValue
+															.indexOf(')'));
+									searchInputValue = "mms/P2/1/b" + fleet
+											+ "/g" + groupNum;
+								}
+
+								// 개인
+							} else {
+
+								if (searchSelectPtalk == "1") {
+									var pnum = searchInputValue.split('*');
+
+									searchInputValue = "82*" + pnum[0] + "*"
+											+ pnum[1];
+
+								} else if (searchSelectPtalk == "2") {
+									var pnum = searchInputValue.split('*');
+
+									searchInputValue = "1*" + pnum[0] + "*"
+											+ pnum[1];
+								}
+
+							}
+
+						}
+
 						if (messageMonth == null || messageMonth == "") {
 							var nowDate = new Date();
 							var year = nowDate.getFullYear();
@@ -1060,6 +1252,7 @@ ADF.PushMsgListView = Backbone.View
 					$('#msg-list-search-content-div').hide();
 					$('#msg-list-ack-status-div').hide();
 					$('#msg-list-send-status-div').hide();
+					$('#msg-list-search-ptalk-div').hide();
 					$('#msg-list-search-input').prop('disabled', true);
 					break;
 
@@ -1067,12 +1260,14 @@ ADF.PushMsgListView = Backbone.View
 				case 1:
 					$('#msg-list-search-content-div').hide();
 					$('#msg-list-ack-status-div').hide();
+					$('#msg-list-search-ptalk-div').hide();
 					$('#msg-list-send-status-div').show();
 					$('#msg-list-search-input').prop('disabled', true);
 					break;
 				// 수신번호
 				case 2:
 					$('#msg-list-search-content-div').show();
+					$('#msg-list-search-ptalk-div').show();
 					$('#msg-list-ack-status-div').hide();
 					$('#msg-list-send-status-div').hide();
 					$('#msg-list-search-input').prop('disabled', false);
@@ -1081,6 +1276,7 @@ ADF.PushMsgListView = Backbone.View
 				// 응답상태
 				case 3:
 					$('#msg-list-search-content-div').hide();
+					$('#msg-list-search-ptalk-div').hide();
 					$('#msg-list-ack-status-div').show();
 					$('#msg-list-send-status-div').hide();
 					$('#msg-list-search-input').prop('disabled', true);
@@ -1222,6 +1418,9 @@ ADF.PushMsgListView = Backbone.View
 																	"data" : "updateTime",
 																	'sClass' : 'one-line'
 																},
+																{
+																	"data" : "retained"
+																},
 
 																{
 																	"data" : "receiver"
@@ -1299,6 +1498,63 @@ ADF.PushMsgListView = Backbone.View
 																						.val(
 																								data.result.data.recordsTotal);
 																				for ( var i in dataResult) {
+																					dataResult[i].retained = dataResult[i].receiver;
+
+																					// 그룹
+																					if (dataResult[i].receiver
+																							.indexOf("mms") > -1) {
+
+																						var topicArr = [];
+																						topicArr = dataResult[i].receiver
+																								.split('/');
+																						console
+																								.log(topicArr);
+																						// p1체크
+																						if (dataResult[i].receiver
+																								.indexOf("P1") > -1) {
+
+																							dataResult[i].receiver = "그룹"
+																									+ topicArr[4]
+																											.substring(1)
+																									+ "("
+																									+ topicArr[3]
+																									+ ")";
+
+																							dataResult[i].retained = "Ptalk1.0";
+																							// p2
+																							// 그룹
+																						} else if (dataResult[i].retained
+																								.indexOf("P2") > -1) {
+																							dataResult[i].receiver = "그룹"
+																									+ topicArr[4]
+																											.substring(1)
+																									+ "("
+																									+ topicArr[3]
+																									+ ")";
+																							dataResult[i].retained = "Ptalk2.0";
+																						}
+																						// 개인
+																					} else {
+
+																						if (dataResult[i].retained
+																								.substring(
+																										0,
+																										2) == "82") {
+																							dataResult[i].receiver = dataResult[i].receiver
+																									.substring(
+																											3,
+																											dataResult[i].receiver.length);
+																							dataResult[i].retained = "Ptalk1.0";
+
+																						} else {
+																							dataResult[i].receiver = dataResult[i].receiver
+																									.substring(
+																											2,
+																											dataResult[i].receiver.length);
+																							dataResult[i].retained = "Ptalk2.0";
+																						}
+
+																					}
 																					dataResult[i].content = pushUtil
 																							.b64_to_utf8(dataResult[i].content);
 																					dataResult[i].contentType = dataResult[i].content;
@@ -1311,9 +1567,9 @@ ADF.PushMsgListView = Backbone.View
 																								+ "..";
 																					}
 																					if (dataResult[i].groupId == null) {
-																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="개인" class="fa fa-user"></i>';
+																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="개인" class="fa fa-user">(개인)</i>';
 																					} else {
-																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="그룹" class="fa fa-users"></i>';
+																						dataResult[i].groupId = '<i data-tooltip="tooltip" title="그룹" class="fa fa-users">(그룹)</i>';
 																					}
 																					switch (dataResult[i].status) {
 																					case -99:
@@ -1444,10 +1700,81 @@ ADF.PushMsgListView = Backbone.View
 															var messageMonth = $(
 																	'#msg-list-month-date-input')
 																	.val();
+
+															var searchSelectPtalk = $(
+																	'#msg-list-search-ptalk-select option:selected')
+																	.val();
 															console.log('월선택');
 															console
 																	.log(messageMonth);
 															searchSelectValue = searchSelectValue * 1;
+
+															if (searchInputValue != "") {
+																console
+																		.log('검색 수신번호 내용');
+																// 그룹
+																if (searchInputValue
+																		.indexOf("그룹") > -1) {
+																	if (searchSelectPtalk == "1") {
+																		var groupNum = searchInputValue
+																				.substring(
+																						2,
+																						searchInputValue
+																								.indexOf('('));
+																		var fleet = searchInputValue
+																				.substring(
+																						(searchInputValue
+																								.indexOf('(') + 1),
+																						searchInputValue
+																								.indexOf(')'));
+																		searchInputValue = "mms/P1/82/"
+																				+ fleet
+																				+ "/g"
+																				+ groupNum;
+
+																	} else if (searchSelectPtalk == "2") {
+																		var groupNum = searchInputValue
+																				.substring(
+																						2,
+																						searchInputValue
+																								.indexOf('('));
+																		var fleet = searchInputValue
+																				.substring(
+																						(searchInputValue
+																								.indexOf('(') + 1),
+																						searchInputValue
+																								.indexOf(')'));
+																		searchInputValue = "mms/P2/1/b"
+																				+ fleet
+																				+ "/g"
+																				+ groupNum;
+																	}
+
+																	// 개인
+																} else {
+
+																	if (searchSelectPtalk == "1") {
+																		var pnum = searchInputValue
+																				.split('*');
+
+																		searchInputValue = "82*"
+																				+ pnum[0]
+																				+ "*"
+																				+ pnum[1];
+
+																	} else if (searchSelectPtalk == "2") {
+																		var pnum = searchInputValue
+																				.split('*');
+
+																		searchInputValue = "1*"
+																				+ pnum[0]
+																				+ "*"
+																				+ pnum[1];
+																	}
+
+																}
+
+															}
 
 															switch (searchSelectValue) {
 															case 0:

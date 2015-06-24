@@ -26,106 +26,98 @@
 		<div class="col-lg-4" id="tab-div">
 			<div class="">
 				<ul class="nav nav-tabs">
-					<!-- 					<li class=""><h4 class="widget-title lighter smaller"> -->
-					<!-- 							<i class="ace-icon fa fa-rss orange"></i>RECENT -->
-					<!-- 						</h4></li> -->
+
 					<li class="active "><a data-toggle="tab"
 						href="#msg-send-contact" id="msg-send-contact-div"> 주소록 발송 </a></li>
 					<li class=""><a data-toggle="tab" href="#msg-send-group"
 						id="msg-send-group-div"> 직접 입력 발송 </a></li>
-
+					<!-- 					<li class=""><a data-toggle="tab" href="#msg-send-excel" -->
+					<!-- 						id="msg-send-excel-div"> 엑셀 입력 발송 </a></li> -->
 
 					<!-- 		<li><a data-toggle="tab" href="#msg-send-private"
 						id="msg-send-private-div"> 개인 발송(직접 입력) </a></li> -->
 				</ul>
 
 				<div class="tab-content">
-					<!-- 					<div id="msg-send-private" class="tab-pane fade"> -->
+					<!-- 					<div id="msg-send-excel" class="tab-pane fade"> -->
 					<!-- 						<div class="widget-box"> -->
 					<!-- 							<div class="widget-header"> -->
 					<!-- 								<i class="ace-icon fa fa-envelope bigger-180"></i> -->
-					<!-- 								<h4 class="widget-title">&nbsp;개인 발송</h4> -->
+					<!-- 								<h4 class="widget-title">&nbsp;엑셀 발송</h4> -->
 					<!-- 							</div> -->
 					<!-- 							<div class="widget-body "> -->
 					<!-- 								<div class="widget-main"> -->
-					<!-- 									<div class="form-group"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>Ptalk -->
-					<!-- 											유형 선택 : </label> <label>Ptalk1.0</label> <input type="radio" -->
-					<!-- 											name="send-private-pnum-radio" -->
-					<!-- 											id="send-private-pnum-p1-radio" value="82" checked="checked"> -->
-					<!-- 										&nbsp;<label>Ptalk2.0</label> <input type="radio" -->
-					<!-- 											name="send-private-pnum-radio" -->
-					<!-- 											id="send-private-pnum-p2-radio" value="1"> -->
-					<!-- 									</div> -->
-
-					<!-- 									<div class="form-group"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>fleet/확장 -->
-					<!-- 											번호</label><br> <span -->
-					<!-- 											style="font-size: x-small; font-weight: bold;">(Ptalk1.0은 -->
-					<!-- 											fleet번호, Ptalk2.0은 확장번호를 입력해 주세요.)</span> <input type="text" -->
-					<!-- 											class="form-control" id="send-private-fleep-bunch-input" -->
-					<!-- 											maxlength="6"> -->
-					<!-- 									</div> -->
-
-					<!-- 									<div class="form-group"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>개별 -->
-					<!-- 											번호 </label><br> <span -->
-					<!-- 											style="font-size: x-small; font-weight: bold;">(개별 번호를 -->
-					<!-- 											입력한 후 플러스(+)버튼을 누르세요!)</span> -->
-					<!-- 										<div class="input-group"> -->
-					<!-- 											<input maxlength="6" type="text" class="form-control" -->
-					<!-- 												id="send-private-input" placeholder=""> <span -->
-					<!-- 												style="cursor: pointer;" id="msg-send-private-plus-span" -->
-					<!-- 												class="input-group-addon"><span -->
-					<!-- 												class="glyphicon glyphicon-plus"></span> </span> -->
-					<!-- 										</div> -->
-					<!-- 									</div> -->
-					<!-- 									<div class="form-group" -->
-					<!-- 										id="msg-send-private-user-target-show-div" -->
-					<!-- 										style="display: none;"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>수신 -->
-					<!-- 											무전번호 목록 </label><br> -->
-					<!-- 										<textarea class="form-control" -->
-					<!-- 											id="msg-send-private-user-target-show-input" -->
-					<!-- 											disabled="disabled"></textarea> -->
-
-					<!-- 									</div> -->
 					<!-- 									<i class="ace-icon fa fa-caret-right blue"></i> <label>내용</label> -->
 					<!-- 									<div class="form-group"> -->
 					<!-- 										<textarea rows="9" class="form-control" -->
-					<!-- 											id="msg-send-private-content-textarea" placeholder="내용 입력"></textarea> -->
-					<!-- 										<p id="msg-send-private-length-p"> -->
-					<!-- 											<strong id="msg-send-private-length-strong">0</strong>/<span -->
-					<!-- 												id="msg-send-private-length-max">140</span><span -->
-					<!-- 												id="msg-send-private-length-byte">byte</span> -->
-					<!-- 											<button style="margin-top: 5px;" type="button" -->
-					<!-- 												data-target="#msg-save-modal" data-toggle="modal" -->
-					<!-- 												id="msg-send-private-save-btn" -->
-					<!-- 												class="btn btn-sm btn-white btn-info pull-right"> -->
-					<!-- 												<i class="ace-icon fa fa-floppy-o bigger-120 blue"></i>&nbsp;내용저장 -->
-					<!-- 											</button> -->
+					<!-- 											id="msg-send-excel-private-content-textarea" -->
+					<!-- 											placeholder="필수 입력"></textarea> -->
+					<!-- 										<p id="msg-send-excel-private-length-p"> -->
+					<!-- 											<strong id="msg-send-excel-private-length-strong">0</strong>/<span -->
+					<!-- 												id="msg-send-excel-private-length-max">140</span><span -->
+					<!-- 												id="msg-send-excel-private-length-byte">byte</span> -->
 					<!-- 										</p> -->
+					<!-- 									</div> -->
+					<!-- 									<div class="modal-footer" -->
+					<!-- 										style="background-color: white; border-top: 0px; padding: 0px; padding-top: 0px"> -->
+					<!-- 										<button class="btn btn-sm " id="msg-send-excel-cancel-btn"> -->
+					<!-- 											<i class="ace-icon fa fa-times"></i> 취소 -->
+					<!-- 										</button> -->
 
+					<!-- 										<button id="msg-send-excel-btn" -->
+					<!-- 											class="btn btn-sm btn-primary "> -->
+					<!-- 											<i id="contact-send-before-i" class="ace-icon fa fa-check"></i><i -->
+					<!-- 												id="contact-send-after-i" -->
+					<!-- 												class="fa fa-circle-o-notch fa-spin" style="display: none;"></i> -->
+					<!-- 											메시지 전송 -->
+					<!-- 										</button> -->
 					<!-- 									</div> -->
 
+
 					<!-- 									<div class="form-group"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>메시지 -->
-					<!-- 											불러오기</label> <select class="form-control" -->
-					<!-- 											id="msg-send-private-content-load-select"> -->
+					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>상용구 -->
+					<!-- 											가져오기</label> <select class="form-control" -->
+					<!-- 											id="msg-send-excel-content-load-select"> -->
 					<!-- 											<option value="0">선택</option> -->
 					<!-- 										</select> -->
 					<!-- 									</div> -->
+
 					<!-- 									<div class="form-group"> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label> -->
-					<!-- 											반복 메시지 </label>&nbsp; <input id="msg-send-private-user-repeat-check" -->
+					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>자동 -->
+					<!-- 											치환</label>&nbsp;<i class="ace-icon fa fa-question-circle blue" -->
+					<!-- 											data-tooltip="tooltip" -->
+					<!-- 											title="발송시에 태그한 내용으로 치환되며,내용길이에 따라 MMS로 전환 될수 있습니다."></i><br> -->
+
+
+
+					<!-- 										<button type="button" id="msg-send-excel-change-name-btn" -->
+					<!-- 											class="btn btn-sm btn-white btn-info "> -->
+					<!-- 											<i class="ace-icon fa fa-tags bigger-120 blue"></i>&nbsp;이름 -->
+					<!-- 										</button> -->
+					<!-- 										<button type="button" id="msg-send-excel-change-item1-btn" -->
+					<!-- 											class="btn btn-sm btn-white btn-info "> -->
+					<!-- 											<i class="ace-icon fa fa-tags bigger-120 blue"></i>&nbsp;항목1 -->
+					<!-- 										</button> -->
+					<!-- 										<button type="button" id="msg-send-excel-change-item2-btn" -->
+					<!-- 											class="btn btn-sm btn-white btn-info "> -->
+					<!-- 											<i class="ace-icon fa fa-tags bigger-120 blue"></i>&nbsp;항목2 -->
+					<!-- 										</button> -->
+					<!-- 										<button type="button" id="msg-send-excel-change-item3-btn" -->
+					<!-- 											class="btn btn-sm btn-white btn-info "> -->
+					<!-- 											<i class="ace-icon fa fa-tags bigger-120 blue"></i>&nbsp;항목3 -->
+					<!-- 										</button> -->
+					<!-- 									</div> -->
+					<!-- 									<div class="form-group"> -->
+					<!-- 										<i class="ace-icon fa fa-repeat blue"></i> <label> 반복 -->
+					<!-- 											메시지 </label>&nbsp; <input id="msg-send-excel-user-repeat-check" -->
 					<!-- 											type="checkbox" /> -->
 					<!-- 									</div> -->
-					<!-- 									<div id="msg-send-private-repeat-div" style="display: none;"> -->
+					<!-- 									<div id="msg-send-excel-repeat-div" style="display: none;"> -->
 					<!-- 										<div class="form-group"> -->
-					<!-- 											<label>횟수 </label><br> <span -->
+					<!-- 											<label>횟수</label><br> <span -->
 					<!-- 												style="font-size: x-small; font-weight: bold;">(반복 휫수 -->
-					<!-- 												+1 건의 메시지가 발송 됩니다.)</span><select class="form-control" -->
-					<!-- 												id="msg-send-private-repeat-cnt-select"> -->
+					<!-- 												+1 건의 메시지가 발송 됩니다.)</span> <select class="form-control" -->
+					<!-- 												id="msg-send-excel-repeat-cnt-select"> -->
 					<!-- 												<option value="0">선택</option> -->
 					<!-- 												<option value="1">1</option> -->
 					<!-- 												<option value="2">2</option> -->
@@ -139,59 +131,53 @@
 					<!-- 												<option value="10">10</option> -->
 					<!-- 											</select> -->
 					<!-- 										</div> -->
-					<!-- 										<div class="form-group"> -->
+					<!-- 										<div class="form-group "> -->
 					<!-- 											<label>반복 시간</label><br> <span -->
 					<!-- 												style="font-size: x-small; font-weight: bold;">(반복 -->
 					<!-- 												시간은 최대 24시간(1440분) 입력 가능합니다!)</span> <input class="form-control" -->
-					<!-- 												maxlength="4" id="msg-send-private-repeat-time-input" -->
+					<!-- 												maxlength="4" id="msg-send-excel-repeat-time-input" -->
 					<!-- 												placeholder="옵션       반복 시간(분 단위)" disabled="disabled"> -->
 					<!-- 										</div> -->
 					<!-- 									</div> -->
+
 					<!-- 									<div> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i> <label>파일 -->
-					<!-- 											첨부</label> <br> <span -->
-					<!-- 											style="font-size: x-small; font-weight: lighter;">(파일 -->
-					<!-- 											첨부시 mms 메시지로 전환되어 전송 됩니다!)</span> -->
+					<!-- 										<i class="ace-icon fa fa-paperclip blue"></i>&nbsp; <label>파일 -->
+					<!-- 											첨부</label>&nbsp; <i class="fa fa-exclamation-triangle red" -->
+					<!-- 											data-tooltip="tooltip" title="파일 첨부시 MMS로 전환되어 발송 됩니다."></i> -->
 					<!-- 										#section:custom/file-input -->
 
-					<!-- 										<form id="private-image-upload-form" method="post" -->
+					<!-- 										<form id="excel-image-upload-form" method="post" -->
 					<!-- 											enctype="multipart/form-data"> -->
-					<!-- 											<input type="file" id="private-image-upload-input"> -->
+					<!-- 											<input type="file" id="excel-image-upload-input"> -->
 					<!-- 										</form> -->
+					<!-- 										<input type="hidden" id="file-md5"> <input -->
+					<!-- 											type="hidden" id="file-thumbnail"> -->
+
 					<!-- 									</div> -->
+					<!-- 									<div id="excel-fileprogress" class="progress" -->
+					<!-- 										style="display: none;"> -->
+					<!-- 										<div class="progress-bar progress-bar-striped active" -->
+					<!-- 											role="progressbar" aria-valuenow="40" aria-valuemin="0" -->
+					<!-- 											aria-valuemax="100" style="width: 100%">파일 첨부중</div> -->
+					<!-- 									</div> -->
+					<!-- 									<br> -->
 					<!-- 									<div> -->
-					<!-- 										<i class="ace-icon fa fa-caret-right blue"></i><label> -->
+					<!-- 										<i class="ace-icon fa fa-clock-o blue"></i>&nbsp;<label> -->
 					<!-- 											예약 메시지 설정</label><br> <span -->
 					<!-- 											style="font-size: x-small; font-weight: lighter;">(예약메시지 -->
 					<!-- 											발송이 필요한 경우 오른쪽 캘린더 설정을 해주세요.)</span> -->
 					<!-- 									</div> -->
-					<!-- 									<div class="input-group" id="msg-send-private-reservation-div"> -->
+					<!-- 									<div class="input-group" id="msg-send-excel-reservation-div"> -->
 
-					<!-- 										<input id="msg-send-private-reservation-date-input" -->
-					<!-- 											type="text" class="form-control" disabled="disabled"> -->
-					<!-- 										<span class="input-group-addon"> <i -->
+					<!-- 										<input id="msg-send-excel-reservation-date-input" type="text" -->
+					<!-- 											class="form-control" disabled="disabled"> <span -->
+					<!-- 											class="input-group-addon"> <i -->
 					<!-- 											class="fa fa-clock-o bigger-110"></i> -->
 					<!-- 										</span> -->
 
 					<!-- 									</div> -->
-
-					<!-- 								</div> -->
-					<!-- 								<div class="modal-footer"> -->
-					<!-- 									<button class="btn btn-sm " id="msg-send-private-cancel-btn"> -->
-					<!-- 										<i class="ace-icon fa fa-times"></i> 취소 -->
-					<!-- 									</button> -->
-
-					<!-- 									<button id="msg-send-private-btn" -->
-					<!-- 										class="btn btn-sm btn-primary "> -->
-					<!-- 										<i id="private-send-before-i" class="ace-icon fa fa-check"></i> -->
-					<!-- 										<i id="private-send-after-i" -->
-					<!-- 											class="fa fa-circle-o-notch fa-spin" style="display: none;"></i> -->
-					<!-- 										메시지 전송 -->
-					<!-- 									</button> -->
 					<!-- 								</div> -->
 					<!-- 							</div> -->
-
-
 					<!-- 						</div> -->
 					<!-- 					</div> -->
 
@@ -368,7 +354,7 @@
 							</div>
 							<div class="widget-body ">
 								<div class="widget-main">
-									<div class="form-group">
+									<!-- 				<div class="form-group">
 										<i class="ace-icon fa fa-caret-right blue"></i> <label>개인/그룹
 											선택 : </label> <label>개인</label> <input type="radio"
 											name="send-check-radio" id="send-check-radio-private"
@@ -422,7 +408,7 @@
 											id="msg-send-group-user-target-show-input"
 											disabled="disabled"></textarea>
 
-									</div>
+									</div> -->
 									<i class="ace-icon fa fa-caret-right blue"></i> <label>내용</label>
 									<div class="form-group">
 										<textarea rows="9" class="form-control"
@@ -818,7 +804,8 @@
 					<thead>
 						<tr>
 							<th><input name="contact-delete-checkbox"
-								id="contact-delete-id" type="checkbox" />&nbsp;무전번호</th>
+								id="contact-delete-id" type="checkbox" />&nbsp;Ptalk유형</th>
+							<th>무전번호</th>
 							<th>이름</th>
 							<th>항목1</th>
 							<th>항목2</th>
@@ -834,6 +821,98 @@
 				</table>
 
 			</div>
+		</div>
+
+		<div class="col-lg-8" id="send-list-div" style="display: none;">
+			<div class="page-header">
+
+				<h4 class="text-primary">무전 번호 입력</h4>
+
+
+
+
+			</div>
+			<div class="widget-main">
+				<div class="widget-body">
+					<div class="form-group">
+						<i class="ace-icon fa fa-caret-right blue"></i> <label>개인/그룹
+							선택 : </label> <label>개인</label> <input type="radio"
+							name="send-check-radio" id="send-check-radio-private" value="0"
+							checked="checked"> &nbsp;<label>그룹</label> <input
+							type="radio" name="send-check-radio" id="send-check-radio-group"
+							value="1">
+					</div>
+					<div class="form-group">
+						<i class="ace-icon fa fa-caret-right blue"></i> <label>Ptalk
+							유형 선택 : </label> <label>Ptalk1.0</label> <input type="radio"
+							name="send-group-pnum-radio" id="send-group-pnum-p1-radio"
+							value="82" checked="checked"> &nbsp;<label>Ptalk2.0</label>
+						<input type="radio" name="send-group-pnum-radio"
+							id="send-group-pnum-p2-radio" value="1">
+					</div>
+
+					<div class="form-group">
+						<i class="ace-icon fa fa-caret-right blue"></i> <label
+							id="group-fleet-label">fleet 번호</label><br> <span
+							id="group-fleet-span"
+							style="font-size: x-small; font-weight: bold;">(무전번호의
+							fleet번호를 입력해주세요!)</span> <input style="background-color: aliceblue"
+							type="text" class="form-control"
+							id="send-group-fleep-bunch-input" maxlength="6"
+							placeholder="필수 입력">
+					</div>
+
+					<div class="form-group">
+						<i class="ace-icon fa fa-caret-right blue"></i> <label
+							id="group-private-label">개별 번호 </label><br> <span
+							id="group-private-span"
+							style="font-size: x-small; font-weight: bold;">(무전번호의 개별
+							ID를 입력해주세요!)</span>
+						<div class="input-group">
+							<input maxlength="6" style="background-color: aliceblue"
+								type="text" class="form-control" id="send-group-input"
+								placeholder="필수 입력"> <span style="cursor: pointer;"
+								id="msg-send-group-plus-span" class="input-group-addon"><span
+								class="glyphicon glyphicon-plus"></span> </span> <span
+								style="cursor: pointer;" id="msg-send-group-minus-span"
+								class="input-group-addon"><span
+								class="glyphicon glyphicon-minus"></span> </span>
+						</div>
+					</div>
+					<div class="form-group" id="msg-send-group-user-target-show-div">
+						<i class="ace-icon fa fa-caret-right blue"></i> <label>수신
+							무전번호 목록 </label><br>
+						<select class="form-control"
+							id="msg-send-group-user-target-select" multiple="multiple" disabled="disabled"></select>
+<!-- 						<input type="hidden" -->
+<!-- 							id="msg-send-group-user-target-show-input-hidden"> -->
+
+					</div>
+				</div>
+
+			</div>
+
+			<!-- div.table-responsive -->
+
+			<!-- div.dataTables_borderWrap -->
+
+		</div>
+
+		<div class="col-lg-8" id="excel-list-div" style="display: none;">
+			<div class="page-header">
+
+				<h4 class="text-primary">테스트 엑셀</h4>
+
+				<!-- 				<div class="btn-group"> -->
+				<!-- 					<button id="contact-delete-btn" class="btn btn-white btn-warning "> -->
+				<!-- 						<i class="ace-icon fa fa-remove bigger-120 orange"></i> 주소록 삭제 -->
+				<!-- 					</button> -->
+				<!-- 				</div> -->
+
+
+			</div>
+			<div id="excel-example"></div>
+
 		</div>
 	</div>
 	<!--row-->
