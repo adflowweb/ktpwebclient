@@ -10292,7 +10292,7 @@ function ContextMenu(instance, customOptions) {
       }
     }, {
       key: 'row_below',
-      name: 'Insert row below',
+      name: '행 삽입',
       callback: function(key, selection) {
         this.alter("insert_row", selection.end.row + 1);
       },
@@ -10334,7 +10334,7 @@ function ContextMenu(instance, customOptions) {
       }
     }, ContextMenu.SEPARATOR, {
       key: 'remove_row',
-      name: 'Remove row',
+      name: '행 삭제',
       callback: function(key, selection) {
         var amount = selection.end.row - selection.start.row + 1;
         this.alter("remove_row", selection.start.row, amount);
