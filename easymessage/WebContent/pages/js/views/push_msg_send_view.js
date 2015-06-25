@@ -1461,7 +1461,7 @@ ADF.PushMsgSendView = Backbone.View
 				$('#send-private-fleep-bunch-input').val("");
 				$('#send-private-input').val("");
 				$('#msg-send-private-user-target-show-input').val("");
-				$('#msg-send-private-user-target-show-div').hide();
+				//$('#msg-send-private-user-target-show-div').hide();
 				$('#msg-send-private-content-textarea').val("");
 				$('#msg-send-private-user-repeat-check').attr('checked', false);
 				$('#msg-send-private-reservation-date-input').val("");
@@ -1495,7 +1495,7 @@ ADF.PushMsgSendView = Backbone.View
 				$('#send-group-fleep-bunch-input').val("");
 				$('#send-group-input').val("");
 				$('#msg-send-group-user-target-show-input').val("");
-				$('#msg-send-group-user-target-show-div').hide();
+				//$('#msg-send-group-user-target-show-div').hide();
 				$('#msg-send-group-content-textarea').val("");
 				$('#msg-send-group-user-repeat-check').attr('checked', false);
 				$('#msg-send-group-reservation-date-input').val("");
@@ -1505,7 +1505,7 @@ ADF.PushMsgSendView = Backbone.View
 				$('.remove').click();
 				$('#msg-send-group-content-load-select').val(0);
 				$('#msg-send-group-repeat-div').fadeOut();
-				$('#msg-send-group-user-target-show-div').fadeOut();
+				//$('#msg-send-group-user-target-show-div').fadeOut();
 
 				var input_messageContent = $('#msg-send-group-content-textarea')
 						.val();
@@ -1830,8 +1830,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-private-repeat-div').fadeOut();
 							$('#msg-send-private-content-load-select').val(0);
 							$('.remove').click();
-							$('#msg-send-private-user-target-show-div')
-									.fadeOut();
+//							$('#msg-send-private-user-target-show-div')
+//									.fadeOut();
 							// msg-send-private-user-repeat-check
 
 						} else {
@@ -1861,8 +1861,8 @@ ADF.PushMsgSendView = Backbone.View
 							$('#msg-send-private-content-load-select').val(0);
 							$('.remove').click();
 							$('#msg-send-private-repeat-div').fadeOut();
-							$('#msg-send-private-user-target-show-div')
-									.fadeOut();
+//							$('#msg-send-private-user-target-show-div')
+//									.fadeOut();
 						} else {
 
 							return false;

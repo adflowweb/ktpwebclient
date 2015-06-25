@@ -159,12 +159,12 @@ ADF.PushMsgListView = Backbone.View
 			},
 
 			modalFooterClick : function() {
-				$('#msg-resend-user-target-show-div').hide();
+				// $('#msg-resend-user-target-show-div').hide();
 				$('#msg-resend-user-target-show-input').val("");
 			},
 
 			modalHeaderClick : function() {
-				$('#msg-resend-user-target-show-div').hide();
+				// $('#msg-resend-user-target-show-div').hide();
 				$('#msg-resend-user-target-show-input').val("");
 
 			},
@@ -767,107 +767,109 @@ ADF.PushMsgListView = Backbone.View
 				var token = sessionStorage.getItem('easy-token');
 				var detailTableData = new Array();
 
-				$
-						.ajax({
-							url : '/v1/pms/adm/svc/messages/' + reqMsgId
-									+ '?keyMon=' + reqMonth,
-							type : 'GET',
-							contentType : "application/json",
-							headers : {
-								'X-Application-Token' : token
-							},
-							dataType : 'json',
+				$.ajax({
+					url : '/v1/pms/adm/svc/messages/' + reqMsgId + '?keyMon='
+							+ reqMonth,
+					type : 'GET',
+					contentType : "application/json",
+					headers : {
+						'X-Application-Token' : token
+					},
+					dataType : 'json',
 
-							async : false,
-							success : function(data) {
-								if (!data.result.errors) {
-									console.log('ajax 호출');
-									console.log(data.result.data.data);
-									var resultData = data.result.data.data;
-									if (resultData.length == 0) {
-										$('#msg-list-detail-div').hide();
-										alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
-										return false;
-									}
-									for ( var i in resultData) {
-										console.log(resultData[i].pmaAckType);
+					async : false,
+					success : function(data) {
+						if (!data.result.errors) {
+							console.log('ajax 호출');
+							console.log(data.result.data.data);
+							var resultData = data.result.data.data;
+							if (resultData.length == 0) {
+								$('#msg-list-detail-div').hide();
+								alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
+								return false;
+							}
+							for ( var i in resultData) {
+								console.log(resultData[i].pmaAckType);
 
-										var receiverType = resultData[i].receiver;
-										console.log('상세 내용');
-										console.log(receiverType);
+								var receiverType = resultData[i].receiver;
+								console.log('상세 내용');
+								console.log(receiverType);
 
-										if (receiverType.substring(0, 2) == "82") {
-											resultData[i].receiver = resultData[i].receiver
-													.substring(
-															3,
-															resultData[i].receiver.length);
-											receiverType = "Ptalk1.0";
+								if (receiverType.substring(0, 2) == "82") {
+									var splitReceiver = resultData[i].receiver;
+									splitReceiver = splitReceiver.split('*');
+									resultData[i].receiver = splitReceiver[1]
+											+ "*" + splitReceiver[2];
+									receiverType = "Ptalk1.0";
 
-										} else {
-											resultData[i].receiver = resultData[i].receiver
-													.substring(
-															2,
-															resultData[i].receiver.length);
-											receiverType = "Ptalk2.0";
-										}
-
-										if (resultData[i].pmaAckType == null) {
-
-											resultData[i].pmaAckType = '응답없음';
-										} else {
-											resultData[i].pmaAckType = '수신확인';
-											var dateTime = resultData[i].pmaAckTime;
-											resultData[i].pmaAckTime = new Date(
-													dateTime).toLocaleString();
-										}
-
-										if (resultData[i].appAckType == null) {
-
-											resultData[i].appAckType = '응답없음';
-										} else {
-											resultData[i].appAckType = '메시지확인';
-											var dateTime = resultData[i].appAckTime;
-											resultData[i].appAckTime = new Date(
-													dateTime).toLocaleString();
-										}
-
-										detailTableData
-												.push({
-													receiverType : receiverType,
-													receiver : resultData[i].receiver,
-													pmaAckType : resultData[i].pmaAckType,
-													pmaAckTime : resultData[i].pmaAckTime,
-													appAckType : resultData[i].appAckType,
-													appAckTime : resultData[i].appAckTime
-
-												});
-
-									}
 								} else {
-									alert('상세조회에 실패 하였습니다.');
-									console.log(data);
+									var splitReceiver = resultData[i].receiver;
+									splitReceiver = splitReceiver.split('*');
+									resultData[i].receiver = splitReceiver[1]
+											+ "*" + splitReceiver[2];
+									// resultData[i].receiver =
+									// resultData[i].receiver
+									// .substring(
+									// 2,
+									// resultData[i].receiver.length);
+									receiverType = "Ptalk2.0";
 								}
 
-							},
-							error : function(data) {
-								if (data.status == 401) {
-									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("easy-token");
-									sessionStorage.removeItem("easy-userId");
-									sessionStorage.removeItem("easy-role");
-									sessionStorage
-											.removeItem("easy-groupTopic");
-									sessionStorage.removeItem("easy-ufmi");
-									sessionStorage.removeItem("easy-userName");
-									pushRouter.navigate('login', {
-										trigger : true
-									});
-									return false;
+								if (resultData[i].pmaAckType == null) {
+
+									resultData[i].pmaAckType = '응답없음';
+								} else {
+									resultData[i].pmaAckType = '수신확인';
+									var dateTime = resultData[i].pmaAckTime;
+									resultData[i].pmaAckTime = new Date(
+											dateTime).toLocaleString();
 								}
-								alert('상세조회에 실패 하였습니다.');
+
+								if (resultData[i].appAckType == null) {
+
+									resultData[i].appAckType = '응답없음';
+								} else {
+									resultData[i].appAckType = '메시지확인';
+									var dateTime = resultData[i].appAckTime;
+									resultData[i].appAckTime = new Date(
+											dateTime).toLocaleString();
+								}
+
+								detailTableData.push({
+									receiverType : receiverType,
+									receiver : resultData[i].receiver,
+									pmaAckType : resultData[i].pmaAckType,
+									pmaAckTime : resultData[i].pmaAckTime,
+									appAckType : resultData[i].appAckType,
+									appAckTime : resultData[i].appAckTime
+
+								});
 
 							}
-						});
+						} else {
+							alert('상세조회에 실패 하였습니다.');
+							console.log(data);
+						}
+
+					},
+					error : function(data) {
+						if (data.status == 401) {
+							alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+							sessionStorage.removeItem("easy-token");
+							sessionStorage.removeItem("easy-userId");
+							sessionStorage.removeItem("easy-role");
+							sessionStorage.removeItem("easy-groupTopic");
+							sessionStorage.removeItem("easy-ufmi");
+							sessionStorage.removeItem("easy-userName");
+							pushRouter.navigate('login', {
+								trigger : true
+							});
+							return false;
+						}
+						alert('상세조회에 실패 하였습니다.');
+
+					}
+				});
 
 				var detailTable = $('#msg-list-detail-table').dataTable({
 					aaData : detailTableData,
