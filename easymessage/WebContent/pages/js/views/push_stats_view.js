@@ -169,6 +169,9 @@ ADF.PushStatsView = Backbone.View.extend({
 						var statusP1Cnt = 0;
 						var statusP2Cnt = 0;
 						var totalMsgCnt = 0;
+						var tms = 0;
+						var mms = 0;
+
 						var appAck = 0;
 						var pmaAck = 0;
 						var statusRD99Cnt = 0;
@@ -182,12 +185,19 @@ ADF.PushStatsView = Backbone.View.extend({
 						var pmaAckR = 0;
 						for ( var i in data.result.data) {
 							var successData = data.result.data[i];
+							console.log(successData);
 
 							// if (successData.isReservation == false) {
 							switch (dataResult[i].status) {
 							case -99:
 								// dataResult[i].status =
 								// "발송오류";
+								if (successData.media_type == 0) {
+									tms = tms + successData.msgCnt;
+								} else {
+									mms = mms + successData.msgCnt;
+								}
+
 								statusD99Cnt = statusD99Cnt
 										+ successData.msgCnt;
 								totalMsgCnt += successData.msgCnt;
@@ -195,7 +205,12 @@ ADF.PushStatsView = Backbone.View.extend({
 							case -2:
 								// dataResult[i].status =
 								// "수신자없음";
-								statusD2Cnt = statusD2Cnt + successData.msgCnt;
+								if (successData.media_type == 0) {
+									tms = tms + successData.msgCnt;
+								} else {
+									mms = mms + successData.msgCnt;
+								}
+								usD2Cnt = statusD2Cnt + successData.msgCnt;
 								totalMsgCnt += successData.msgCnt;
 								break;
 							/*
@@ -204,6 +219,11 @@ ADF.PushStatsView = Backbone.View.extend({
 							 * successData.msgCnt; break;
 							 */
 							case 0:
+								if (successData.media_type == 0) {
+									tms = tms + successData.msgCnt;
+								} else {
+									mms = mms + successData.msgCnt;
+								}
 								// dataResult[i].status =
 								// "발송중";
 								// statusP0Cnt = successData.msgCnt;
@@ -211,6 +231,11 @@ ADF.PushStatsView = Backbone.View.extend({
 								totalMsgCnt += successData.msgCnt;
 								break;
 							case 1:
+								if (successData.media_type == 0) {
+									tms = tms + successData.msgCnt;
+								} else {
+									mms = mms + successData.msgCnt;
+								}
 								// dataResult[i].status =
 								// "발송됨";
 
@@ -222,6 +247,11 @@ ADF.PushStatsView = Backbone.View.extend({
 
 								break;
 							case 2:
+								if (successData.media_type == 0) {
+									tms = tms + successData.msgCnt;
+								} else {
+									mms = mms + successData.msgCnt;
+								}
 								// dataResult[i].status =
 								// "예약취소됨";
 								statusP2Cnt = statusP2Cnt + successData.msgCnt;
@@ -283,6 +313,8 @@ ADF.PushStatsView = Backbone.View.extend({
 							"totalMsgCnt" : totalMsgCnt,
 							"msgCnt" : statusP1Cnt,
 							"sending" : statusP0Cnt,
+							"TMS" : tms,
+							"MMS" : mms,
 							/* "limitOver" : statusD1Cnt, */
 							"userNotFound" : statusD2Cnt,
 							"resCancel" : statusP2Cnt,
@@ -339,12 +371,18 @@ ADF.PushStatsView = Backbone.View.extend({
 
 							aoColumns : [ {
 								mData : 'totalMsgCnt',
-								"sWidth" : "15%"
+								"sWidth" : "10%"
 							}, {
 								mData : 'msgCnt',
-								"sWidth" : "15%"
+								"sWidth" : "10%"
 							}, {
 								mData : 'sending',
+								"sWidth" : "10%"
+							}, {
+								mData : 'TMS',
+								"sWidth" : "10%"
+							}, {
+								mData : 'MMS',
 								"sWidth" : "10%"
 							},
 							/*
@@ -364,10 +402,10 @@ ADF.PushStatsView = Backbone.View.extend({
 								"sWidth" : "10%"
 							}, {
 								mData : 'pmaAck',
-								"sWidth" : "15%"
+								"sWidth" : "10%"
 							}, {
 								mData : 'appAck',
-								"sWidth" : "15%"
+								"sWidth" : "10%"
 							} ]
 						});
 						/*

@@ -1106,8 +1106,10 @@ ADF.PushMsgListView = Backbone.View
 									if (isSafari) {
 
 										var a = document.createElement('a');
-										a.href = 'data:attachment/csv,'
-												+ encodeURI(xmlhttp.responseText);
+										var test="\\xEF\\xBB\\xBF";
+										console.log(test);
+										a.href = 'data:attachment/csv;charset=utf-8,%EF%BB%BF'
+												+ encodeURIComponent(xmlhttp.responseText);
 										document.body.appendChild(a);
 										var evObj = document
 												.createEvent('MouseEvents');
@@ -1115,10 +1117,11 @@ ADF.PushMsgListView = Backbone.View
 												true, window);
 										a.dispatchEvent(evObj);
 									} else {
-
+										var test="\\xEF\\xBB\\xBF";
+										console.log(test);
 										var a = document.createElement('a');
-										a.href = 'data:attachment/csv,'
-												+ encodeURI(xmlhttp.responseText);
+										a.href = 'data:attachment/csv;charset=utf-8,%EF%BB%BF'
+												+ encodeURIComponent(xmlhttp.responseText);
 										a.target = '_blank';
 										a.download = 'message.csv';
 										document.body.appendChild(a);
@@ -1153,6 +1156,7 @@ ADF.PushMsgListView = Backbone.View
 						xmlhttp.open("GET", '/v1/pms/adm/svc/messages/csv'
 								+ requestUrl, true);
 						xmlhttp.setRequestHeader("X-Application-Token", token);
+						xmlhttp.setRequestHeader("Content-Type", "application/json; charset = UTF-8");
 						xmlhttp.send();
 
 					}
