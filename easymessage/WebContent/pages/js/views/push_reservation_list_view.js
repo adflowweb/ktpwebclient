@@ -582,14 +582,24 @@ ADF.PushReservationListView = Backbone.View
 																	reservationMonth[0],
 																	reservationMonth[1] - 1,
 																	1)
-																	.toISOString();
+
 															reservationEndDate = new Date(
 																	reservationMonth[0],
 																	reservationMonth[1],
-																	0)
-																	.toISOString();
+																	0,23,59)
+
 															console
 																	.log('예약메시지 시작 끝');
+															console
+																	.log(reservationStartDate);
+															console
+																	.log(reservationEndDate);
+															console
+																	.log('isostring');
+															reservationStartDate = reservationStartDate
+																	.toISOString();
+															reservationEndDate = reservationEndDate
+																	.toISOString();
 															console
 																	.log(reservationStartDate);
 															console

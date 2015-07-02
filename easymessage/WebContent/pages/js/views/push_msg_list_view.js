@@ -204,7 +204,7 @@ ADF.PushMsgListView = Backbone.View
 					var contentLength = $('#msg-resend-length-strong').text();
 					messageData.contentLength = contentLength;
 					var fileName = $('#resend-file-name-hidden').val();
-					var fileFormat = $('#resend-file-name-hidden').val();
+					var fileFormat = $('#resend-file-format-hidden').val();
 					if (fileName != "" && fileFormat != "") {
 						messageData.fileName = fileName;
 						messageData.fileFormat = fileFormat;
