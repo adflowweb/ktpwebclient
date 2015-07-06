@@ -1,8 +1,8 @@
 window.ADF = window.ADF || {};
+// 상용구 뷰
 ADF.PushMsgContentView = Backbone.View
 		.extend({
-			// user-info-modify-btn
-
+			// 상용구 뷰 이벤트 목록
 			events : {
 				"click a[href=#msg-content-edit-modal]" : "clickHrefEdit",
 				"click a[href=#msg-content-delete-modal]" : "clickHrefDelete",
@@ -30,7 +30,6 @@ ADF.PushMsgContentView = Backbone.View
 
 			el : '.main-content-inner',
 			beforeRender : function() {
-				console.log('before render...');
 				$('#sidebar-shortcuts').show();
 				$('#sidebar-ul-list').show();
 				$('#login-user-info-div').show();
@@ -42,12 +41,13 @@ ADF.PushMsgContentView = Backbone.View
 				console.log('after render..');
 
 			},
+
+			// 상용구 메시지 입력 창
 			checkContentSaveArea : function() {
 
 				var input_messageContent = $(
 						'#msg-send-private-content-save-textarea').val();
 				input_messageContent = input_messageContent.trim();
-				console.log(input_messageContent.Length());
 				var strongLength = input_messageContent.Length();
 				if (strongLength > 140) {
 					$('#msg-send-private-content-save-textarea').css(
@@ -66,12 +66,12 @@ ADF.PushMsgContentView = Backbone.View
 				}
 
 			},
-
+			// 상용구 수정 취소
 			msgEditCancel : function() {
 				$('#send-private-title-edit-input').val("");
 				$('#msg-send-private-content-edit-textarea').val("");
 			},
-
+			// 상용구 수정 form check
 			msgEditFormCheck : function() {
 				var editInput = $('#send-private-title-edit-input').val();
 				var editContentArea = $(
@@ -90,7 +90,7 @@ ADF.PushMsgContentView = Backbone.View
 				}
 				return true;
 			},
-
+			// 상용구 수정
 			msgEdit : function() {
 				if (this.msgEditFormCheck()) {
 					var msgTitle = $('#send-private-title-edit-input').val();
@@ -103,7 +103,6 @@ ADF.PushMsgContentView = Backbone.View
 					templateData.templateName = msgTitle;
 					templateData.templateMsg = msgContent;
 					var templateDataReq = JSON.stringify(templateData);
-					console.log(templateDataReq);
 
 					if (confirm("해당 내용으로 수정 하시겠습니까?") == true) {
 
@@ -157,13 +156,13 @@ ADF.PushMsgContentView = Backbone.View
 
 				}
 			},
-
+			// 상용구 저장 취소
 			msgSaveCancel : function() {
-				console.log('123123123');
 				$('#send-private-title-save-input').val("");
 				$('#msg-send-private-content-save-textarea').val("");
 
 			},
+			// 상용구 저장 form check
 			msgSaveFormCheck : function() {
 				var saveInput = $('#send-private-title-save-input').val();
 				var saveContentArea = $(
@@ -182,19 +181,16 @@ ADF.PushMsgContentView = Backbone.View
 				}
 				return true;
 			},
-
+			// 상용구 저장
 			msgSave : function() {
-				console.log('메시지 저장');
-				var selectSize = $('#msg-content-list-box-div > div').length;
 
-				console.log(selectSize);
+				var selectSize = $('#msg-content-list-box-div > div').length;
 				if (selectSize >= 12) {
 					alert('내용저장은 12개까지만 가능합니다');
 					return false;
 				}
 
 				if (this.msgSaveFormCheck()) {
-					console.log('메시지 저장');
 					var token = sessionStorage.getItem("easy-token");
 					var saveInput = $('#send-private-title-save-input').val();
 					var saveContentArea = $(
@@ -255,22 +251,16 @@ ADF.PushMsgContentView = Backbone.View
 				}
 
 			},
+			// 상용구 수정 버튼 클릭
 			clickHrefEdit : function(e) {
-				console.log('test123');
-				console.log(e.currentTarget);
 				var msgId = $(e.currentTarget).attr('class');
-				console.log(msgId);
-
 				var title = $('h5.' + msgId).text();
 				var content = $('p.' + msgId).text();
-				console.log(title);
-				console.log(content);
 				$('#send-private-title-edit-input').val(title);
 				$('#msg-send-private-content-edit-textarea').val(content);
 				var input_messageContent = $(
 						'#msg-send-private-content-edit-textarea').val();
 				input_messageContent = input_messageContent.trim();
-				console.log(input_messageContent.Length());
 				var strongLength = input_messageContent.Length();
 				if (strongLength > 140) {
 					$('#msg-send-private-content-edit-textarea').css(
@@ -291,18 +281,15 @@ ADF.PushMsgContentView = Backbone.View
 				$('#msg-edit-btn').attr("name", msgId);
 
 			},
-
+			// 상용구 삭제 버튼 클릭
 			clickHrefDelete : function(e) {
-
 				var msgId = $(e.currentTarget).attr('class');
-				console.log(msgId);
 				if (msgId != null) {
 					$('#msg-delete-btn').attr('name', msgId);
 				}
 			},
-
+			// 상용구 화면 생성
 			render : function() {
-				console.log("user Info view render..");
 				var that = this;
 				var token = sessionStorage.getItem("easy-token");
 				var userId = sessionStorage.getItem("easy-userId");

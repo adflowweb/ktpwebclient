@@ -1,6 +1,9 @@
 window.ADF = window.ADF || {};
+// 예약 메시지 뷰
 ADF.PushReservationListView = Backbone.View
 		.extend({
+
+			// 예약 메시지 이벤트 목록
 			events : {
 				"click #reservation-cancel-btn" : "reservationCancel",
 				"click #reservation-search-btn" : "reservationSearch",
@@ -25,9 +28,6 @@ ADF.PushReservationListView = Backbone.View
 
 			el : '.main-content-inner',
 			beforeRender : function() {
-				console.log('before render...');
-
-				console.log('예약 리스트');
 				$('#sidebar-shortcuts').show();
 				$('#sidebar-ul-list').show();
 				$('#login-user-info-div').show();
@@ -36,16 +36,15 @@ ADF.PushReservationListView = Backbone.View
 
 			},
 			afterRender : function() {
-				console.log('after render..');
 
 			},
 
 			reservationListTable : {
 
 			},
-
+			// 검색 select box 변경
 			searchSelectChange : function() {
-				console.log('change select..');
+
 				var selectOptionValue = $('#reservation-search-select').val();
 				selectOptionValue = selectOptionValue * 1;
 				if (selectOptionValue == 1) {
@@ -60,14 +59,14 @@ ADF.PushReservationListView = Backbone.View
 					$("#reservation-search-ptalk-div").hide();
 				}
 			},
-
+			// 검색 버튼 reset
 			resetSearch : function() {
 				$('#reservation-search-select').val("0").attr("selected",
 						"selected");
 				$('#reservation-search-input').val("");
 				$('#reservation-search-input').prop('disabled', true);
 			},
-
+			// 예약 취소
 			reservationCancel : function() {
 				var that = this;
 				var checkedLength = $('input[name="reservatoin-checkbox"]:checked').length;
@@ -147,7 +146,7 @@ ADF.PushReservationListView = Backbone.View
 				}
 
 			},
-
+			// 예약 검색
 			reservationSearch : function() {
 
 				var formCheck = this.searchFormCheck();
@@ -160,8 +159,9 @@ ADF.PushReservationListView = Backbone.View
 
 			},
 
+			// 예약 체크 박스
 			reservationCheckbox : function() {
-				console.log('asdf');
+
 				checkboxes = document.getElementsByName('reservatoin-checkbox');
 				for (var i = 0, n = checkboxes.length; i < n; i++) {
 					if (checkboxes[i].checked == true) {
@@ -172,7 +172,7 @@ ADF.PushReservationListView = Backbone.View
 
 				}
 			},
-
+			// 검색 form check
 			searchFormCheck : function() {
 
 				var selectOptionValue = $('#reservation-search-select').val();
@@ -199,9 +199,8 @@ ADF.PushReservationListView = Backbone.View
 				return true;
 
 			},
-
+			// 예약 화면 생성
 			render : function() {
-				console.log("reservation view  render..");
 				var that = this;
 				var token = sessionStorage.getItem("easy-token");
 
@@ -313,8 +312,7 @@ ADF.PushReservationListView = Backbone.View
 																						var topicArr = [];
 																						topicArr = dataResult[i].receiver
 																								.split('/');
-																						console
-																								.log(topicArr);
+
 																						// p1체크
 																						if (dataResult[i].receiver
 																								.indexOf("P1") > -1) {
@@ -450,8 +448,7 @@ ADF.PushReservationListView = Backbone.View
 															searchSelectValue = searchSelectValue * 1;
 
 															if (searchInputValue != "") {
-																console
-																		.log('검색 수신번호 내용');
+
 																// 그룹
 																if (searchInputValue
 																		.indexOf("그룹") > -1) {
@@ -586,24 +583,13 @@ ADF.PushReservationListView = Backbone.View
 															reservationEndDate = new Date(
 																	reservationMonth[0],
 																	reservationMonth[1],
-																	0,23,59)
+																	0, 23, 59)
 
-															console
-																	.log('예약메시지 시작 끝');
-															console
-																	.log(reservationStartDate);
-															console
-																	.log(reservationEndDate);
-															console
-																	.log('isostring');
 															reservationStartDate = reservationStartDate
 																	.toISOString();
 															reservationEndDate = reservationEndDate
 																	.toISOString();
-															console
-																	.log(reservationStartDate);
-															console
-																	.log(reservationEndDate);
+
 															messageMonth = messageMonth
 																	.replace(
 																			"/",

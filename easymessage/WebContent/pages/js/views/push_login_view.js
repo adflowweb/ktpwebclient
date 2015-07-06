@@ -1,6 +1,9 @@
 window.ADF = window.ADF || {};
 
+// 로그인 뷰
 ADF.PushLoginView = Backbone.View.extend({
+
+	// 로그인 뷰 이벤트 목록
 	events : {
 		"click #login-login-btn" : "login",
 		"keypress #login-id-input" : "idEnter",
@@ -28,14 +31,15 @@ ADF.PushLoginView = Backbone.View.extend({
 		});
 	},
 	el : '.main-content-inner',
+
 	beforeRender : function() {
 		$('#sidebar-shortcuts').hide();
 		$('#sidebar-ul-list').hide();
 		$('#login-user-info-div').hide();
 
 	},
+	// 로그인 뷰 화면 생성
 	render : function() {
-		console.log("login view render..");
 		var that = this;
 		$.get('pages/js/template/push_login_template.html', function(data) {
 			var template = _.template(data, {});
@@ -44,9 +48,9 @@ ADF.PushLoginView = Backbone.View.extend({
 
 	},
 	afterRender : function() {
-		console.log('after render..');
-	},
 
+	},
+	// 로그인 form check
 	loginFormCheck : function() {
 		var loginId = $('#login-id-input').val();
 		var loginPass = $('#login-pass-input').val();
@@ -70,7 +74,6 @@ ADF.PushLoginView = Backbone.View.extend({
 
 	},
 	passEnter : function(e) {
-		console.log('pass endter');
 		if (e.keyCode == 13) {
 			console.log('로그인버튼 클릭');
 			$('#login-login-btn').click();
@@ -78,7 +81,7 @@ ADF.PushLoginView = Backbone.View.extend({
 		}
 
 	},
-
+	// 로그인
 	login : function() {
 		var loginInfo = new Object();
 		var loginId = $('#login-id-input').val();

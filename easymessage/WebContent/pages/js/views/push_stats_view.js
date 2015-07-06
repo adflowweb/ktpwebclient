@@ -1,26 +1,10 @@
 window.ADF = window.ADF || {};
+// 통계 뷰
 ADF.PushStatsView = Backbone.View.extend({
-
-	// defaultContent": "<button>Click!</button>"
+	// 통계 이벤트 목록
 	events : {
 		"dp.change #msg-stats-date-time-picker-div" : "statsDatePickerChange",
 		"click #msg-stats-search-btn" : "clickStatsSearch"
-	// "change #msg-list-search-select" : "searchSelectChange",
-	// "click #msg-list-search-btn" : "searchBtnClick",
-	// "click #msg-list-csv-btn" : "csvFileDown",
-	// "click #msg-list-table tbody #msg-list-detail-btn" :
-	// "getDetailList",
-	// "click #msg-list-detail-confirm-btn" : "confirmDetailTable",
-	// "click #msg-list-resend-btn" : "msgResendModal",
-	// "input #resend-private-input" : "checkPrivateInput",
-	// "input #resend-fleep-bunch-input" : "checkBunchInput",
-	// "input #msg-resend-content-textarea" : "checkContentArea",
-	// "click #msg-resend-plus-span" : "replusUfmiCheck",
-	// "click #msg-resend-btn" : "msgResend",
-	// "click #modal-header-close" : "modalHeaderClick",
-	// "click #modal-footer-cancel" : "modalFooterClick"
-
-	// "click #msg-list-detail-btn":"getDetailList"
 	},
 
 	initialize : function() {
@@ -39,7 +23,6 @@ ADF.PushStatsView = Backbone.View.extend({
 
 	el : '.main-content-inner',
 	beforeRender : function() {
-		console.log('before render...');
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
@@ -48,15 +31,14 @@ ADF.PushStatsView = Backbone.View.extend({
 
 	},
 	afterRender : function() {
-		console.log('after render..');
 
 	},
 
+	// 통계 날짜 변경 이벤트
 	statsDatePickerChange : function() {
-		console.log('월선택 체인지..펑션');
 		setTimeout(this.statsChangeDateInput, 500);
 	},
-
+	// 통계 검색 form check
 	clickStatsSearchFormCheck : function() {
 		var searchDateStart = $('#msg-stats-start-date-input').val();
 		var searchDateEnd = $('#msg-stats-end-date-input').val();
@@ -114,13 +96,10 @@ ADF.PushStatsView = Backbone.View.extend({
 		}
 	},
 
+	// 통계 검색
 	clickStatsSearch : function() {
-		console.log('test123123');
 		$('#stats-reservation-div').fadeIn();
 		$('#stats-div').fadeIn();
-		// <script type="text/javascript"
-		// src="assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
-
 		var token = sessionStorage.getItem('easy-token');
 		if (this.clickStatsSearchFormCheck()) {
 			var input_month_value = $('#msg-stats-month-date-input').val();
@@ -185,13 +164,11 @@ ADF.PushStatsView = Backbone.View.extend({
 						var pmaAckR = 0;
 						for ( var i in data.result.data) {
 							var successData = data.result.data[i];
-							console.log(successData);
 
-							// if (successData.isReservation == false) {
 							switch (dataResult[i].status) {
 							case -99:
-								// dataResult[i].status =
-								// "발송오류";
+
+								// "발송오류"
 								if (successData.media_type == 0) {
 									tms = tms + successData.msgCnt;
 								} else {
@@ -203,8 +180,8 @@ ADF.PushStatsView = Backbone.View.extend({
 								totalMsgCnt += successData.msgCnt;
 								break;
 							case -2:
-								// dataResult[i].status =
-								// "수신자없음";
+
+								// "수신자없음"
 								if (successData.media_type == 0) {
 									tms = tms + successData.msgCnt;
 								} else {
@@ -213,20 +190,16 @@ ADF.PushStatsView = Backbone.View.extend({
 								usD2Cnt = statusD2Cnt + successData.msgCnt;
 								totalMsgCnt += successData.msgCnt;
 								break;
-							/*
-							 * case -1: // dataResult[i].status = "허용갯수초과";
-							 * statusD1Cnt = successData.msgCnt; totalMsgCnt +=
-							 * successData.msgCnt; break;
-							 */
+
 							case 0:
 								if (successData.media_type == 0) {
 									tms = tms + successData.msgCnt;
 								} else {
 									mms = mms + successData.msgCnt;
 								}
-								// dataResult[i].status =
-								// "발송중";
-								// statusP0Cnt = successData.msgCnt;
+
+								// "발송중"
+
 								statusP0Cnt = statusP0Cnt + successData.msgCnt;
 								totalMsgCnt += successData.msgCnt;
 								break;
@@ -236,10 +209,9 @@ ADF.PushStatsView = Backbone.View.extend({
 								} else {
 									mms = mms + successData.msgCnt;
 								}
-								// dataResult[i].status =
-								// "발송됨";
 
-								// statusP1Cnt = successData.msgCnt;
+								// "발송됨"
+
 								statusP1Cnt = statusP1Cnt + successData.msgCnt;
 								appAck = appAck + successData.appAckCnt;
 								pmaAck = pmaAck + successData.pmaAckCnt;
@@ -252,60 +224,13 @@ ADF.PushStatsView = Backbone.View.extend({
 								} else {
 									mms = mms + successData.msgCnt;
 								}
-								// dataResult[i].status =
-								// "예약취소됨";
+
+								// "예약취소됨"
 								statusP2Cnt = statusP2Cnt + successData.msgCnt;
 								totalMsgCnt += successData.msgCnt;
 								break;
 
 							}
-
-							// }
-							// else {
-							// switch (dataResult[i].status) {
-							// case -99:
-							// // dataResult[i].status =
-							// // "발송오류";
-							// statusRD99Cnt = successData.msgCnt;
-							// totalMsgCntR += successData.msgCnt;
-							// break;
-							// case -2:
-							// // dataResult[i].status =
-							// // "수신자없음";
-							// statusRD2Cnt = successData.msgCnt;
-							// totalMsgCntR += successData.msgCnt;
-							// break;
-							// /*
-							// * case -1: // dataResult[i].status = "허용갯수초과";
-							// * statusRD1Cnt = successData.msgCnt;
-							// * totalMsgCntR += successData.msgCnt; break;
-							// */
-							// case 0:
-							// // dataResult[i].status =
-							// // "발송중";
-							// statusRP0Cnt = successData.msgCnt;
-							// totalMsgCntR += successData.msgCnt;
-							// break;
-							// case 1:
-							// // dataResult[i].status =
-							// // "발송됨";
-							//
-							// statusRP1Cnt = successData.msgCnt;
-							// appAckR = successData.appAckCnt;
-							// pmaAckR = successData.pmaAckCnt;
-							// totalMsgCntR += successData.msgCnt;
-							//
-							// break;
-							// case 2:
-							// // dataResult[i].status =
-							// // "예약취소됨";
-							// statusRP2Cnt = successData.msgCnt;
-							// totalMsgCntR += successData.msgCnt;
-							// break;
-							//
-							// }
-							//
-							// }
 
 						}
 
@@ -323,18 +248,6 @@ ADF.PushStatsView = Backbone.View.extend({
 							"appAck" : appAck
 						});
 
-						// monthTableDataRes.push({
-						// "totalMsgCnt" : totalMsgCntR,
-						// "msgCnt" : statusRP1Cnt,
-						// "resCancel" : statusRP2Cnt,
-						// "sending" : statusRP0Cnt,
-						// /* "limitOver" : statusRD1Cnt, */
-						// "userNotFound" : statusRD2Cnt,
-						// "serverError" : statusRD99Cnt,
-						// "pmaAck" : pmaAckR,
-						// "appAck" : appAckR
-						// });
-
 						statsTable = $('#msg-stats-table').dataTable({
 							aaData : monthTableData,
 							'bSort' : false,
@@ -349,26 +262,6 @@ ADF.PushStatsView = Backbone.View.extend({
 							"bInfo" : false,
 							"bLengthChange" : false,
 							"dom" : 'T<"clear">lrtip',
-							// "tableTools" : {
-							// "sSwfPath" :
-							// "assets/js/dataTables/extensions/TableTools/swf/copycsvxlspdf.swf",
-							// "aButtons" : [
-							//
-							// {
-							// "sExtends" : "csv",
-							// "sToolTip" : "Export to CSV",
-							// "sButtonClass" : "btn btn-white
-							// btn-primary btn-bold pull-right",
-							// "sButtonText" : "<i class='fa
-							// fa-file-excel-o bigger-110 green'></i>",
-							// "sFileName" : "*.csv"
-							// }
-							//
-							// ]
-							// },
-							// "sFileName" :
-							// "*.csv"
-
 							aoColumns : [ {
 								mData : 'totalMsgCnt',
 								"sWidth" : "10%"
@@ -385,9 +278,7 @@ ADF.PushStatsView = Backbone.View.extend({
 								mData : 'MMS',
 								"sWidth" : "10%"
 							},
-							/*
-							 * { mData : 'limitOver' },
-							 */
+
 							{
 								mData : 'userNotFound',
 								"sWidth" : "10%"
@@ -396,7 +287,6 @@ ADF.PushStatsView = Backbone.View.extend({
 								"sWidth" : "10%"
 							},
 
-							// "resCancel" : statusP2Cnt,
 							{
 								mData : 'serverError',
 								"sWidth" : "10%"
@@ -408,39 +298,6 @@ ADF.PushStatsView = Backbone.View.extend({
 								"sWidth" : "10%"
 							} ]
 						});
-						/*
-						 * statsReservationTable = $(
-						 * '#msg-stats-reservation-table').dataTable({ aaData :
-						 * monthTableDataRes, 'bSort' : false, bJQueryUI : true,
-						 * bDestroy : true, "bPaginate" : false, "pageLength" :
-						 * 25, "bInfo" : false, bScrollCollapse : true,
-						 * "autoWidth" : false, scrollX : true, "bLengthChange" :
-						 * false,
-						 * 
-						 * "bLengthChange" : false, "dom" : 'T<"clear">lrtip', //
-						 * "tableTools" : { // "sSwfPath" : //
-						 * "assets/js/dataTables/extensions/TableTools/swf/copycsvxlspdf.swf", //
-						 * "aButtons" : [ // // { // "sExtends" : "csv", //
-						 * "sToolTip" : "Export to CSV", // "sButtonClass" :
-						 * "btn btn-white // btn-primary btn-bold pull-right", //
-						 * "sButtonText" : "<i class='fa // fa-file-excel-o
-						 * bigger-110 // green'></i>", // "sFileName" : "*.csv" // } // // ] // },
-						 * aoColumns : [ { mData : 'totalMsgCnt', "sWidth" :
-						 * "15%" }, { mData : 'msgCnt', "sWidth" : "15%" }, {
-						 * mData : 'resCancel', "sWidth" : "15%" }, { mData :
-						 * 'sending', "sWidth" : "15%" }, { mData : 'limitOver' }, {
-						 * mData : 'userNotFound', "sWidth" : "10%" }, { mData :
-						 * 'serverError', "sWidth" : "10%" }, { mData :
-						 * 'pmaAck', "sWidth" : "10%" }, { mData : 'appAck',
-						 * "sWidth" : "10%" } ] });
-						 */
-
-						// $('#month_svc_msgsend_div').text(totalMsgCnt);
-						// $('#month_svc_msgres_div').text(totalMsgCntR);
-						// $('#month-svc-msgcnt-panel-head').show();
-						// $('#month-svc-msgcnt-panel-body').show();
-						// $('#month-svc-res-panel-body').show();
-						// $('#month-svc-res-panel-head').show();
 					} else {
 
 						alert('통계 목록을 가지고오는데 실패하였습니다.');
@@ -466,12 +323,11 @@ ADF.PushStatsView = Backbone.View.extend({
 					alert('통계 목록을 가지고오는데 실패하였습니다.');
 				}
 			});
-			// statsTable.fnDestroy();
-			// statsReservationTable.fnDestroy();
+
 		}
 
 	},
-
+	// 통계 날짜 변경
 	statsChangeDateInput : function() {
 		var messagelist_Picker = $("#msg-stats-month-date-input").val();
 		var messageList_Result = [];
@@ -501,39 +357,9 @@ ADF.PushStatsView = Backbone.View.extend({
 				pushUtil.chageDateL(messageList_Result[0],
 						messageList_Result[1]));
 	},
-
+	// 통계 화면 생성
 	render : function() {
-		console.log("stats view render..");
 		var that = this;
-
-		// $(function() {
-		// var script = document.createElement("script");
-		// script.type = "text/javascript";
-		//
-		// if (script.readyState) { // IE
-		// script.onreadystatechange = function() {
-		// if (script.readyState == "loaded"
-		// || script.readyState == "complete") {
-		// script.onreadystatechange = null;
-		// callback();
-		// }
-		// };
-		// } else { // Others
-		// script.onload = function() {
-		// callback();
-		// };
-		// }
-		//
-		// script.src =
-		// "assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js";
-		// document.getElementsByTagName("head")[0]
-		// .appendChild(script);
-		//
-		// function callback() {
-		//
-		// }
-		// ;
-		// });
 		$.get('pages/js/template/push_stats_template.html', function(data) {
 			var template = _.template(data, {});
 			that.$el.html(template);

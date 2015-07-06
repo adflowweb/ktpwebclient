@@ -1,12 +1,8 @@
 window.ADF = window.ADF || {};
 
+// Router
 ADF.PUSHRouter = Backbone.Router.extend({
-
-	// initialize
-
 	initialize : function() {
-		console.log('라우터 생성자');
-
 	},
 
 	routes : {
@@ -23,11 +19,11 @@ ADF.PUSHRouter = Backbone.Router.extend({
 
 });
 
+// 브라우저 버전 체크
 if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
-	console.log('ie 버전 check');
 	alert('현재 페이지는 Chrome 브라우저에 최적화 되어 있으며 Internet Explorer 는 10 버전 이상부터 지원 합니다!');
-	console.log(navigator.userAgent);
+
 } else {
 	var pushRouter = new ADF.PUSHRouter();
 	var loginView = new ADF.PushLoginView();
@@ -37,8 +33,8 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 	var statsView = new ADF.PushStatsView();
 	var userInfoView = new ADF.PushUserInfoView();
 	var msgContentView = new ADF.PushMsgContentView();
-	// var contentListView= new ADF.PushContentListView();
 
+	// 메인 페이지 라우터
 	pushRouter.on('route:main', function() {
 		var token = sessionStorage.getItem("easy-token");
 
@@ -53,16 +49,13 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 		msgSendView.render();
 
 	});
-
+	// 로그인 페이지 라우터
 	pushRouter.on('route:login', function() {
-		console.log("메시지 로그인 라우터 작동");
-
 		loginView.render();
 
 	});
-
+	// 메시지 전송 라우터
 	pushRouter.on('route:msg_send', function() {
-		console.log("메시지 전송 라우터 작동");
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -76,9 +69,8 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 		msgSendView.render();
 	});
-
+	// 메시지 리스트 라우터
 	pushRouter.on('route:msg_list', function() {
-		console.log("메시지 리스트 라우터 작동");
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -92,9 +84,8 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 		msgListView.render();
 	});
-
+	// 상용구 라우터
 	pushRouter.on('route:msg_content', function() {
-		console.log("메시지 리스트 라우터 작동");
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -108,9 +99,8 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 		msgContentView.render();
 	});
-
+	// 예약 리스트 라우터
 	pushRouter.on('route:reservation_list', function() {
-		console.log("예약 리스트 라우터 작동");
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -125,8 +115,8 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 		reservationListView.render();
 	});
 
+	// 통계 라우터
 	pushRouter.on('route:msg_stats', function() {
-		console.log("통계 라우터 작동");
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -140,9 +130,9 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 		statsView.render();
 	});
-
+	// 유저 정보 라우터
 	pushRouter.on('route:user_info', function() {
-		console.log("사용자 정보조회");
+
 		var token = sessionStorage.getItem("easy-token");
 
 		if (token == "null" || token == null || token == "") {
@@ -159,11 +149,10 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 		userInfoView.render();
 
-		console.log('사용자 정보 조회');
 	});
 
+	// 로그 아웃 라우터
 	pushRouter.on('route:logout', function() {
-		console.log("사용자 정보조회");
 
 		if (confirm('로그아웃 하시겠습니까?') == true) {
 			sessionStorage.removeItem("easy-token");
@@ -178,53 +167,40 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 		}
 
 	});
-
+	// 좌측 상단 메시지 전송 아이콘
 	$('#sidebar_btn_msg_send').click(function() {
-		console.log('심플 아이콘 msg_send');
+
 		pushRouter.navigate('msg_send', {
 			trigger : true
 		});
 	});
+	// 좌측 상단 메시지 리스트 아이콘
 	$('#sidebar_btn_msg_list').click(function() {
-		console.log('심플 아이콘 msg_list');
+
 		pushRouter.navigate('msg_list', {
 			trigger : true
 		});
 	});
+	// 좌측 상단 예약 리스트 아이콘
 	$('#sidebar_btn_reservation_list').click(function() {
-		console.log('심플 아이콘 reservation_list');
+
 		pushRouter.navigate('reservation_list', {
 			trigger : true
 		});
 	});
+	// 좌측 상단 상용구 아이콘
 	$('#sidebar_btn_content').click(function() {
-		console.log('심플 아이콘 msg_stats');
+
 		pushRouter.navigate('msg_content', {
 			trigger : true
 		});
 	});
+	// 우측 상단 메시지 전송 건수
 	$('#msg-count-li')
 			.click(
 					function() {
-						console.log('li check..');
-						console.log('test123123');
-						// $('#stats-reservation-div').fadeIn();
-						// $('#stats-div').fadeIn();
-						// <script type="text/javascript"
-						// src="assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
 						var token = sessionStorage.getItem('easy-token');
-
-						// var input_month_value =
-						// $('#msg-stats-month-date-input').val();
-						// input_month_value = input_month_value.replace("/",
-						// "");
-						//
-						// var searchDateStart =
-						// $('#msg-stats-start-date-input').val();
-						// var searchDateEnd =
-						// $('#msg-stats-end-date-input').val();
-
 						var dateObj = new Date();
 						var month = dateObj.getMonth() + 1;
 						var year = dateObj.getFullYear();
@@ -242,9 +218,6 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 
 						year = year + "";
 						inputMonth = year + month;
-						console.log(inputMonth);
-						console.log('달');
-						// 시작일 종료일 월 체크
 						var ajaxUrlMonth = "";
 
 						startDate = startDate.toISOString();
@@ -307,7 +280,6 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 									return false;
 								}
 
-								// alert('통계 목록을 가지고오는데 실패하였습니다.');
 							}
 						});
 
@@ -362,7 +334,6 @@ if (/msie [6-9]./.test(navigator.userAgent.toLowerCase())) {
 									return false;
 								}
 
-								// alert('통계 목록을 가지고오는데 실패하였습니다.');
 							}
 						});
 

@@ -1,7 +1,8 @@
 window.ADF = window.ADF || {};
+// 유저 정보 뷰
 ADF.PushUserInfoView = Backbone.View.extend({
-	// user-info-modify-btn
 
+	// 유저 정보 이벤트 목록
 	events : {
 		"click #user-info-modify-btn" : "userInfoModify",
 		"click #user-info-confirm-btn" : "userInfoConfirm"
@@ -22,31 +23,25 @@ ADF.PushUserInfoView = Backbone.View.extend({
 
 	el : '.main-content-inner',
 	beforeRender : function() {
-		console.log('before render...');
 		$('#sidebar-shortcuts').show();
 		$('#sidebar-ul-list').show();
 		$('#login-user-info-div').show();
-		var userId=sessionStorage.getItem('easy-userId');
+		var userId = sessionStorage.getItem('easy-userId');
 		$('#user-id-span').text(userId);
 
 	},
 	afterRender : function() {
-		console.log('after render..');
 
 	},
 
+	// 유저 정보 뷰 생성
+
 	render : function() {
-		console.log("user Info view render..");
 		var that = this;
 		var token = sessionStorage.getItem("easy-token");
 		var userId = sessionStorage.getItem("easy-userId");
 		var userName = sessionStorage.getItem("easy-userName");
 		var ufmi = sessionStorage.getItem("easy-ufmi");
-
-		console.log(token);
-		console.log(userId);
-		console.log(ufmi);
-		console.log(userName);
 		if (token == null || token == "" || token == "null" || userId == null
 				|| userId == "" || userId == "null" || ufmi == "null"
 				|| ufmi == null || ufmi == "") {
@@ -62,7 +57,7 @@ ADF.PushUserInfoView = Backbone.View.extend({
 			that.$el.html(template);
 			$('#user-info-ufmi-input').val(ufmi);
 			if (userName == "" || userName == null || userName == "null") {
-				console.log('사용자 정보 이프');
+
 				$('#user-info-sendnum-input').val("");
 			} else {
 				$('#user-info-sendnum-input').val(userName);
@@ -72,7 +67,6 @@ ADF.PushUserInfoView = Backbone.View.extend({
 		}, 'html');
 	},
 	userInfoModify : function() {
-		console.log('사용자 정보 수정 버튼 클릭');
 
 		var checkInput = $('#user-info-sendnum-input').prop('disabled');
 		if (checkInput == true) {
@@ -120,7 +114,7 @@ ADF.PushUserInfoView = Backbone.View.extend({
 										true);
 							} else {
 								alert('발송번호 수정에 실패 하였습니다.');
-								// console.log('이름 업데이트 실패');
+
 							}
 
 						},
@@ -139,7 +133,7 @@ ADF.PushUserInfoView = Backbone.View.extend({
 								return false;
 							}
 							alert('발송번호 수정에 실패 하였습니다.');
-							// console.log('이름 업데이트 실패');
+
 						}
 					});
 
