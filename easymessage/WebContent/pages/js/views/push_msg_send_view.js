@@ -27,6 +27,7 @@ ADF.PushMsgSendView = Backbone.View
 				"input #msg-send-contact-private-content-textarea" : "checkContactContentArea",
 				"input #msg-send-excel-repeat-time-input" : "checkExcelRepeatTime",
 				"input #msg-send-contact-private-repeat-time-input" : "checkRepeatTimeContact",
+				"input #msg-send-group-repeat-time-input" : "checkRepeatTimeGroup",
 				"click #msg-send-group-btn" : "msgSendGroup",
 				"click #msg-send-excel-cancel-btn" : "msgSendExcelCancel",
 				"click #msg-send-group-cancel-btn" : "msgGroupSendCancel",
@@ -95,7 +96,7 @@ ADF.PushMsgSendView = Backbone.View
 						"deleteContactIcon", "groupMiunsClick", "msgSendExcel",
 						"msgSendExcelFormCheck", "calculateSize",
 						"excelHandDataCheck", "handsontableRemove",
-						"handsontableSave");
+						"handsontableSave", "checkRepeatTimeGroup");
 				var _this = this;
 				this.render = _.wrap(this.render, function(render) {
 					_this.beforeRender();
@@ -419,7 +420,6 @@ ADF.PushMsgSendView = Backbone.View
 				var p1p2Radio = $(
 						'input:radio[name="send-group-pnum-radio"]:checked')
 						.val();
-				
 
 				// 개인
 				if (privateGroupCheck == 0) {
@@ -441,7 +441,7 @@ ADF.PushMsgSendView = Backbone.View
 				} else {
 					// p1
 					if (p1p2Radio == "82") {
-					
+
 						$('#group-fleet-label').text('fleet 번호');
 						$('#group-fleet-span').text('무전번호의 fleet번호를 입력해주세요!');
 						$('#group-private-label').text('그룹 번호');
@@ -490,7 +490,7 @@ ADF.PushMsgSendView = Backbone.View
 			},
 			// 파일 변경 이벤트(공통)
 			changeFile : function(e) {
-			
+
 				var maxSize = 3 * 1024 * 1024;
 				if (e.target.files[0].size > maxSize) {
 					alert('파일 첨부 용량을 초과 하였습니다(3MB 이하)');
@@ -1111,6 +1111,8 @@ ADF.PushMsgSendView = Backbone.View
 									+ "/g" + private_input;
 						}
 
+						console.log('주소록 추가');
+						console.log(ufmiResult);
 						var token = sessionStorage.getItem('easy-token');
 						$.ajax({
 							url : '/v1/pms/adm/svc/subscribe/count?topic='
@@ -1358,7 +1360,7 @@ ADF.PushMsgSendView = Backbone.View
 			selectContactContentList : function() {
 				var contentSelect = $(
 						'#msg-send-contact-private-content-load-select').val();
-				var contentMsg = contentSelect;
+				var contentMsg = pushUtil.b64_to_utf8(contentSelect);
 				$('#msg-send-contact-private-content-textarea').val(contentMsg);
 				var input_messageContent = $(
 						'#msg-send-contact-private-content-textarea').val();
@@ -1386,7 +1388,7 @@ ADF.PushMsgSendView = Backbone.View
 			selectGroupContentList : function() {
 				var contentSelect = $('#msg-send-group-content-load-select')
 						.val();
-				var contentMsg = contentSelect;
+				var contentMsg = pushUtil.b64_to_utf8(contentSelect);
 				$('#msg-send-group-content-textarea').val(contentMsg);
 				var input_messageContent = $('#msg-send-group-content-textarea')
 						.val();
@@ -1412,7 +1414,7 @@ ADF.PushMsgSendView = Backbone.View
 			selectExcelContentList : function() {
 				var contentSelect = $('#msg-send-excel-content-load-select')
 						.val();
-				var contentMsg = contentSelect;
+				var contentMsg = pushUtil.b64_to_utf8(contentSelect);
 				$('#msg-send-excel-content-textarea').val(contentMsg);
 				var input_messageContent = $('#msg-send-excel-content-textarea')
 						.val();
@@ -1678,6 +1680,15 @@ ADF.PushMsgSendView = Backbone.View
 					$("#msg-send-excel-repeat-time-input").focus();
 					return false;
 				}
+
+				console.log(private_input);
+				if (pushUtil.compactTrim(private_input) != "") {
+					console.log(private_input);
+					if (private_input == 0) {
+						alert('0은 입력할 수 없습니다');
+						return false;
+					}
+				}
 			},
 
 			// 주소록 반복 시간 체크
@@ -1691,6 +1702,35 @@ ADF.PushMsgSendView = Backbone.View
 					alert('숫자 만 입력 가능합니다!');
 					$("#msg-send-contact-private-repeat-time-input").focus();
 					return false;
+				}
+
+				console.log(private_input);
+				if (pushUtil.compactTrim(private_input) != "") {
+					console.log(private_input);
+					if (private_input == 0) {
+						alert('0은 입력할 수 없습니다');
+						return false;
+					}
+				}
+			},
+
+			checkRepeatTimeGroup : function() {
+				var num_check = /^[0-9]*$/;
+				var private_input = $("#msg-send-group-repeat-time-input")
+						.val();
+
+				if (!num_check.test(private_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#msg-send-group-repeat-time-input").focus();
+					return false;
+				}
+				console.log(private_input);
+				if (pushUtil.compactTrim(private_input) != "") {
+					console.log(private_input);
+					if (private_input == 0) {
+						alert('0은 입력할 수 없습니다');
+						return false;
+					}
 				}
 			},
 
@@ -2223,7 +2263,7 @@ ADF.PushMsgSendView = Backbone.View
 										success : function(data) {
 
 											if (!data.result.errors) {
-										
+
 												groupTopicCount = groupTopicCount
 														+ data.result.data;
 
@@ -2774,9 +2814,6 @@ ADF.PushMsgSendView = Backbone.View
 
 							if (xhrHeadReq.status == 404) {
 
-						
-
-							
 								var formdata = new FormData();
 								formdata.append("fileData", fileData);
 								var xhrFileReq = new XMLHttpRequest();
@@ -2890,7 +2927,6 @@ ADF.PushMsgSendView = Backbone.View
 										success : function(data) {
 
 											if (!data.result.errors) {
-											
 
 												if (data.result.data != 0) {
 													groupTopicCount = groupTopicCount
@@ -3317,7 +3353,6 @@ ADF.PushMsgSendView = Backbone.View
 
 							if (xhrHeadReq.status == 404) {
 
-							
 								var formdata = new FormData();
 								formdata.append("fileData", fileData);
 								var xhrFileReq = new XMLHttpRequest();
@@ -3358,7 +3393,7 @@ ADF.PushMsgSendView = Backbone.View
 								xhrHeadThumReq.setRequestHeader("file", ".png");
 								xhrHeadThumReq.send();
 								if (xhrHeadThumReq.status == 404) {
-								
+
 									var thumbNail = $('#file-thumbnail').val();
 
 									if (thumbNail == null || thumbNail == "") {
@@ -3755,8 +3790,8 @@ ADF.PushMsgSendView = Backbone.View
 						groupTopic = "mms/P2/1/b" + fleep_bunch_input + "/g"
 								+ private_input;
 					}
-					userText = userText + "그룹" + fleep_bunch_input + "("
-							+ private_input + ")";
+					userText = userText + "그룹" + private_input + "("
+							+ fleep_bunch_input + ")";
 
 					var checkTopic = false;
 					// groupTopic check
@@ -3780,7 +3815,7 @@ ADF.PushMsgSendView = Backbone.View
 								if (data.result.data != 0) {
 									checkTopic = true;
 								} else {
-									
+
 									alert(userText + "는 수신자가 없는 그룹입니다.");
 									return false;
 								}
@@ -4131,6 +4166,8 @@ ADF.PushMsgSendView = Backbone.View
 														if (dataResult.length > 0) {
 
 															for ( var i in dataResult) {
+																dataResult[i].templateMsg = pushUtil
+																		.utf8_to_b64(dataResult[i].templateMsg);
 
 																$(
 																		"#msg-send-excel-content-load-select")
@@ -4189,7 +4226,6 @@ ADF.PushMsgSendView = Backbone.View
 												async : false,
 												success : function(data) {
 													if (!data.result.errors) {
-														
 
 														var resultData = data.result.data;
 														if (resultData.length == 0) {
@@ -4210,7 +4246,8 @@ ADF.PushMsgSendView = Backbone.View
 															var hiddenUfmi = resultData[i].ufmi;
 															var receiverType = resultData[i].ufmi;
 															// 그룹토픽 체크
-
+															console
+																	.log(resultData);
 															// 그룹
 															if (resultData[i].ufmi
 																	.indexOf("mms") > -1) {
@@ -4233,7 +4270,7 @@ ADF.PushMsgSendView = Backbone.View
 																	receiverType = "Ptalk1.0";
 																	// p2
 																	// 그룹
-																} else if (dataResult[i].retained
+																} else if (resultData[i].ufmi
 																		.indexOf("P2") > -1) {
 																	resultData[i].ufmi = "그룹"
 																			+ topicArr[4]

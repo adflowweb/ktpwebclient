@@ -5,7 +5,8 @@ ADF.PushUserInfoView = Backbone.View.extend({
 	// 유저 정보 이벤트 목록
 	events : {
 		"click #user-info-modify-btn" : "userInfoModify",
-		"click #user-info-confirm-btn" : "userInfoConfirm"
+		"click #user-info-confirm-btn" : "userInfoConfirm",
+		"click #easymessage-pdf-download" : "pdfdownload"
 	},
 
 	initialize : function() {
@@ -32,6 +33,13 @@ ADF.PushUserInfoView = Backbone.View.extend({
 	},
 	afterRender : function() {
 
+	},
+
+	pdfdownload : function() {
+		$('#easymessage-pdf-download').attr({
+			target : '_blank',
+			href : '/pmsuser/easymessage-web.pdf'
+		});
 	},
 
 	// 유저 정보 뷰 생성

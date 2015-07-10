@@ -699,7 +699,7 @@ ADF.PushMsgListView = Backbone.View
 							var resultData = data.result.data.data;
 							if (resultData.length == 0) {
 								$('#msg-list-detail-div').hide();
-								alert('수신 확인된 내용이 없어 상세내용을 볼 수 없습니다!');
+								alert('수신되지 않은 메시지 입니다.\n상세 내용을 확인 할 수 없습니다.');
 								return false;
 							}
 							for ( var i in resultData) {

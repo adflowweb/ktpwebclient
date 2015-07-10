@@ -25,7 +25,8 @@
 <link rel="stylesheet" href="assets/css/ace.css"
 	class="ace-main-stylesheet" id="main-ace-style" />
 
-<link rel="stylesheet" media="screen" href="assets/css/handsontable.full.css">
+<link rel="stylesheet" media="screen"
+	href="assets/css/handsontable.full.css">
 <link rel="shortcut icon" href="assets/images/title_icon.jpg" />
 
 <!--[if lte IE 9]>
@@ -95,7 +96,7 @@
 								class="ace-icon fa fa-bell icon-animated-bell"></i>
 						</a>
 
-							<ul 
+							<ul
 								class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header"><i
 									class="ace-icon fa fa-comment"></i> 메시지 발송 건수</li>
@@ -104,15 +105,17 @@
 									<ul class="dropdown-menu dropdown-navbar navbar-pink">
 										<li><a>
 												<div class="clearfix">
-													<span class="pull-left">이번달 발송 건수 </span> <span 
-														class="pull-right badge badge-success"  id="month-count-span">0</span>
+													<span class="pull-left">이번달 발송 건수 </span> <span
+														class="pull-right badge badge-success"
+														id="month-count-span">0</span>
 												</div>
 										</a></li>
 
 										<li><a>
 												<div class="clearfix">
 													<span class="pull-left">금일 발송 건수 </span> <span
-														class="pull-right badge badge-success" id="today-count-span">0</span>
+														class="pull-right badge badge-success"
+														id="today-count-span">0</span>
 												</div>
 										</a></li>
 									</ul>
@@ -132,7 +135,17 @@
 										class="ace-icon fa fa-user"></i> 사용자 정보
 								</a></li>
 
-								<!-- <li class="divider"></li> -->
+								<!-- <li class="divider"></li>
+								
+									$('#easymessage-pdf-download').attr({
+			target : '_blank',
+			href : '/easymessage-web.pdf'
+		});
+								 -->
+
+								<li><a href="/pmsuser/easymessage-web.pdf" target="_blank"> <i
+										class="ace-icon fa fa-file-pdf-o"></i> 사용자 설명서 다운로드
+								</a></li>
 
 								<li><a href="#logout"> <i
 										class="ace-icon fa fa-power-off"></i> 로그아웃
