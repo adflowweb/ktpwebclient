@@ -42,6 +42,7 @@ ADF.PushMsgSendView = Backbone.View
 				"click #contact-add-btn" : "contactAdd",
 				"click #contact-add-footer-cancel" : "contactAddCancel",
 				"click #contact-delete-id" : "contactAllCheckBox",
+
 				"click #contact-delete-btn" : "contactDelete",
 				"click a[name='editContactBtn']" : "editContactModal",
 				"click a[name='name-contact-delete-a']" : "deleteContactIcon",
@@ -1017,11 +1018,15 @@ ADF.PushMsgSendView = Backbone.View
 				for (var i = 0, n = checkboxes.length; i < n; i++) {
 					if (checkboxes[i].checked == true) {
 						checkboxes[i].checked = false;
+						$('#contact-delete-id').attr('checked',false);
 					} else {
 						checkboxes[i].checked = true;
+						$('#contact-delete-id').attr('checked',false);
 					}
 
 				}
+
+			//	setTimeout(this.contactAllCheckBox, 500);
 			},
 
 			// 주소록 추가 취소
@@ -1048,6 +1053,20 @@ ADF.PushMsgSendView = Backbone.View
 				var private_input = $('#contact-add-private-input').val();
 				var fleep_bunch_input = $('#contact-add-fleep-bunch-input')
 						.val();
+
+				var num_check = /^[0-9]*$/;
+
+				if (!num_check.test(private_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#contact-add-private-input").focus();
+					return false;
+				}
+
+				if (!num_check.test(fleep_bunch_input)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#contact-add-fleep-bunch-input").focus();
+					return false;
+				}
 
 				if (contactUserName == null || contactUserName == "") {
 					alert('이름을 입력해 주세요!');
@@ -3685,6 +3704,23 @@ ADF.PushMsgSendView = Backbone.View
 
 				var privateGroupCheck = $(
 						'input:radio[name="send-check-radio"]:checked').val();
+
+				var num_check = /^[0-9]*$/;
+				var private_input_check = $('#send-group-input').val();
+				var fleep_bunch_input_check = $('#send-group-fleep-bunch-input')
+						.val();
+
+				if (!num_check.test(private_input_check)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#send-group-input").focus();
+					return false;
+				}
+
+				if (!num_check.test(fleep_bunch_input_check)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#send-group-fleep-bunch-input").focus();
+					return false;
+				}
 
 				if (privateGroupCheck == 0) {
 					var userText = "";

@@ -405,6 +405,23 @@ ADF.PushMsgListView = Backbone.View
 				var privateGroupCheck = $(
 						'input:radio[name="resend-check-radio"]:checked').val();
 
+				var num_check = /^[0-9]*$/;
+				var private_input_check = $('#resend-private-input').val();
+				var fleep_bunch_input_check = $('#resend-fleep-bunch-input')
+						.val();
+
+				if (!num_check.test(private_input_check)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#resend-private-input").focus();
+					return false;
+				}
+
+				if (!num_check.test(fleep_bunch_input_check)) {
+					alert('숫자 만 입력 가능합니다!');
+					$("#resend-fleep-bunch-input").focus();
+					return false;
+				}
+
 				if (privateGroupCheck == 0) {
 					var userText = "";
 
