@@ -647,6 +647,28 @@ ADF.PushMsgListView = Backbone.View
 				}
 
 				if (aData.fileName != null && aData.fileFormat != null) {
+
+					// console.log('서버에 파일 네임과 포맷 이 있음');
+					// // head check
+					//
+					// var token = sessionStorage.getItem('easy-token');
+					// var userId = sessionStorage.getItem('easy-userId');
+					// var xhrHeadReq = new XMLHttpRequest();
+					// xhrHeadReq.open("HEAD", "/cts/v1/users/" + userId,
+					// false);
+					// xhrHeadReq.setRequestHeader("md5", aData.fileName);
+					// xhrHeadReq.setRequestHeader("token", token);
+					// xhrHeadReq.setRequestHeader("file", aData.fileFormat);
+					// xhrHeadReq.send();
+					// if (xhrHeadReq.status == 404) {
+					// console.log('해당파일없음');
+					// $('#resend-file-name-hidden').val("");
+					// $('#resend-file-format-hidden').val("");
+					// $('#resend-file').hide();
+					// } else if (xhrHeadReq.status == 409) {
+					//					
+					// }
+					// console.log('파일좀재함');
 					$('#resend-file').show();
 					$('#resend-file-name-hidden').val(aData.fileName);
 					$('#resend-file-format-hidden').val(aData.fileFormat);

@@ -255,7 +255,7 @@ ADF.PushMsgContentView = Backbone.View
 			clickHrefEdit : function(e) {
 				var msgId = $(e.currentTarget).attr('class');
 				var title = $('h5.' + msgId).text();
-				var content = $('p.' + msgId).text();
+				var content = $('textarea.' + msgId).text();
 				$('#send-private-title-edit-input').val(title);
 				$('#msg-send-private-content-edit-textarea').val(content);
 				var input_messageContent = $(
@@ -343,25 +343,31 @@ ADF.PushMsgContentView = Backbone.View
 																contentHtml = contentHtml
 																		.concat('<div style="word-break: break-all;" class="'
 																				+ dataResult[i].templateId
-																				+ 'col-xs-6 col-sm-3 pricing-box"><div class="widget-box"><div class="widget-header"><h5 class="'
+																				+ ' col-sm-3 col-xs-12 col-sm-6 pricing-box"><div class="widget-box"><div class="widget-header"><h5 class="'
 																				+ dataResult[i].templateId
 																				+ ' widget-title bigger lighter">'
 																				+ dataResult[i].templateName
 																				+ '</h5><div class="widget-toolbar"><a class="'
 																				+ dataResult[i].templateId
-																				+ '"data-toggle="modal" href="#msg-content-edit-modal"><i class="ace-icon fa fa-pencil bigger-130"></i></a><a class="'
+																				+ '"data-toggle="modal" href="#msg-content-edit-modal" data-tooltip="tooltip" title="수정"><i class="ace-icon fa fa-pencil bigger-130"></i></a><a class="'
 																				+ dataResult[i].templateId
-																				+ '"data-toggle="modal" href="#msg-content-delete-modal"><i class="ace-icon fa fa-trash-o bigger-130"></i></a></div></div><div class="widget-body"><div class="widget-main"><div class="form-group"></div><p class="'
+																				+ '"data-toggle="modal" href="#msg-content-delete-modal" data-tooltip="tooltip" title="삭제"><i class="ace-icon fa fa-trash-o bigger-130"></i></a></div></div><div class="widget-body"><div class="widget-main"><div class="form-group"><textarea rows="9" class="form-control '
 																				+ dataResult[i].templateId
-																				+ '">'
+																				+ '" disabled="disabled">'
 																				+ dataResult[i].templateMsg
-																				+ '</p></div></div></div></div>');
+																				+ '</textarea></div></div></div></div></div>');
 
 															}
 															$(
 																	'#msg-content-list-box-div')
 																	.html(
 																			contentHtml);
+															$(
+																	'[data-tooltip="tooltip"]')
+																	.tooltip(
+																			{
+																				placement : 'top'
+																			});
 														} else {
 															$(
 																	'#msg-content-list-div')
