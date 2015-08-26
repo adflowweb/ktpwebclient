@@ -597,27 +597,24 @@ ADF.PushMsgListView = Backbone.View
 					var receiver_ver_check = aData.retained;
 					// p1
 
-					$('input:radio[id="resend-check-radio-private"]').attr(
-							"checked", true);
+					$('#resend-check-radio-private').prop("checked", true);
 					if (receiver_ver_check == "Ptalk1.0") {
-						$('input:radio[id="resend-pnum-p1-radio"]').attr(
-								"checked", true);
+						$('#resend-pnum-p1-radio').prop("checked", true);
+
 						// p2
 					} else {
-						$('input:radio[id="resend-pnum-p2-radio"]').attr(
-								"checked", true);
+						$('#resend-pnum-p2-radio').prop("checked", true);
+
 					}
 					$('#resend-fleep-bunch-input').val(receiver_split[0]);
 					$('#resend-private-input').val(receiver_split[1]);
 				} else {
-					$('input:radio[id="resend-check-radio-group"]').attr(
-							"checked", true);
+					$('#resend-check-radio-group').prop("checked", true);
 					var topicP1P2Check = aData.receiver;
 					var receiver_ver_check = aData.retained;
 					// p1
 					if (receiver_ver_check == "Ptalk1.0") {
-						$('input:radio[id="resend-pnum-p1-radio"]').attr(
-								"checked", true);
+						$('#resend-pnum-p1-radio').prop("checked", true);
 
 						$('#resend-fleep-bunch-input').val(
 								topicP1P2Check.substring((topicP1P2Check
@@ -628,8 +625,7 @@ ADF.PushMsgListView = Backbone.View
 										.indexOf("(")));
 						// p2
 					} else {
-						$('input:radio[id="resend-pnum-p2-radio"]').attr(
-								"checked", true);
+						$('#resend-pnum-p2-radio').prop("checked", true);
 
 						$('#resend-fleep-bunch-input').val(
 								topicP1P2Check.substring((topicP1P2Check
