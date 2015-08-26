@@ -157,11 +157,11 @@ ADF.PushMsgListView = Backbone.View
 			},
 
 			modalFooterClick : function() {
-				$('#msg-resend-user-target-show-input').val("");
+				$('#msg-resend-user-target-select').find('option').remove();
 			},
 
 			modalHeaderClick : function() {
-				$('#msg-resend-user-target-show-input').val("");
+				$('#msg-resend-user-target-select').find("option").remove();
 
 			},
 			// 메시지 재전송
@@ -633,7 +633,7 @@ ADF.PushMsgListView = Backbone.View
 
 						$('#resend-fleep-bunch-input').val(
 								topicP1P2Check.substring((topicP1P2Check
-										.indexOf(",") + 1), topicP1P2Check
+										.indexOf("(") + 2), topicP1P2Check
 										.indexOf(")")));
 						$('#resend-private-input').val(
 								topicP1P2Check.substring(2, topicP1P2Check
