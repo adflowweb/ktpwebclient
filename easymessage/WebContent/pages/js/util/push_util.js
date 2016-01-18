@@ -52,6 +52,10 @@ pushUtil.chageDateF = function(year, month) {
 	var nowYear = defaultFirstDay.getFullYear();
 	var nowMonth = defaultFirstDay.getMonth();
 	var firstDay = defaultFirstDay.getDate();
+	if(nowMonth==0){
+		nowMonth=12;
+		nowYear--;
+	}
 	return nowYear + "/" + nowMonth + "/" + firstDay;
 };
 
