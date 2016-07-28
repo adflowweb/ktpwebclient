@@ -1018,15 +1018,15 @@ ADF.PushMsgSendView = Backbone.View
 				for (var i = 0, n = checkboxes.length; i < n; i++) {
 					if (checkboxes[i].checked == true) {
 						checkboxes[i].checked = false;
-						$('#contact-delete-id').attr('checked',false);
+						$('#contact-delete-id').attr('checked', false);
 					} else {
 						checkboxes[i].checked = true;
-						$('#contact-delete-id').attr('checked',false);
+						$('#contact-delete-id').attr('checked', false);
 					}
 
 				}
 
-			//	setTimeout(this.contactAllCheckBox, 500);
+				// setTimeout(this.contactAllCheckBox, 500);
 			},
 
 			// 주소록 추가 취소
@@ -1133,53 +1133,53 @@ ADF.PushMsgSendView = Backbone.View
 						console.log('주소록 추가');
 						console.log(ufmiResult);
 						var token = sessionStorage.getItem('easy-token');
-						$.ajax({
-							url : '/v1/pms/adm/svc/subscribe/count?topic='
-									+ ufmiResult,
-							type : 'GET',
-							headers : {
-								'X-Application-Token' : token
-							},
-							contentType : "application/json",
-							dataType : 'json',
-							async : false,
-
-							success : function(data) {
-
-								if (!data.result.errors) {
-									if (data.result.data == 0) {
-										checkTopic = false;
-										alert("입력하신 번호는 수신자가 없는 그룹입니다!");
-									}
-
-								} else {
-									checkTopic = false;
-									alert("입력하신 번호는 수신자가 없는 그룹입니다!");
-
-								}
-
-							},
-							error : function(data, textStatus, request) {
-								if (data.status == 401) {
-
-									alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-									sessionStorage.removeItem("easy-token");
-									sessionStorage.removeItem("easy-userId");
-									sessionStorage.removeItem("easy-role");
-									sessionStorage
-											.removeItem("easy-groupTopic");
-									sessionStorage.removeItem("easy-ufmi");
-									sessionStorage.removeItem("easy-userName");
-									pushRouter.navigate('login', {
-										trigger : true
-									});
-									return false;
-								}
-
-								alert('그룹 대상조회에 실패 했습니다!');
-								return false;
-							}
-						});
+						// $.ajax({
+						// url : '/v1/pms/adm/svc/subscribe/count?topic='
+						// + ufmiResult,
+						// type : 'GET',
+						// headers : {
+						// 'X-Application-Token' : token
+						// },
+						// contentType : "application/json",
+						// dataType : 'json',
+						// async : false,
+						//
+						// success : function(data) {
+						//
+						// if (!data.result.errors) {
+						// if (data.result.data == 0) {
+						// checkTopic = false;
+						// alert("입력하신 번호는 수신자가 없는 그룹입니다!");
+						// }
+						//
+						// } else {
+						// checkTopic = false;
+						// alert("입력하신 번호는 수신자가 없는 그룹입니다!");
+						//
+						// }
+						//
+						// },
+						// error : function(data, textStatus, request) {
+						// if (data.status == 401) {
+						//
+						// alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+						// sessionStorage.removeItem("easy-token");
+						// sessionStorage.removeItem("easy-userId");
+						// sessionStorage.removeItem("easy-role");
+						// sessionStorage
+						// .removeItem("easy-groupTopic");
+						// sessionStorage.removeItem("easy-ufmi");
+						// sessionStorage.removeItem("easy-userName");
+						// pushRouter.navigate('login', {
+						// trigger : true
+						// });
+						// return false;
+						// }
+						//
+						// alert('그룹 대상조회에 실패 했습니다!');
+						// return false;
+						// }
+						// });
 
 					}
 
@@ -2267,55 +2267,55 @@ ADF.PushMsgSendView = Backbone.View
 
 						if (messageData.receivers[i].indexOf("mms") > -1) {
 
-							$
-									.ajax({
-										url : '/v1/pms/adm/svc/subscribe/count?topic='
-												+ messageData.receivers[i],
-										type : 'GET',
-										headers : {
-											'X-Application-Token' : token
-										},
-										contentType : "application/json",
-										dataType : 'json',
-										async : false,
-
-										success : function(data) {
-
-											if (!data.result.errors) {
-
-												groupTopicCount = groupTopicCount
-														+ data.result.data;
-
-											}
-
-										},
-										error : function(data, textStatus,
-												request) {
-											if (data.status == 401) {
-
-												alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-												sessionStorage
-														.removeItem("easy-token");
-												sessionStorage
-														.removeItem("easy-userId");
-												sessionStorage
-														.removeItem("easy-role");
-												sessionStorage
-														.removeItem("easy-groupTopic");
-												sessionStorage
-														.removeItem("easy-ufmi");
-												sessionStorage
-														.removeItem("easy-userName");
-												pushRouter.navigate('login', {
-													trigger : true
-												});
-												return false;
-											}
-
-											alert('그룹 대상조회에 실패 했습니다!');
-											return false;
-										}
-									});
+							// $
+							// .ajax({
+							// url : '/v1/pms/adm/svc/subscribe/count?topic='
+							// + messageData.receivers[i],
+							// type : 'GET',
+							// headers : {
+							// 'X-Application-Token' : token
+							// },
+							// contentType : "application/json",
+							// dataType : 'json',
+							// async : false,
+							//
+							// success : function(data) {
+							//
+							// if (!data.result.errors) {
+							//
+							// groupTopicCount = groupTopicCount
+							// + data.result.data;
+							//
+							// }
+							//
+							// },
+							// error : function(data, textStatus,
+							// request) {
+							// if (data.status == 401) {
+							//
+							// alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+							// sessionStorage
+							// .removeItem("easy-token");
+							// sessionStorage
+							// .removeItem("easy-userId");
+							// sessionStorage
+							// .removeItem("easy-role");
+							// sessionStorage
+							// .removeItem("easy-groupTopic");
+							// sessionStorage
+							// .removeItem("easy-ufmi");
+							// sessionStorage
+							// .removeItem("easy-userName");
+							// pushRouter.navigate('login', {
+							// trigger : true
+							// });
+							// return false;
+							// }
+							//
+							// alert('그룹 대상조회에 실패 했습니다!');
+							// return false;
+							// }
+							// });
 
 							if (groupTopicCount == 0) {
 								// return false;
@@ -2328,7 +2328,7 @@ ADF.PushMsgSendView = Backbone.View
 
 					var messageDataResult = JSON.stringify(messageData);
 
-					var sendCount = groupTopicCount + privateUfmi;
+					// var sendCount = groupTopicCount + privateUfmi;
 					var fileName = document
 							.getElementById("group-image-upload-input").value;
 					var fileData = document
@@ -2337,27 +2337,27 @@ ADF.PushMsgSendView = Backbone.View
 
 					if (messageData.resendMaxCount) {
 
-						sendCount = sendCount * 1;
-						messageData.resendMaxCount = messageData.resendMaxCount * 1;
-						sendCount = (sendCount * messageData.resendMaxCount)
-								+ sendCount;
-						groupTopicCount = (groupTopicCount * messageData.resendMaxCount)
-								+ groupTopicCount;
+						// sendCount = sendCount * 1;
+						// messageData.resendMaxCount =
+						// messageData.resendMaxCount * 1;
+						// sendCount = (sendCount * messageData.resendMaxCount)
+						// + sendCount;
+						// groupTopicCount = (groupTopicCount *
+						// messageData.resendMaxCount)
+						// + groupTopicCount;
 					} else {
 
 					}
 
 					// 인원체크
 
-					if (sendCount == 0) {
-						alert('수신 대상자가 없습니다!');
-						return false;
-
-					}
+					// if (sendCount == 0) {
+					// alert('수신 대상자가 없습니다!');
+					// return false;
+					//
+					// }
 					if (messageData.reservationTime) {
-						if (confirm("총 " + sendCount + "건(그룹 수신자:"
-								+ groupTopicCount
-								+ ")의 메시지가 예약전송 됩니다. 전송 하시겠습니까?") == true) {
+						if (confirm(" 메시지가 예약전송 됩니다. 전송 하시겠습니까?") == true) {
 							$('.remove').click();
 							$('#msg-send-group-user-target-show-input').val("");
 							$('#msg-send-group-content-textarea').val("");
@@ -2380,9 +2380,7 @@ ADF.PushMsgSendView = Backbone.View
 							return false;
 						}
 					} else {
-						if (confirm(" 총 " + sendCount + "건(그룹 수신자:"
-								+ groupTopicCount
-								+ ")의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
+						if (confirm("메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
 							$('.remove').click();
 							$('#msg-send-group-user-target-show-input').val("");
 							$('#msg-send-group-content-textarea').val("");
@@ -2931,77 +2929,79 @@ ADF.PushMsgSendView = Backbone.View
 								.indexOf("mms") != -1) {
 							// 그룹 대상
 
-							$
-									.ajax({
-										url : '/v1/pms/adm/svc/subscribe/count?topic='
-												+ messageData.addressMessageArray[i].receiver,
-										type : 'GET',
-										headers : {
-											'X-Application-Token' : token
-										},
-										contentType : "application/json",
-										dataType : 'json',
-										async : false,
-
-										success : function(data) {
-
-											if (!data.result.errors) {
-
-												if (data.result.data != 0) {
-													groupTopicCount = groupTopicCount
-															+ data.result.data;
-												} else {
-													var convertText = messageData.addressMessageArray[i].receiver;
-													convertText = convertText
-															.substring(
-																	convertText
-																			.lastIndexOf("g") + 1,
-																	convertText.length);
-													alert("그룹"
-															+ convertText
-															+ "은 수신자가 없는 그룹입니다.");
-												}
-
-											} else {
-												var convertText = messageData.addressMessageArray[i].receiver;
-												convertText = convertText
-														.substring(
-																convertText
-																		.lastIndexOf("g") + 1,
-																convertText.length);
-												alert("그룹" + convertText
-														+ "은 수신자가 없는 그룹입니다.");
-												return false;
-											}
-
-										},
-										error : function(data, textStatus,
-												request) {
-											if (data.status == 401) {
-
-												alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-												sessionStorage
-														.removeItem("easy-token");
-												sessionStorage
-														.removeItem("easy-userId");
-												sessionStorage
-														.removeItem("easy-role");
-												sessionStorage
-														.removeItem("easy-groupTopic");
-												sessionStorage
-														.removeItem("easy-ufmi");
-												sessionStorage
-														.removeItem("easy-userName");
-												pushRouter.navigate('login', {
-													trigger : true
-												});
-												return false;
-											}
-
-											alert('그룹 대상조회에 실패 했습니다!');
-											return false;
-										}
-									});
+							// $
+							// .ajax({
+							// url : '/v1/pms/adm/svc/subscribe/count?topic='
+							// + messageData.addressMessageArray[i].receiver,
+							// type : 'GET',
+							// headers : {
+							// 'X-Application-Token' : token
+							// },
+							// contentType : "application/json",
+							// dataType : 'json',
+							// async : false,
+							//
+							// success : function(data) {
+							//
+							// if (!data.result.errors) {
+							//
+							// if (data.result.data != 0) {
+							// groupTopicCount = groupTopicCount
+							// + data.result.data;
+							// } else {
+							// var convertText =
+							// messageData.addressMessageArray[i].receiver;
+							// convertText = convertText
+							// .substring(
+							// convertText
+							// .lastIndexOf("g") + 1,
+							// convertText.length);
+							// alert("그룹"
+							// + convertText
+							// + "은 수신자가 없는 그룹입니다.");
+							// }
+							//
+							// } else {
+							// var convertText =
+							// messageData.addressMessageArray[i].receiver;
+							// convertText = convertText
+							// .substring(
+							// convertText
+							// .lastIndexOf("g") + 1,
+							// convertText.length);
+							// alert("그룹" + convertText
+							// + "은 수신자가 없는 그룹입니다.");
+							// return false;
+							// }
+							//
+							// },
+							// error : function(data, textStatus,
+							// request) {
+							// if (data.status == 401) {
+							//
+							// alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+							// sessionStorage
+							// .removeItem("easy-token");
+							// sessionStorage
+							// .removeItem("easy-userId");
+							// sessionStorage
+							// .removeItem("easy-role");
+							// sessionStorage
+							// .removeItem("easy-groupTopic");
+							// sessionStorage
+							// .removeItem("easy-ufmi");
+							// sessionStorage
+							// .removeItem("easy-userName");
+							// pushRouter.navigate('login', {
+							// trigger : true
+							// });
+							// return false;
+							// }
+							//
+							// alert('그룹 대상조회에 실패 했습니다!');
+							// return false;
+							// }
+							// });
 
 						} else {
 							console
@@ -3009,28 +3009,28 @@ ADF.PushMsgSendView = Backbone.View
 							privateUfmi++;
 						}
 					}
-					var sendCount = groupTopicCount + privateUfmi;
+					// var sendCount = groupTopicCount + privateUfmi;
 
 					if (messageData.resendMaxCount) {
 
-						messageData.resendMaxCount = messageData.resendMaxCount * 1;
-						sendCount = (sendCount * messageData.resendMaxCount)
-								+ sendCount;
+						// messageData.resendMaxCount =
+						// messageData.resendMaxCount * 1;
+						// sendCount = (sendCount * messageData.resendMaxCount)
+						// + sendCount;
 
 					} else {
 
 					}
 
-					if (sendCount == 0) {
-						alert('수신 대상자가 없습니다!');
-						return false;
-
-					}
+					// if (sendCount == 0) {
+					// alert('수신 대상자가 없습니다!');
+					// return false;
+					//
+					// }
 
 					if (messageData.reservationTime) {
 
-						if (confirm(sendCount + "건(그룹 수신자:" + groupTopicCount
-								+ ")의 메시지가 예약 전송 됩니다. 전송 하시겠습니까?") == true) {
+						if (confirm("메시지가 예약 전송 됩니다. 전송 하시겠습니까?") == true) {
 
 						} else {
 
@@ -3038,8 +3038,7 @@ ADF.PushMsgSendView = Backbone.View
 						}
 					} else {
 
-						if (confirm(sendCount + "건(그룹 수신자:" + groupTopicCount
-								+ ")의 메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
+						if (confirm("메시지가 전송 됩니다. 전송 하시겠습니까?") == true) {
 
 						} else {
 
@@ -3829,61 +3828,61 @@ ADF.PushMsgSendView = Backbone.View
 					userText = userText + "그룹" + private_input + "("
 							+ fleep_bunch_input + ")";
 
-					var checkTopic = false;
+					var checkTopic = true;
 					// groupTopic check
 
 					var token = sessionStorage.getItem('easy-token');
-					$.ajax({
-						url : '/v1/pms/adm/svc/subscribe/count?topic='
-								+ groupTopic,
-						type : 'GET',
-						headers : {
-							'X-Application-Token' : token
-						},
-						contentType : "application/json",
-						dataType : 'json',
-						async : false,
-
-						success : function(data) {
-
-							if (!data.result.errors) {
-
-								if (data.result.data != 0) {
-									checkTopic = true;
-								} else {
-
-									alert(userText + "는 수신자가 없는 그룹입니다.");
-									return false;
-								}
-
-							} else {
-
-								alert(userText + "는 수신자가 없는 그룹입니다.");
-								return false;
-
-							}
-
-						},
-						error : function(data, textStatus, request) {
-							if (data.status == 401) {
-
-								alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
-								sessionStorage.removeItem("easy-token");
-								sessionStorage.removeItem("easy-userId");
-								sessionStorage.removeItem("easy-role");
-								sessionStorage.removeItem("easy-groupTopic");
-								sessionStorage.removeItem("easy-ufmi");
-								sessionStorage.removeItem("easy-userName");
-								pushRouter.navigate('login', {
-									trigger : true
-								});
-								return false;
-							}
-
-							alert('그룹 대상조회에 실패 했습니다!');
-							return false;
-						}
-					});
+					// $.ajax({
+					// url : '/v1/pms/adm/svc/subscribe/count?topic='
+					// + groupTopic,
+					// type : 'GET',
+					// headers : {
+					// 'X-Application-Token' : token
+					// },
+					// contentType : "application/json",
+					// dataType : 'json',
+					// async : false,
+					//
+					// success : function(data) {
+					//
+					// if (!data.result.errors) {
+					//
+					// if (data.result.data != 0) {
+					// checkTopic = true;
+					// } else {
+					//
+					// alert(userText + "는 수신자가 없는 그룹입니다.");
+					// return false;
+					// }
+					//
+					// } else {
+					//
+					// alert(userText + "는 수신자가 없는 그룹입니다.");
+					// return false;
+					//
+					// }
+					//
+					// },
+					// error : function(data, textStatus, request) {
+					// if (data.status == 401) {
+					//
+					// alert("사용시간이 경과되어 자동 로그아웃 됩니다.");
+					// sessionStorage.removeItem("easy-token");
+					// sessionStorage.removeItem("easy-userId");
+					// sessionStorage.removeItem("easy-role");
+					// sessionStorage.removeItem("easy-groupTopic");
+					// sessionStorage.removeItem("easy-ufmi");
+					// sessionStorage.removeItem("easy-userName");
+					// pushRouter.navigate('login', {
+					// trigger : true
+					// });
+					// return false;
+					// }
+					//
+					// alert('그룹 대상조회에 실패 했습니다!');
+					// return false;
+					// }
+					// });
 
 					if (checkTopic == true) {
 
