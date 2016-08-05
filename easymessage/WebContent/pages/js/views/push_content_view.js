@@ -369,9 +369,6 @@ ADF.PushMsgContentView = Backbone.View
 																				placement : 'top'
 																			});
 														} else {
-															$(
-																	'#msg-content-list-div')
-																	.hide();
 														}
 
 													} else {
